@@ -270,6 +270,23 @@ def summary_cmd(
     typer.echo(f"wrote {base / 'reviews' / 'summary.json'}")
 
 
+@app.command("models")
+def models_cmd(provider: str = typer.Argument(..., help="A provider name from config/llm.yaml")):
+    """List the model names a provider's endpoint offers, to pick models for each role."""
+    from factory.adapters.llm.router import list_models
+
+    try:
+        names = list_models(provider)
+    except LLMError as exc:
+        fail(exc)
+    for name in names:
+        typer.echo(name)
+    typer.echo(f"{len(names)} model(s)", err=True)
+
+
 @app.callback()
 def main():
     """Language-learning video factory."""
+    from factory.env import load_dotenv
+
+    load_dotenv()

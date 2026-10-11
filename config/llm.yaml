@@ -1,58 +1,46 @@
 # LLM routing: which provider and model serves each factory role (docs/decisions/0002-per-role-llm-providers.md).
 #
-# Secrets never live here: each provider names the environment variable that holds its key.
+# Secrets never live here. A provider names the environment variables that hold its key and,
+# for a private endpoint, its URL; set them in the shell or in the gitignored .env file.
 # Changing a role's provider, model or params changes that station's station_version, so stored
 # artifacts from the old setting are never reused.
 
 providers:
-  deepseek:
-    type: openai_compatible
-    base_url: https://api.deepseek.com
-    api_key_env: DEEPSEEK_API_KEY
-  qwen:
-    type: openai_compatible
-    # International (Singapore) endpoint. Accounts in mainland China use
-    # https://dashscope.aliyuncs.com/compatible-mode/v1 instead.
-    base_url: https://dashscope-intl.aliyuncs.com/compatible-mode/v1
-    api_key_env: DASHSCOPE_API_KEY
-  anthropic:
-    type: anthropic
-    api_key_env: ANTHROPIC_API_KEY
+  gateway:
+    type: openai_compatible          # the endpoint speaks the OpenAI chat/completions API
+    base_url_env: LLM_GATEWAY_URL    # e.g. https://llm.example.com/v1
+    api_key_env: LLM_GATEWAY_API_KEY
 
-# USD per million tokens. A model without an entry is still run; its cost is recorded as unpriced.
+# USD per million tokens, per provider and model. A model without a price still runs;
+# its tokens are recorded and its cost is marked unpriced. Fill these in from the
+# gateway's own billing, e.g.:
+#   gateway:
+#     some-model: {input: 1.00, cached_input: 0.10, output: 4.00}
 prices:
-  deepseek:
-    # DeepSeek peak-hour prices, checked 2026-10-11 at api-docs.deepseek.com/quick_start/pricing.
-    # Off-peak is half. Recording peak keeps the ledger conservative.
-    deepseek-v4-pro: {input: 1.32, cached_input: 0.044, output: 3.96}
-    deepseek-flash: {input: 0.30, cached_input: 0.006, output: 1.20}
-  qwen: {}  # fill in from the Model Studio pricing page; third-party listings disagree
-  anthropic:
-    claude-opus-5-5: {input: 4.00, cached_input: 0.20, cache_write: 5.00, output: 20.00}
-    claude-opus-4-8: {input: 5.00, cached_input: 0.50, cache_write: 6.25, output: 25.00}
+  gateway: {}
 
-# One entry per factory role. `params` are passed to the provider's request as-is
-# (for openai_compatible) or read by the provider (anthropic: effort).
+# One entry per factory role. `params` are passed to the request as-is.
+# List the model names your endpoint offers with: uv run factory models gateway
 roles:
   a2_scriptwriter:
-    provider: deepseek
+    provider: gateway
     model: deepseek-v4-pro
     max_tokens: 32000
-    params: {reasoning_effort: high, extra_body: {thinking: {type: enabled}}}
+    params: {}
   a3_level_editor:
-    provider: deepseek
+    provider: gateway
     model: deepseek-v4-pro
     max_tokens: 16000
-    params: {reasoning_effort: high, extra_body: {thinking: {type: enabled}}}
-  # Both reviewers use a different vendor from the writer, so the panel never judges
-  # its own model family's output (ADR 0001, decision 3).
+    params: {}
+  # The reviewers should use a different model family from the writer, so the panel
+  # never judges its own family's output (ADR 0001, decision 3).
   review_examiner:
-    provider: qwen
+    provider: gateway
     model: qwen3-max
     max_tokens: 16000
     params: {}
   review_learner:
-    provider: qwen
+    provider: gateway
     model: qwen3-max
     max_tokens: 16000
     params: {}

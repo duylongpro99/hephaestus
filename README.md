@@ -14,9 +14,16 @@ uv run python -m packs.en.ingest   # downloads NGSL data and builds packs/en/dat
 ```
 
 The agent commands call the LLM provider configured for each role in
-[`config/llm.yaml`](config/llm.yaml). Set the key variable each provider names, for example
-`DEEPSEEK_API_KEY` and `DASHSCOPE_API_KEY` for the default routing. See
-[ADR 0002](docs/decisions/0002-per-role-llm-providers.md).
+[`config/llm.yaml`](config/llm.yaml). By default every role goes through one OpenAI-compatible
+endpoint: copy `.env.example` to `.env` and set `LLM_GATEWAY_URL` and `LLM_GATEWAY_API_KEY`
+(variables already set in the shell win). Then list the endpoint's models and set each role's
+`model` to match:
+
+```bash
+uv run factory models gateway
+```
+
+See [ADR 0002](docs/decisions/0002-per-role-llm-providers.md).
 
 ## Commands
 

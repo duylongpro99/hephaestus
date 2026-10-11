@@ -129,7 +129,8 @@ def test_missing_api_key_names_the_env_var(monkeypatch):
 def test_router_builds_openai_compatible_provider_with_injected_client():
     provider = provider_for("a2_scriptwriter", client=FakeOpenAI([]))
     assert isinstance(provider, OpenAICompatibleProvider)
-    assert provider.identity.startswith("deepseek/deepseek-v4-pro#")
+    role = load_llm_config().role("a2_scriptwriter")
+    assert provider.identity.startswith(f"{role.provider}/{role.model}#")
 
 
 class _Attempt(NS):
@@ -153,3 +154,38 @@ def test_anthropic_fallback_attempts_are_each_priced():
 def test_anthropic_final_text_skips_the_declined_attempt():
     blocks = [NS(type="text", text='{"partial'), NS(type="fallback"), NS(type="text", text='{"ok": 1}')]
     assert final_text(NS(content=blocks)) == '{"ok": 1}'
+
+
+def test_gateway_url_comes_from_the_environment(monkeypatch):
+    from factory.adapters.llm.router import make_client
+
+    provider = load_llm_config().providers["gateway"]
+    monkeypatch.setenv(provider.api_key_env, "test-key")
+    monkeypatch.delenv(provider.base_url_env, raising=False)
+    with pytest.raises(LLMError, match=provider.base_url_env):
+        make_client(provider)
+    monkeypatch.setenv(provider.base_url_env, "https://llm.example.test/v1")
+    assert str(make_client(provider).base_url).startswith("https://llm.example.test/v1")
+
+
+def test_provider_needs_exactly_one_url_source():
+    from factory.adapters.llm.router import ProviderConfig
+
+    with pytest.raises(ValueError):
+        ProviderConfig(type="openai_compatible", api_key_env="K")
+    with pytest.raises(ValueError):
+        ProviderConfig(type="openai_compatible", api_key_env="K", base_url="https://a", base_url_env="U")
+
+
+def test_dotenv_never_overrides_the_shell(tmp_path, monkeypatch):
+    from factory.env import load_dotenv
+
+    env = tmp_path / ".env"
+    env.write_text('# comment\nexport FACTORY_TEST_A="from file"\nFACTORY_TEST_B=file\n')
+    monkeypatch.delenv("FACTORY_TEST_A", raising=False)
+    monkeypatch.setenv("FACTORY_TEST_B", "shell")
+    assert load_dotenv(env) == ["FACTORY_TEST_A"]
+    import os
+
+    assert os.environ["FACTORY_TEST_A"] == "from file" and os.environ["FACTORY_TEST_B"] == "shell"
+    monkeypatch.delenv("FACTORY_TEST_A")
