@@ -27,4 +27,5 @@ uv run factory review <script.json> --spec <spec.json>   # two-persona review pa
 
 - [Architecture](docs/architecture.md): the multi-agent factory design.
 - [Research](docs/research.md): market, pedagogy and licensing research.
-- [Decisions](docs/decisions/): architecture decision records.
+- [Decisions](docs/decisions/): architecture decision records, starting with
+  [ADR 0001: first slice and spike scope](docs/decisions/0001-first-slice-and-spike-scope.md).
