@@ -5,7 +5,7 @@ other's verdict or the Level Editor's reasoning. Each returns a QAReport and a G
 the decision rules below are enforced in code, not left to the model.
 """
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Literal
 
@@ -58,7 +58,7 @@ class Review:
     qa_report: QAReport
     decision: GateDecision
     level_fit_verdict: str
-    cost: CostEntry | None = None
+    costs: list[CostEntry] = field(default_factory=list)
 
     @property
     def approved(self) -> bool:
@@ -83,7 +83,7 @@ def enforce_rules(verdict: PanelVerdict) -> str:
     return verdict.decision
 
 
-def to_review(verdict: PanelVerdict, persona: str, episode_id: str, cost: CostEntry | None = None) -> Review:
+def to_review(verdict: PanelVerdict, persona: str, episode_id: str, costs: list[CostEntry] | None = None) -> Review:
     report = QAReport(
         episode_id=episode_id,
         reviewer=persona,
@@ -106,7 +106,7 @@ def to_review(verdict: PanelVerdict, persona: str, episode_id: str, cost: CostEn
         notes=notes,
     )
     return Review(persona=persona, qa_report=report, decision=gate_decision,
-                  level_fit_verdict=verdict.level_fit_verdict, cost=cost)
+                  level_fit_verdict=verdict.level_fit_verdict, costs=costs or [])
 
 
 def build_user(spec: EpisodeSpec, script: Script) -> str:
@@ -126,7 +126,7 @@ def review(persona: str, spec: EpisodeSpec, script: Script, llm: LLMClient) -> R
         station=station(persona), system=system, user=build_user(spec, script),
         output_model=PanelVerdict, effort="high", max_tokens=32_000,
     )
-    return to_review(result.parsed, persona, spec.episode_id, result.cost)
+    return to_review(result.parsed, persona, spec.episode_id, result.costs)
 
 
 def run_panel(spec: EpisodeSpec, script: Script, llm: LLMClient) -> list[Review]:

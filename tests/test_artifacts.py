@@ -80,10 +80,9 @@ def test_editing_a_dialogue_line_updates_its_replay_copy(session):
 def test_insert_in_dialogue_also_inserts_in_replay(session):
     session.insert_line("s2l1", "anna", "Really?", {"vi": "Thật à?"}, 1500)
     replay = next(s for s in session.script.segments if s.type == "replay")
-    assert [line.text for line in replay.lines][:3] == [
-        "Anna, I was riding my bike home yesterday when it started to rain.", "Really?",
-        "Oh no! Did you have your umbrella?",
-    ]
+    dialogue = next(s for s in session.script.segments if s.type == "dialogue")
+    assert [line.text for line in replay.lines] == [line.text for line in dialogue.lines]
+    assert replay.lines[1].text == "Really?"
     assert len({line.id for line in session.script.iter_lines()}) == len(list(session.script.iter_lines()))
 
 
@@ -97,3 +96,69 @@ def test_session_does_not_mutate_the_input(spec):
     session = EditSession(example, spec, resolve("en-podcast-spike", "A2"), load_pack("en"))
     session.delete_line("s3l3")
     assert "s3l3" in {line.id for line in example.iter_lines()}
+
+
+def test_replay_lines_cannot_be_edited_directly(session):
+    with pytest.raises(ValueError, match="edit the dialogue line s2l1"):
+        session.edit_line("s4l1", "Hi.", {"vi": "Chào."})
+
+
+def test_dialogue_delete_rebuilds_the_replay(session):
+    session.delete_line("s2l3")
+    dialogue = next(s for s in session.script.segments if s.type == "dialogue")
+    replay = next(s for s in session.script.segments if s.type == "replay")
+    assert [line.text for line in replay.lines] == [line.text for line in dialogue.lines]
+    assert [line.id for line in replay.lines] == [f"s4l{i}" for i in range(1, len(dialogue.lines) + 1)]
+
+
+def test_quiz_items_are_editable(session):
+    session.edit_quiz_item("s5q1", "Where did Ben get an umbrella?", ["At a shop", "At home"], 0, {"vi": "Ben lấy ô ở đâu?"})
+    item = session.script.segments[4].items[0]
+    assert item.options == ["At a shop", "At home"]
+    with pytest.raises(ValueError):
+        session.edit_quiz_item("s5q1", "Q?", ["Only one"], 0, {"vi": "?"})
+
+
+def test_insert_rejects_unknown_speaker(session):
+    with pytest.raises(ValueError, match="unknown speaker"):
+        session.insert_line("s3l1", "narrator", "Hi.", {"vi": "Chào."}, 500)
+
+
+class _Attempt:
+    def __init__(self, model, inp, out, read=0, type_="message"):
+        self.model, self.input_tokens, self.output_tokens, self.type = model, inp, out, type_
+        self.cache_creation_input_tokens, self.cache_read_input_tokens = 0, read
+
+
+class _Message:
+    def __init__(self, model, usage, content=()):
+        self.model, self.usage, self.content, self.stop_reason = model, usage, list(content), "end_turn"
+
+
+def test_fallback_attempts_are_each_priced():
+    from factory.adapters.llm.anthropic_client import cost_entries
+
+    usage = _Attempt("claude-opus-4-8", 1000, 500)
+    usage.iterations = [_Attempt("claude-opus-5-5", 1_000_000, 0), _Attempt("claude-opus-4-8", 1_000_000, 0, type_="fallback_message")]
+    entries = cost_entries("a2", _Message("claude-opus-4-8", usage))
+    assert [e.model for e in entries] == ["claude-opus-5-5", "claude-opus-4-8"]
+    assert [e.usd for e in entries] == [4.0, 5.0]
+
+
+def test_unknown_model_price_is_recorded_not_raised():
+    from factory.adapters.llm.anthropic_client import cost_entries
+
+    usage = _Attempt("claude-mystery-9", 10, 10)
+    [entry] = cost_entries("a2", _Message("claude-mystery-9", usage))
+    assert entry.priced is False and entry.usd == 0.0
+
+
+def test_final_text_skips_the_declined_attempt():
+    from factory.adapters.llm.anthropic_client import final_text
+
+    class Block:
+        def __init__(self, type_, text=""):
+            self.type, self.text = type_, text
+
+    message = _Message("m", None, [Block("text", '{"partial'), Block("fallback"), Block("text", '{"ok": 1}')])
+    assert final_text(message) == '{"ok": 1}'

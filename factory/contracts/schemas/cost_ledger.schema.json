@@ -28,6 +28,11 @@
           "title": "Output Tokens",
           "type": "integer"
         },
+        "priced": {
+          "default": true,
+          "title": "Priced",
+          "type": "boolean"
+        },
         "station": {
           "title": "Station",
           "type": "string"
@@ -76,7 +81,7 @@
       "type": "string"
     },
     "schema_version": {
-      "default": "1.0.0",
+      "default": "1.1.0",
       "title": "Schema Version",
       "type": "string"
     },

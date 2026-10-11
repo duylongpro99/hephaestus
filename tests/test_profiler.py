@@ -118,3 +118,35 @@ def test_phase_three_fixture_profiles(pack, config, script, spec):
     text = format_report(report)
     assert "in-level ratio" in text and not report.passed
     assert {"target_repetition", "duration"} <= gates(report)
+
+
+def test_curly_apostrophes_are_in_level(pack, config):
+    straight = profile(make_script(CLEAN_LINES + ["I don't know. It's Anna's key, and it's cheap."]), make_spec(), config, pack)
+    curly = profile(make_script(CLEAN_LINES + ["I don’t know. It’s Anna’s key, and it’s cheap."]), make_spec(), config, pack)
+    assert curly.off_level_tokens == []
+    assert curly.in_level_ratio == straight.in_level_ratio
+    assert curly.sentence_length == straight.sentence_length
+
+
+def test_inflected_target_forms_count(pack, config):
+    spec = make_spec().model_copy(update={"target_words": ["rent"]})
+    script = make_script(["I rent a small flat.", "Renting is not cheap.", "She rented a car.", "He rents a room."])
+    script.vocab[0].word = "rent"
+    report = profile(script, spec, config, pack)
+    assert report.target_word_counts == {"rent": 4}
+
+
+def test_multi_word_target_is_counted_as_a_phrase(pack, config):
+    spec = make_spec().model_copy(update={"target_words": ["get up"]})
+    report = profile(make_script(["I get up at six.", "Do you get up early?", "We got up late."]), spec, config, pack)
+    assert report.target_word_counts == {"get up": 2}
+
+
+def test_replay_mismatch_is_a_gate(pack, config, script, spec):
+    data = script.model_dump()
+    data["segments"].insert(1, {"id": "s9", "type": "replay", "lines": [
+        {**data["segments"][0]["lines"][0], "id": "s9l1", "text": "Hello! Can I see the menu?"},
+    ]})
+    report = profile(Script.model_validate(data), spec, config, pack)
+    failure = next(f for f in report.gate_failures if f.gate == "replay_mismatch")
+    assert failure.line_ids == ["s9l1"]

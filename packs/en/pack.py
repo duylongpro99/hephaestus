@@ -79,7 +79,8 @@ class EnPack:
         ]
 
     def tokenize(self, text: str) -> list[Token]:
-        doc = self.nlp(text)
+        # Typographic apostrophes would split "don’t" into an unknown "n’t"; spaCy expects ASCII.
+        doc = self.nlp(text.replace("\u2019", "'").replace("\u2018", "'"))
         sentence_of = {}
         for index, sent in enumerate(doc.sents):
             for tok in sent:
@@ -153,6 +154,11 @@ class EnPack:
             return min(r for r in (entry.get("rank"), entry.get("spoken_rank"), 10_000) if r is not None)
 
         return sorted(found, key=rank)
+
+    def lemma_forms(self, lemma: str) -> list[str]:
+        """Inflected forms of a headword from the lexicon (empty when the word is not listed)."""
+        headwords, _ = self._lexicon
+        return list((headwords.get(lemma.lower()) or {}).get("forms", []))
 
     def level_wordlist(self, level: str) -> dict[str, list[str]]:
         """Headwords at or below `level`, grouped by level and sorted alphabetically."""

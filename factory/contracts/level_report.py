@@ -5,7 +5,7 @@ from pydantic import computed_field
 from factory.contracts.base import Contract, Part
 
 GateName = Literal[
-    "coverage", "new_words", "target_repetition", "sentence_length", "duration", "vocab_gloss"
+    "coverage", "new_words", "target_repetition", "sentence_length", "duration", "vocab_gloss", "replay_mismatch"
 ]
 
 
@@ -35,7 +35,7 @@ class GateFailure(Part):
 class LevelReport(Contract):
     """Code-gate verdict on a script (architecture §4.4), written by the profiler."""
 
-    schema_version: str = "1.0.0"
+    schema_version: str = "1.1.0"
     episode_id: str
     level: str
     config_hash: str

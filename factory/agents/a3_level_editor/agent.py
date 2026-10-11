@@ -12,7 +12,9 @@ from typing import Literal
 
 from anthropic import beta_tool
 
-from factory.adapters.llm.anthropic_client import LLMClient
+from pydantic import ValidationError
+
+from factory.adapters.llm.anthropic_client import LLMClient, LLMError
 from factory.agents.drafts import to_draft_dict, translation_languages
 from factory.agents.prefix import system_blocks
 from factory.artifacts import station_version
@@ -56,15 +58,39 @@ class EditSession:
                     return segment.lines, index, segment.type
         raise EditError(f"no line with id {line_id}")
 
-    def _replay_twin(self, line_id: str) -> tuple[list[Line], int] | None:
-        """The replay copy of a dialogue line, matched by position in the segment."""
+    def _dialogue_lines(self) -> list[Line]:
+        return [line for s in self.script.segments if s.type == "dialogue" for line in s.lines]
+
+    def _editable(self, line_id: str) -> tuple[list[Line], int, str]:
+        """Locate a line A3 may change directly. Replay lines are rebuilt from the dialogue."""
         lines, index, seg_type = self._locate(line_id)
-        if seg_type != "dialogue":
-            return None
+        if seg_type == "replay":
+            dialogue = self._dialogue_lines()
+            hint = f"edit the dialogue line {dialogue[index].id} instead" if index < len(dialogue) else "edit the dialogue"
+            raise EditError(f"{line_id} is a replay line; {hint}, and the replay is rebuilt from it")
+        return lines, index, seg_type
+
+    def sync_replay(self) -> str:
+        """Rebuild the replay from the dialogue, keeping the replay's own pauses where it has them."""
         replay = next((s for s in self.script.segments if s.type == "replay"), None)
-        if replay is None or index >= len(replay.lines) or replay.lines[index].text != lines[index].text:
-            return None
-        return replay.lines, index
+        if replay is None:
+            return "no replay segment"
+        old_pauses = [line.pause_after_ms for line in replay.lines]
+        replay.lines = [
+            line.model_copy(update={
+                "id": f"{replay.id}l{i}",
+                "pause_after_ms": old_pauses[i - 1] if i <= len(old_pauses) else 500,
+                "visual_cue": None,
+            })
+            for i, line in enumerate(self._dialogue_lines(), start=1)
+        ]
+        return f"replay rebuilt from the dialogue ({len(replay.lines)} lines)"
+
+    def _after_change(self, seg_type: str, message: str) -> str:
+        self.edits += 1
+        if seg_type == "dialogue":
+            message += "; " + self.sync_replay()
+        return message
 
     def _check_translations(self, translations: dict[str, str]) -> dict[str, str]:
         missing = [lang for lang in self.translations if not translations.get(lang, "").strip()]
@@ -73,7 +99,7 @@ class EditSession:
         return {lang: translations[lang] for lang in self.translations}
 
     def _new_id(self, after_id: str) -> str:
-        existing = {line.id for line in self.script.iter_lines()}
+        existing = {x.id for s in self.script.segments for x in [*s.lines, *s.items]}
         n = 1
         while f"{after_id}x{n}" in existing:
             n += 1
@@ -81,51 +107,56 @@ class EditSession:
 
     def edit_line(self, line_id: str, text: str, translations: dict[str, str]) -> str:
         translations = self._check_translations(translations)
-        twin = self._replay_twin(line_id)
-        lines, index, _ = self._locate(line_id)
+        lines, index, seg_type = self._editable(line_id)
         lines[index] = lines[index].model_copy(update={"text": text, "translation": translations})
-        if twin:
-            t_lines, t_index = twin
-            t_lines[t_index] = t_lines[t_index].model_copy(update={"text": text, "translation": translations})
-        self.edits += 1
-        return f"edited {line_id}" + (f" and its replay copy {t_lines[t_index].id}" if twin else "")
+        return self._after_change(seg_type, f"edited {line_id}")
 
     def insert_line(
         self, after_line_id: str, speaker: str, text: str, translations: dict[str, str], pause_after_ms: int,
     ) -> str:
         translations = self._check_translations(translations)
-        twin = self._replay_twin(after_line_id)
-        lines, index, _ = self._locate(after_line_id)
+        cast = {member.id for member in self.config.channel.cast}
+        if speaker not in cast:
+            raise EditError(f"unknown speaker {speaker}; use one of {sorted(cast)}")
+        lines, index, seg_type = self._editable(after_line_id)
         new = Line(id=self._new_id(after_line_id), speaker=speaker, text=text,
-                   translation=translations, pause_after_ms=pause_after_ms)
+                   translation=translations, pause_after_ms=max(0, pause_after_ms))
         lines.insert(index + 1, new)
-        result = f"inserted {new.id}"
-        if twin:
-            t_lines, t_index = twin
-            copy = new.model_copy(update={"id": self._new_id(t_lines[t_index].id),
-                                          "pause_after_ms": t_lines[t_index].pause_after_ms})
-            t_lines.insert(t_index + 1, copy)
-            result += f" and its replay copy {copy.id}"
-        self.edits += 1
-        return result
+        return self._after_change(seg_type, f"inserted {new.id}")
 
     def delete_line(self, line_id: str) -> str:
-        twin = self._replay_twin(line_id)
-        lines, index, _ = self._locate(line_id)
+        lines, index, seg_type = self._editable(line_id)
         if len(lines) == 1:
             raise EditError("cannot delete the only line of a segment")
-        if twin:
-            t_lines, t_index = twin
-            del t_lines[t_index]
         del lines[index]
-        self.edits += 1
-        return f"deleted {line_id}" + (" and its replay copy" if twin else "")
+        return self._after_change(seg_type, f"deleted {line_id}")
 
     def set_pause(self, line_id: str, pause_after_ms: int) -> str:
-        lines, index, _ = self._locate(line_id)
+        lines, index, _ = self._locate(line_id)  # replay pauses are the replay's own
         lines[index] = lines[index].model_copy(update={"pause_after_ms": max(0, pause_after_ms)})
         self.edits += 1
         return f"set pause after {line_id} to {pause_after_ms} ms"
+
+    def edit_quiz_item(
+        self, item_id: str, question: str, options: list[str], answer_index: int, translations: dict[str, str],
+    ) -> str:
+        translations = self._check_translations(translations)
+        for segment in self.script.segments:
+            for index, item in enumerate(segment.items):
+                if item.id == item_id:
+                    if len(options) < 2 or not 0 <= answer_index < len(options):
+                        raise EditError("need at least 2 options and an answer_index inside them")
+                    segment.items[index] = item.model_copy(update={
+                        "question": question, "options": options, "answer_index": answer_index,
+                        "translation": translations,
+                    })
+                    self.edits += 1
+                    return f"edited quiz item {item_id}"
+        raise EditError(f"no quiz item with id {item_id}")
+
+    def validate(self) -> None:
+        """Re-check the edited script against the Script contract."""
+        self.script = Script.model_validate(self.script.model_dump())
 
     def set_vocab_gloss(self, word: str, glosses: dict[str, str]) -> str:
         support = self.config.channel.support_languages
@@ -147,6 +178,8 @@ class EditSession:
     def profile_summary(self) -> str:
         report = self.report()
         text = {line.id: line.text for line in self.script.iter_lines()}
+        text |= {item.id: " / ".join([item.question, *item.options])
+                 for segment in self.script.segments for item in segment.items}
         flagged = sorted({lid for f in report.gate_failures for lid in f.line_ids})
         return json.dumps({
             "passed": report.passed,
@@ -199,7 +232,7 @@ def make_tools(session: EditSession) -> list:
 
     @beta_tool
     def edit_line(line_id: str, text: str, translations: dict[str, str]) -> str:
-        """Replace the text of one line. A dialogue line's replay copy is updated too.
+        """Replace the text of one line. Editing a dialogue line rebuilds the replay from the dialogue.
 
         Args:
             line_id: The id of the line to change, e.g. "s2l4".
@@ -211,7 +244,7 @@ def make_tools(session: EditSession) -> list:
     @beta_tool
     def insert_line(after_line_id: str, speaker: str, text: str, translations: dict[str, str],
                     pause_after_ms: int) -> str:
-        """Insert a new line after an existing line. In the dialogue, the replay gets a copy too.
+        """Insert a new line after an existing line. In the dialogue, the replay is rebuilt to match.
 
         Args:
             after_line_id: The id of the line the new line follows.
@@ -224,7 +257,7 @@ def make_tools(session: EditSession) -> list:
 
     @beta_tool
     def delete_line(line_id: str) -> str:
-        """Delete one line. In the dialogue, its replay copy is deleted too.
+        """Delete one line. In the dialogue, the replay is rebuilt to match.
 
         Args:
             line_id: The id of the line to delete.
@@ -242,6 +275,25 @@ def make_tools(session: EditSession) -> list:
         return guarded(session.set_pause, line_id, pause_after_ms)
 
     @beta_tool
+    def edit_quiz_item(item_id: str, question: str, options: list[str], answer_index: int,
+                       translations: dict[str, str]) -> str:
+        """Replace an on-screen quiz item (question, options, answer).
+
+        Args:
+            item_id: The id of the quiz item, e.g. "s5q1".
+            question: The new question in the target language.
+            options: The answer options in the target language, at least 2.
+            answer_index: Zero-based index of the correct option.
+            translations: Translation of the question per translation language, e.g. {"vi": "..."}.
+        """
+        return guarded(session.edit_quiz_item, item_id, question, options, answer_index, translations)
+
+    @beta_tool
+    def sync_replay() -> str:
+        """Rebuild the replay segment from the dialogue, line for line (fixes replay_mismatch)."""
+        return session.sync_replay()
+
+    @beta_tool
     def set_vocab_gloss(word: str, glosses: dict[str, str]) -> str:
         """Add or replace the glosses of a vocabulary item.
 
@@ -252,7 +304,7 @@ def make_tools(session: EditSession) -> list:
         return guarded(session.set_vocab_gloss, word, glosses)
 
     return [lexical_profile, rate_estimate, find_simpler_synonym, edit_line, insert_line,
-            delete_line, set_pause, set_vocab_gloss]
+            delete_line, set_pause, edit_quiz_item, sync_replay, set_vocab_gloss]
 
 
 @dataclass
@@ -262,6 +314,7 @@ class LevelLoopResult:
     turns: int
     reports: list[LevelReport]
     costs: list[CostEntry] = field(default_factory=list)
+    error: str | None = None  # why the loop stopped early, if it did
 
 
 def build_user(session: EditSession, report: LevelReport) -> str:
@@ -284,13 +337,22 @@ def level_loop(
     tools = make_tools(session)
     reports = [session.report()]
     costs: list[CostEntry] = []
-    turns = 0
+    turns, error = 0, None
     while not reports[-1].passed and turns < max_turns:
         turns += 1
-        turn_costs, _ = llm.tool_loop(
-            station=STATION, system=system, user=build_user(session, reports[-1]), tools=tools,
-        )
-        costs += turn_costs
+        try:
+            costs += llm.tool_loop(
+                station=STATION, system=system, user=build_user(session, reports[-1]), tools=tools,
+            )
+            session.validate()
+        except LLMError as exc:
+            costs += exc.costs
+            error = str(exc)
+        except ValidationError as exc:
+            error = f"edited script broke the Script contract: {exc}"
         reports.append(session.report())
-    status: Status = "PASSED" if reports[-1].passed else "ESCALATED"
-    return LevelLoopResult(script=session.script, status=status, turns=turns, reports=reports, costs=costs)
+        if error:
+            break
+    status: Status = "PASSED" if reports[-1].passed and not error else "ESCALATED"
+    return LevelLoopResult(script=session.script, status=status, turns=turns, reports=reports,
+                           costs=costs, error=error)

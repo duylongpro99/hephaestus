@@ -4,6 +4,7 @@ It talks to the target language only through the LanguagePack interface, and rea
 threshold from the resolved level band.
 """
 
+import re
 from collections import Counter, defaultdict
 from dataclasses import dataclass
 from statistics import mean
@@ -37,18 +38,43 @@ def is_word(token: Token) -> bool:
 
 
 def is_content(token: Token, names: set[str]) -> bool:
-    return not (token.is_punct or token.is_num or token.is_proper or token.surface.lower() in names)
+    """A token that carries vocabulary load. Clitics, numbers, names and interjections do not."""
+    return is_word(token) and not (
+        token.is_num or token.is_proper or token.pos == "INTJ" or token.surface.lower() in names
+    )
 
 
-def matches(token: Token, word: str) -> bool:
-    return token.lemma == word or token.surface.lower() == word
+def matches(token: Token, forms: set[str]) -> bool:
+    return token.lemma in forms or token.surface.lower() in forms
+
+
+def phrase_count(text: str, phrase: str) -> int:
+    normalized = text.lower().replace("\u2019", "'")
+    return len(re.findall(rf"(?<![\w']){re.escape(phrase)}(?![\w'])", normalized))
+
+
+def replay_mismatches(script: Script) -> list[str]:
+    """Replay line ids whose text differs from the dialogue, line for line."""
+    dialogue = [line for s in script.segments if s.type == "dialogue" for line in s.lines]
+    replay = [line for s in script.segments if s.type == "replay" for line in s.lines]
+    if not replay:
+        return []
+    bad = [r.id for d, r in zip(dialogue, replay) if d.text.strip() != r.text.strip()]
+    bad += [r.id for r in replay[len(dialogue):]]
+    if len(replay) < len(dialogue):
+        bad.append(f"missing {len(dialogue) - len(replay)} replay line(s)")
+    return bad
 
 
 def profile(script: Script, spec: EpisodeSpec, config: ResolvedConfig, pack: LanguagePack) -> LevelReport:
     band = config.band
     level = config.level
     targets = [w.lower() for w in spec.target_words]
-    allowed = set(targets) | {w.lower() for w in spec.review_words}
+    single_targets = {t: {t, *pack.lemma_forms(t)} for t in targets if " " not in t}
+    phrase_targets = [t for t in targets if " " in t]
+    target_forms = set().union(*single_targets.values()) if single_targets else set()
+    review_forms = {f for w in spec.review_words for f in (w.lower(), *pack.lemma_forms(w.lower()))}
+    allowed = target_forms | review_forms
     names = {c.lower() for c in spec.cast} | {m.id.lower() for m in config.channel.cast}
     names.add(config.channel.persona.name.lower())
 
@@ -66,16 +92,16 @@ def profile(script: Script, spec: EpisodeSpec, config: ResolvedConfig, pack: Lan
             if unit.spoken and is_word(token):
                 words_per_sentence[token.sentence] += 1
             if unit.spoken:
-                for target in targets:
-                    if matches(token, target):
+                for target, forms in single_targets.items():
+                    if matches(token, forms):
                         target_counts[target] += 1
             if not is_content(token, names):
                 continue
             content_count += 1
             content_lemmas.add(token.lemma)
-            if token.lemma in allowed or token.surface.lower() in allowed:
+            if matches(token, allowed):
                 in_level_count += 1
-                if token.lemma in targets or token.surface.lower() in targets:
+                if matches(token, target_forms):
                     new_lemmas.add(token.lemma)
                 continue
             token_level = pack.lemma_level(token, config.framework)
@@ -87,6 +113,9 @@ def profile(script: Script, spec: EpisodeSpec, config: ResolvedConfig, pack: Lan
                     line_id=unit.id, surface=token.surface, lemma=token.lemma, level=token_level,
                 ))
         sentence_lengths += [(unit.id, n) for n in words_per_sentence.values()]
+        if unit.spoken:
+            for phrase in phrase_targets:
+                target_counts[phrase] += phrase_count(unit.text, phrase)
 
     in_level_ratio = round(in_level_count / content_count, 4) if content_count else 1.0
     new_word_ratio = round(len(new_lemmas) / len(content_lemmas), 4) if content_lemmas else 0.0
@@ -139,6 +168,14 @@ def profile(script: Script, spec: EpisodeSpec, config: ResolvedConfig, pack: Lan
     missing_gloss = _missing_glosses(script, targets, config.channel.support_languages)
     if missing_gloss:
         failures.append(GateFailure(gate="vocab_gloss", detail="; ".join(missing_gloss)))
+
+    mismatched = replay_mismatches(script)
+    if mismatched:
+        failures.append(GateFailure(
+            gate="replay_mismatch",
+            detail="the replay must repeat the dialogue line for line",
+            line_ids=[m for m in mismatched if not m.startswith("missing")],
+        ))
 
     return LevelReport(
         episode_id=script.episode_id,

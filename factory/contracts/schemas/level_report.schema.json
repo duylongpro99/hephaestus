@@ -14,7 +14,8 @@
             "target_repetition",
             "sentence_length",
             "duration",
-            "vocab_gloss"
+            "vocab_gloss",
+            "replay_mismatch"
           ],
           "title": "Gate",
           "type": "string"
@@ -180,7 +181,7 @@
       "type": "boolean"
     },
     "schema_version": {
-      "default": "1.0.0",
+      "default": "1.1.0",
       "title": "Schema Version",
       "type": "string"
     },

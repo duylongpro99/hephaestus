@@ -33,6 +33,18 @@ def read_json(path: Path):
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+def append_attempt(path: Path, attempt: dict) -> None:
+    """Keep every run of an episode; the last attempt is the current one."""
+    record = read_json(path) if path.exists() else {"attempts": []}
+    attempt["finished_at"] = datetime.now(timezone.utc).isoformat()
+    record["attempts"].append(attempt)
+    write_json(path, record)
+
+
+def latest_attempt(path: Path) -> dict | None:
+    return read_json(path)["attempts"][-1] if path.exists() else None
+
+
 @app.command("profile")
 def profile_cmd(
     script_path: Path = typer.Argument(..., exists=True, help="Script JSON"),
@@ -76,7 +88,12 @@ def script_cmd(
     ledger = CostLedger(episode_id=spec.episode_id, budget_usd=spec.budget_usd)
 
     a2_version = a2.version(llm.model)
-    a2_inputs = [spec, config.config_hash]
+    from factory.agents.prefix import wordlist_block
+    from factory.artifacts import sha256_text
+
+    # The wordlist comes from pack data that neither the config hash nor the code hash covers.
+    wordlist_hash = sha256_text(wordlist_block(config, pack))
+    a2_inputs = [spec, config.config_hash, wordlist_hash]
     envelope = None if fresh else store.read_envelope(**where, station=a2.STATION, version=a2_version,
                                                       inputs=a2_inputs)
     if envelope:
@@ -85,17 +102,17 @@ def script_cmd(
         typer.echo(f"A2: reusing stored draft {a2.STATION}@{envelope['hash']}")
     else:
         typer.echo(f"A2: drafting {spec.episode_id} with {llm.model} ...")
-        draft, a2_cost = a2.write_script(spec, config, pack, llm)
-        a2_costs = [a2_cost]
+        draft, a2_costs = a2.write_script(spec, config, pack, llm)
         store.write(**where, station=a2.STATION, version=a2_version, inputs=a2_inputs, artifact=draft,
                     extra={"cost": [c.model_dump(mode="json") for c in a2_costs]})
-        typer.echo(f"A2: done, ${a2_cost.usd:.4f}, cache read {a2_cost.cache_read_input_tokens} tokens")
+        typer.echo(f"A2: done, ${sum(c.usd for c in a2_costs):.4f}, "
+                   f"cache read {sum(c.cache_read_input_tokens for c in a2_costs)} tokens")
     ledger.entries += a2_costs
 
     result = a3.level_loop(draft, spec, config, pack, llm, max_turns=max_turns)
     ledger.entries += result.costs
     a3_version = a3.version(llm.model)
-    a3_inputs = [draft, spec, config.config_hash]
+    a3_inputs = [draft, spec, config.config_hash, wordlist_hash]
     script_path = store.write(**where, station=a3.STATION, version=a3_version, inputs=a3_inputs,
                               artifact=result.script,
                               extra={"status": result.status, "turns": result.turns,
@@ -107,9 +124,10 @@ def script_cmd(
     elapsed = round(time.monotonic() - started, 1)
     out_dir = eval_dir(config)
     write_json(out_dir / "scripts" / f"{spec.episode_id}.json", result.script.model_dump(mode="json"))
-    write_json(out_dir / "runs" / f"{spec.episode_id}.json", {
+    append_attempt(out_dir / "runs" / f"{spec.episode_id}.json", {
         "episode_id": spec.episode_id,
         "status": result.status,
+        "error": result.error,
         "a3_turns": result.turns,
         "elapsed_s": elapsed,
         "station_versions": {a2.STATION: a2_version, a3.STATION: a3_version},
@@ -120,7 +138,8 @@ def script_cmd(
 
     for entry in ledger.entries:
         typer.echo(f"  {entry.station:<16} {entry.model:<18} in={entry.input_tokens} out={entry.output_tokens} "
-                   f"cache_w={entry.cache_creation_input_tokens} cache_r={entry.cache_read_input_tokens} ${entry.usd:.4f}")
+                   f"cache_w={entry.cache_creation_input_tokens} cache_r={entry.cache_read_input_tokens} ${entry.usd:.4f}"
+                   + ("" if entry.priced else " (no price for this model; not in the total)"))
     typer.echo(format_report(result.reports[-1]))
     typer.echo(f"status {result.status} after {result.turns} A3 turn(s); total ${ledger.total_usd:.4f}; {elapsed:.0f}s")
     typer.echo(f"artifact: {script_path}")
@@ -141,6 +160,7 @@ def review_cmd(
     script_path = script_path or eval_dir(config) / "scripts" / f"{spec.episode_id}.json"
     script = Script.model_validate_json(script_path.read_text(encoding="utf-8"))
     llm = LLMClient()
+    run_path = eval_dir(config) / "runs" / f"{spec.episode_id}.json"
     for persona in panel.PERSONAS:
         result = panel.review(persona, spec, script, llm)
         write_json(eval_dir(config) / "reviews" / spec.episode_id / f"{persona}.json", {
@@ -148,11 +168,18 @@ def review_cmd(
             "level_fit_verdict": result.level_fit_verdict,
             "qa_report": result.qa_report.model_dump(mode="json"),
             "gate_decision": result.decision.model_dump(mode="json"),
-            "cost": result.cost.model_dump(mode="json") if result.cost else None,
+            "costs": [c.model_dump(mode="json") for c in result.costs],
         })
+        if run_path.exists():  # the panel's cost belongs to the script's ledger
+            record = read_json(run_path)
+            data = {k: v for k, v in record["attempts"][-1]["cost_ledger"].items() if k != "total_usd"}
+            data["entries"] += [c.model_dump(mode="json") for c in result.costs]
+            ledger = CostLedger.model_validate(data)
+            record["attempts"][-1]["cost_ledger"] = ledger.model_dump(mode="json")
+            write_json(run_path, record)
         counts = {sev: sum(i.severity == sev for i in result.qa_report.issues) for sev in ("critical", "major", "minor")}
         typer.echo(f"{persona:<9} {result.decision.decision:<16} level {result.level_fit_verdict:<5} "
-                   f"issues {counts}  ${result.cost.usd if result.cost else 0:.4f}")
+                   f"issues {counts}  ${sum(c.usd for c in result.costs):.4f}")
 
 
 @app.command("decide")
@@ -167,6 +194,8 @@ def decide_cmd(
     config = resolve(spec.channel, spec.level)
     if level_fit not in ("below", "at", "above"):
         raise typer.BadParameter("level-fit must be below, at or above")
+    if decision not in ("approve", "edit-and-approve", "reject"):
+        raise typer.BadParameter("decision must be approve, edit-and-approve or reject")
     gate_decision = GateDecision(episode_id=spec.episode_id, gate=1, user="human", decision=decision, notes=notes)
     path = eval_dir(config) / "reviews" / spec.episode_id / "human.json"
     write_json(path, {"level_fit_verdict": level_fit, "gate_decision": gate_decision.model_dump(mode="json")})
@@ -185,15 +214,15 @@ def summary_cmd(
     base = eval_dir(config)
     rows = []
     for spec in specs:
-        run_path = base / "runs" / f"{spec.episode_id}.json"
-        run = read_json(run_path) if run_path.exists() else None
+        run = latest_attempt(base / "runs" / f"{spec.episode_id}.json")
         reviews = {}
         for name in ("examiner", "learner", "human"):
             path = base / "reviews" / spec.episode_id / f"{name}.json"
             if path.exists():
                 reviews[name] = read_json(path)
-        panel_usd = sum((r.get("cost") or {}).get("usd", 0) for r in reviews.values())
-        script_usd = run["cost_ledger"]["total_usd"] if run else 0
+        panel_usd = sum(c["usd"] for r in reviews.values() for c in r.get("costs", []))
+        entries = run["cost_ledger"]["entries"] if run else []
+        script_usd = sum(e["usd"] for e in entries if not e["station"].startswith("review_"))
         final = run["final_report"] if run else None
         rows.append({
             "episode_id": spec.episode_id,

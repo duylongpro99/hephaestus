@@ -30,6 +30,7 @@ turn gives you the current gate report and the script.
 - **duration** (too short or too long): insert or delete lines in the explanation or quiz,
   or adjust `pause_after_ms`. Keep pauses inside the band's `pause_ms` range for slow
   segments.
+- **replay_mismatch**: call `sync_replay`.
 - **vocab_gloss**: add the missing gloss with `set_vocab_gloss`. A gloss in the target
   language must use only wordlist words.
 
@@ -39,4 +40,7 @@ turn gives you the current gate report and the script.
   naturally by a native speaker of that language.
 - Keep the speakers, the story and the grammar point. Use only structures from the allowed
   grammar list.
-- Dialogue lines and their replay copies must stay identical; the tools keep them in step.
+- Never edit replay lines. Edit the dialogue line instead; the replay is rebuilt from the
+  dialogue after every dialogue edit. For a `replay_mismatch` failure, call `sync_replay`.
+- Off-level words in an on-screen quiz item (ids like `s5q1`) are fixed with
+  `edit_quiz_item`.
