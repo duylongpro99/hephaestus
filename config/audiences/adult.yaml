@@ -1,0 +1,17 @@
+# Audience Profile: adult learners, 18+ (architecture §4.0).
+profile: adult
+version: 1
+ages: [18, null]
+made_for_kids: false
+rate_multiplier: 1.0
+length_min: [6, 25]
+formats:
+  - graded_story
+  - slow_dialogue_explain_replay
+  - topic_talk
+  - shadowing
+  - exam_prep_drill
+  - news_digest
+  - culture_vlog_narrated
+# Values here override the framework band for this audience.
+band_overrides: {}

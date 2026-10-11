@@ -1,0 +1,187 @@
+{
+  "$defs": {
+    "RateTarget": {
+      "additionalProperties": false,
+      "properties": {
+        "max": {
+          "title": "Max",
+          "type": "number"
+        },
+        "min": {
+          "title": "Min",
+          "type": "number"
+        },
+        "unit": {
+          "enum": [
+            "wpm",
+            "syllables_s",
+            "mora_s",
+            "chars_min"
+          ],
+          "title": "Unit",
+          "type": "string"
+        }
+      },
+      "required": [
+        "unit",
+        "min",
+        "max"
+      ],
+      "title": "RateTarget",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "The work order for one episode (architecture \u00a74.2).",
+  "properties": {
+    "budget_usd": {
+      "title": "Budget Usd",
+      "type": "number"
+    },
+    "cast": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Cast",
+      "type": "array"
+    },
+    "channel": {
+      "title": "Channel",
+      "type": "string"
+    },
+    "config_hash": {
+      "title": "Config Hash",
+      "type": "string"
+    },
+    "episode_id": {
+      "title": "Episode Id",
+      "type": "string"
+    },
+    "format": {
+      "title": "Format",
+      "type": "string"
+    },
+    "grammar_point": {
+      "title": "Grammar Point",
+      "type": "string"
+    },
+    "length_min": {
+      "maxItems": 2,
+      "minItems": 2,
+      "prefixItems": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "number"
+        }
+      ],
+      "title": "Length Min",
+      "type": "array"
+    },
+    "level": {
+      "title": "Level",
+      "type": "string"
+    },
+    "ordering": {
+      "default": "loose",
+      "enum": [
+        "strict",
+        "loose"
+      ],
+      "title": "Ordering",
+      "type": "string"
+    },
+    "publish_slot": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Publish Slot"
+    },
+    "rate_target": {
+      "$ref": "#/$defs/RateTarget"
+    },
+    "review_words": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Review Words",
+      "type": "array"
+    },
+    "schema_version": {
+      "default": "1.0.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "season_arc_beat": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Season Arc Beat"
+    },
+    "season_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Season Id"
+    },
+    "source": {
+      "enum": [
+        "season",
+        "adhoc"
+      ],
+      "title": "Source",
+      "type": "string"
+    },
+    "target_words": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Target Words",
+      "type": "array"
+    },
+    "theme": {
+      "title": "Theme",
+      "type": "string"
+    }
+  },
+  "required": [
+    "episode_id",
+    "channel",
+    "level",
+    "format",
+    "theme",
+    "target_words",
+    "grammar_point",
+    "rate_target",
+    "length_min",
+    "cast",
+    "source",
+    "config_hash",
+    "budget_usd"
+  ],
+  "title": "EpisodeSpec",
+  "type": "object"
+}

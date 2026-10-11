@@ -1,0 +1,51 @@
+{
+  "episode_id": "en-A2-x00",
+  "title_working": "Coffee for Two",
+  "hook": "Ben wants a cheap coffee. But the menu is very long!",
+  "segments": [
+    {
+      "id": "s1",
+      "type": "dialogue",
+      "speed": "slow",
+      "layout": "podcast_b",
+      "lines": [
+        {"id": "s1l1", "speaker": "ben", "text": "Hi! Can I see the menu, please?", "translation": {"vi": "Xin chào! Cho tôi xem thực đơn được không?"}, "pause_after_ms": 1500, "visual_cue": "menu"},
+        {"id": "s1l2", "speaker": "anna", "text": "Sure. What would you like to order?", "translation": {"vi": "Được chứ. Bạn muốn gọi món gì?"}, "pause_after_ms": 1500, "visual_cue": null},
+        {"id": "s1l3", "speaker": "ben", "text": "I would like a coffee, but a cheap one. It is hard to choose!", "translation": {"vi": "Tôi muốn một ly cà phê, nhưng loại rẻ thôi. Khó chọn quá!"}, "pause_after_ms": 1500, "visual_cue": null},
+        {"id": "s1l4", "speaker": "anna", "text": "The small coffee is cheap. You can pay at the front.", "translation": {"vi": "Cà phê ly nhỏ thì rẻ. Bạn có thể trả tiền ở phía trước."}, "pause_after_ms": 2000, "visual_cue": "counter"}
+      ],
+      "items": []
+    },
+    {
+      "id": "s2",
+      "type": "explanation",
+      "speed": "slow",
+      "layout": "vocab_grid",
+      "lines": [
+        {"id": "s2l1", "speaker": "anna", "text": "When you order food, say: I would like a coffee, please.", "translation": {"vi": "Khi bạn gọi món, hãy nói: Tôi muốn một ly cà phê."}, "pause_after_ms": 2000, "visual_cue": null}
+      ],
+      "items": []
+    },
+    {
+      "id": "s3",
+      "type": "quiz",
+      "speed": "slow",
+      "layout": "quiz",
+      "lines": [
+        {"id": "s3l1", "speaker": "anna", "text": "Quick question. Where does Ben pay?", "translation": {"vi": "Câu hỏi nhanh. Ben trả tiền ở đâu?"}, "pause_after_ms": 3000, "visual_cue": null}
+      ],
+      "items": [
+        {"id": "s3q1", "question": "Where does Ben pay?", "options": ["At the front", "At the table"], "answer_index": 0, "translation": {"vi": "Ben trả tiền ở đâu?"}}
+      ]
+    }
+  ],
+  "vocab": [
+    {"word": "order", "gloss": {"en": "to ask for food or a drink", "vi": "gọi món"}, "is_target": true},
+    {"word": "menu", "gloss": {"en": "a list of the food in a cafe", "vi": "thực đơn"}, "is_target": true},
+    {"word": "cheap", "gloss": {"en": "it does not cost a lot of money", "vi": "rẻ"}, "is_target": true},
+    {"word": "choose", "gloss": {"en": "to take one thing from many", "vi": "chọn"}, "is_target": true},
+    {"word": "pay", "gloss": {"en": "to give money for something", "vi": "trả tiền"}, "is_target": true}
+  ],
+  "grammar_notes": ["Use 'I would like' to ask for something politely."],
+  "interaction_prompts": ["What do you like to order at a cafe? Tell us in the comments."]
+}

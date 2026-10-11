@@ -1,0 +1,219 @@
+{
+  "$defs": {
+    "GateFailure": {
+      "additionalProperties": false,
+      "properties": {
+        "detail": {
+          "title": "Detail",
+          "type": "string"
+        },
+        "gate": {
+          "enum": [
+            "coverage",
+            "new_words",
+            "target_repetition",
+            "sentence_length",
+            "duration",
+            "vocab_gloss"
+          ],
+          "title": "Gate",
+          "type": "string"
+        },
+        "line_ids": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Line Ids",
+          "type": "array"
+        }
+      },
+      "required": [
+        "gate",
+        "detail"
+      ],
+      "title": "GateFailure",
+      "type": "object"
+    },
+    "OffLevelToken": {
+      "additionalProperties": false,
+      "properties": {
+        "lemma": {
+          "title": "Lemma",
+          "type": "string"
+        },
+        "level": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Level"
+        },
+        "line_id": {
+          "title": "Line Id",
+          "type": "string"
+        },
+        "surface": {
+          "title": "Surface",
+          "type": "string"
+        }
+      },
+      "required": [
+        "line_id",
+        "surface",
+        "lemma",
+        "level"
+      ],
+      "title": "OffLevelToken",
+      "type": "object"
+    },
+    "SentenceLengthStats": {
+      "additionalProperties": false,
+      "properties": {
+        "band": {
+          "maxItems": 2,
+          "minItems": 2,
+          "prefixItems": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "integer"
+            }
+          ],
+          "title": "Band",
+          "type": "array"
+        },
+        "long_lines": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Long Lines",
+          "type": "array"
+        },
+        "long_share": {
+          "title": "Long Share",
+          "type": "number"
+        },
+        "max": {
+          "title": "Max",
+          "type": "integer"
+        },
+        "mean": {
+          "title": "Mean",
+          "type": "number"
+        },
+        "min": {
+          "title": "Min",
+          "type": "integer"
+        },
+        "sentence_count": {
+          "title": "Sentence Count",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "mean",
+        "min",
+        "max",
+        "band",
+        "sentence_count",
+        "long_lines",
+        "long_share"
+      ],
+      "title": "SentenceLengthStats",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Code-gate verdict on a script (architecture \u00a74.4), written by the profiler.",
+  "properties": {
+    "config_hash": {
+      "title": "Config Hash",
+      "type": "string"
+    },
+    "content_token_count": {
+      "title": "Content Token Count",
+      "type": "integer"
+    },
+    "episode_id": {
+      "title": "Episode Id",
+      "type": "string"
+    },
+    "estimated_duration_min": {
+      "title": "Estimated Duration Min",
+      "type": "number"
+    },
+    "gate_failures": {
+      "items": {
+        "$ref": "#/$defs/GateFailure"
+      },
+      "title": "Gate Failures",
+      "type": "array"
+    },
+    "in_level_ratio": {
+      "title": "In Level Ratio",
+      "type": "number"
+    },
+    "level": {
+      "title": "Level",
+      "type": "string"
+    },
+    "new_word_ratio": {
+      "title": "New Word Ratio",
+      "type": "number"
+    },
+    "off_level_tokens": {
+      "items": {
+        "$ref": "#/$defs/OffLevelToken"
+      },
+      "title": "Off Level Tokens",
+      "type": "array"
+    },
+    "passed": {
+      "readOnly": true,
+      "title": "Passed",
+      "type": "boolean"
+    },
+    "schema_version": {
+      "default": "1.0.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "sentence_length": {
+      "$ref": "#/$defs/SentenceLengthStats"
+    },
+    "target_word_counts": {
+      "additionalProperties": {
+        "type": "integer"
+      },
+      "title": "Target Word Counts",
+      "type": "object"
+    },
+    "word_count": {
+      "title": "Word Count",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "episode_id",
+    "level",
+    "config_hash",
+    "content_token_count",
+    "in_level_ratio",
+    "new_word_ratio",
+    "off_level_tokens",
+    "target_word_counts",
+    "sentence_length",
+    "word_count",
+    "estimated_duration_min",
+    "gate_failures",
+    "passed"
+  ],
+  "title": "LevelReport",
+  "type": "object"
+}

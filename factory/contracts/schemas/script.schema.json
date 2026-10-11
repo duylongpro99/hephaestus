@@ -1,0 +1,255 @@
+{
+  "$defs": {
+    "Line": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "pause_after_ms": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Pause After Ms",
+          "type": "integer"
+        },
+        "speaker": {
+          "title": "Speaker",
+          "type": "string"
+        },
+        "text": {
+          "title": "Text",
+          "type": "string"
+        },
+        "translation": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "default": {},
+          "title": "Translation",
+          "type": "object"
+        },
+        "visual_cue": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Visual Cue"
+        }
+      },
+      "required": [
+        "id",
+        "speaker",
+        "text"
+      ],
+      "title": "Line",
+      "type": "object"
+    },
+    "QuizItem": {
+      "additionalProperties": false,
+      "properties": {
+        "answer_index": {
+          "minimum": 0,
+          "title": "Answer Index",
+          "type": "integer"
+        },
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "options": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 2,
+          "title": "Options",
+          "type": "array"
+        },
+        "question": {
+          "title": "Question",
+          "type": "string"
+        },
+        "translation": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "default": {},
+          "title": "Translation",
+          "type": "object"
+        }
+      },
+      "required": [
+        "id",
+        "question",
+        "options",
+        "answer_index"
+      ],
+      "title": "QuizItem",
+      "type": "object"
+    },
+    "Segment": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "items": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/QuizItem"
+          },
+          "title": "Items",
+          "type": "array"
+        },
+        "layout": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Layout"
+        },
+        "lines": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/Line"
+          },
+          "title": "Lines",
+          "type": "array"
+        },
+        "speed": {
+          "anyOf": [
+            {
+              "enum": [
+                "slow",
+                "natural"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Speed"
+        },
+        "type": {
+          "enum": [
+            "hook",
+            "dialogue",
+            "explanation",
+            "replay",
+            "quiz",
+            "outro"
+          ],
+          "title": "Type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "type"
+      ],
+      "title": "Segment",
+      "type": "object"
+    },
+    "VocabItem": {
+      "additionalProperties": false,
+      "properties": {
+        "gloss": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "Gloss",
+          "type": "object"
+        },
+        "is_target": {
+          "title": "Is Target",
+          "type": "boolean"
+        },
+        "word": {
+          "title": "Word",
+          "type": "string"
+        }
+      },
+      "required": [
+        "word",
+        "gloss",
+        "is_target"
+      ],
+      "title": "VocabItem",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "An episode script, written by A2 and patched by A3 (architecture \u00a74.3).",
+  "properties": {
+    "episode_id": {
+      "title": "Episode Id",
+      "type": "string"
+    },
+    "grammar_notes": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Grammar Notes",
+      "type": "array"
+    },
+    "hook": {
+      "title": "Hook",
+      "type": "string"
+    },
+    "interaction_prompts": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Interaction Prompts",
+      "type": "array"
+    },
+    "schema_version": {
+      "default": "1.0.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "segments": {
+      "items": {
+        "$ref": "#/$defs/Segment"
+      },
+      "minItems": 1,
+      "title": "Segments",
+      "type": "array"
+    },
+    "title_working": {
+      "title": "Title Working",
+      "type": "string"
+    },
+    "vocab": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/VocabItem"
+      },
+      "title": "Vocab",
+      "type": "array"
+    }
+  },
+  "required": [
+    "episode_id",
+    "title_working",
+    "hook",
+    "segments"
+  ],
+  "title": "Script",
+  "type": "object"
+}

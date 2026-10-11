@@ -1,0 +1,30 @@
+# Level Framework: CEFR, the internal scale (architecture §4.0).
+# Values come from research.md §2.1. [P] marks a planning estimate to calibrate.
+framework: cefr
+version: 1
+levels: [PreA1, A1, A2, B1, B2, C1, C2]
+bands:
+  A1:
+    coverage_min: 0.95            # share of content tokens at or below the level
+    new_word_max: 0.05            # distinct new lemmas / distinct content lemmas
+    target_repetition_min: 5      # occurrences of each target word per episode
+    sentence_length: [6, 8]       # mean words per sentence
+    long_sentence_share_max: 0.10 # share of sentences longer than the band maximum
+    rate: {unit: wpm, min: 80, max: 100}
+    pause_ms: [2000, 4000]
+  A2:
+    coverage_min: 0.95
+    new_word_max: 0.05
+    target_repetition_min: 5
+    sentence_length: [8, 12]      # [P] interpolated between A1 (6-8) and B1 (12-15)
+    long_sentence_share_max: 0.10
+    rate: {unit: wpm, min: 100, max: 120}
+    pause_ms: [1500, 3000]
+  B1:
+    coverage_min: 0.95
+    new_word_max: 0.05
+    target_repetition_min: 5
+    sentence_length: [12, 15]
+    long_sentence_share_max: 0.10
+    rate: {unit: wpm, min: 120, max: 140}
+    pause_ms: [1000, 2000]

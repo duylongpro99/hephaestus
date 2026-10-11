@@ -1,0 +1,17 @@
+# Channel Bible for the EN A2 script spike (docs/decisions/0001-first-slice-and-spike-scope.md).
+channel: en-podcast-spike
+version: 1
+target: {pack: en, framework: cefr, levels: [A2]}
+audience: adult
+support_languages: [en, vi]
+persona:
+  name: Anna
+  bio: An English teacher from Manchester who has lived in Hanoi for six years. She loves street food and cycling.
+  speaking_style: Warm, calm and clear. Short sentences, everyday words, gentle humour. Repeats key words naturally.
+  catchphrases: ["Let's listen again.", "Easy, right?"]
+cast:
+  - {id: anna, role: host, description: The teacher and host. She explains the words and the grammar.}
+  - {id: ben, role: guest, description: "Anna's friend, a cheerful office worker who tells everyday stories."}
+formats: [slow_dialogue_explain_replay]
+# Values here override the framework band and the audience overrides for this channel.
+band_overrides: {}

@@ -1,0 +1,67 @@
+{
+  "additionalProperties": false,
+  "description": "A review decision at a human gate (architecture \u00a74.4). Gate 1 is script review.",
+  "properties": {
+    "decision": {
+      "enum": [
+        "approve",
+        "edit-and-approve",
+        "reject"
+      ],
+      "title": "Decision",
+      "type": "string"
+    },
+    "diff": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Diff"
+    },
+    "episode_id": {
+      "title": "Episode Id",
+      "type": "string"
+    },
+    "gate": {
+      "enum": [
+        0,
+        1,
+        2
+      ],
+      "title": "Gate",
+      "type": "integer"
+    },
+    "notes": {
+      "default": "",
+      "title": "Notes",
+      "type": "string"
+    },
+    "schema_version": {
+      "default": "1.0.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "timestamp": {
+      "format": "date-time",
+      "title": "Timestamp",
+      "type": "string"
+    },
+    "user": {
+      "title": "User",
+      "type": "string"
+    }
+  },
+  "required": [
+    "episode_id",
+    "gate",
+    "user",
+    "decision"
+  ],
+  "title": "GateDecision",
+  "type": "object"
+}
