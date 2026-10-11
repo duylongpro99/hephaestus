@@ -144,7 +144,7 @@ Legend: `[A#]` = LLM agent · `[C#]` = deterministic code service · `[T]` = too
 | A11 | **Compliance Officer** | per episode | single call + code checks | `claude-opus-5` | `PublishPackage` + Bible + policy digest → pass/fail with reasons (MFK, synthetic label, clickbait/deceptive-educational, reused-content risk) |
 | A12 | **Analyst** | weekly (scheduled) | agent with read-only analytics tools; candidate for a **Managed Agents scheduled deployment** | `claude-opus-5` | YouTube Analytics + QA history → tuning proposals (never auto-applied) |
 
-**Model policy:**
+**Model policy:** *(Superseded for model choice by [ADR 0002](decisions/0002-per-role-llm-providers.md): each role's provider and model are set in `config/llm.yaml`. The principles below still guide which model a role should get.)*
 - Default every station to `claude-opus-5` with adaptive thinking.
 - Move a station down (Sonnet 5, Haiku 4.5) **only after its eval shows quality holds**. That is a deliberate business decision, not something to do by default.
 - Use **effort** before switching models: `low` for Packager/Derivatives, `high` for Showrunner and the judges.

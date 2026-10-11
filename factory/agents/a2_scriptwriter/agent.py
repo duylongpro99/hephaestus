@@ -4,28 +4,27 @@ from pathlib import Path
 
 from pydantic import ValidationError
 
-from factory.adapters.llm import anthropic_client
-from factory.adapters.llm.anthropic_client import LLMClient, LLMError
+from factory.adapters.llm.base import LLMError, LLMProvider
 from factory.agents.drafts import draft_models, to_draft_dict, to_script
 from factory.agents.prefix import system_blocks
-from factory.artifacts import station_version
+from factory.artifacts import ADAPTER_SOURCES, station_version
 from factory.config import ResolvedConfig
 from factory.contracts import CostEntry, EpisodeSpec, Script
 from factory.tools.language_pack import LanguagePack
 
 STATION = "a2_scriptwriter"
-CLIENT_PATH = Path(anthropic_client.__file__).resolve()
 HERE = Path(__file__).resolve().parent
 PROMPT_PATH = HERE / "prompt.md"
 EXAMPLE_PATH = HERE / "example_script.json"
 
 
-def version(model: str) -> str:
-    return station_version(model, PROMPT_PATH, EXAMPLE_PATH, Path(__file__).resolve(),
-                           HERE.parent / "drafts.py", HERE.parent / "prefix.py", CLIENT_PATH)
+def version(identity: str) -> str:
+    """`identity` is the role's provider/model/params identity from config/llm.yaml."""
+    return station_version(identity, PROMPT_PATH, EXAMPLE_PATH, Path(__file__).resolve(),
+                           HERE.parent / "drafts.py", HERE.parent / "prefix.py", *ADAPTER_SOURCES)
 
 
-def build_system(config: ResolvedConfig, pack: LanguagePack) -> list[dict]:
+def build_system(config: ResolvedConfig, pack: LanguagePack) -> list[str]:
     support = config.channel.support_languages
     example = Script.model_validate_json(EXAMPLE_PATH.read_text(encoding="utf-8"))
     return system_blocks(
@@ -49,7 +48,7 @@ def build_user(spec: EpisodeSpec, config: ResolvedConfig) -> str:
 
 
 def write_script(
-    spec: EpisodeSpec, config: ResolvedConfig, pack: LanguagePack, llm: LLMClient,
+    spec: EpisodeSpec, config: ResolvedConfig, pack: LanguagePack, llm: LLMProvider,
 ) -> tuple[Script, list[CostEntry]]:
     support = config.channel.support_languages
     draft_model = draft_models(config.pack.code, tuple(support))
@@ -58,7 +57,6 @@ def write_script(
         system=build_system(config, pack),
         user=build_user(spec, config),
         output_model=draft_model,
-        effort="high",
     )
     try:
         script = to_script(result.parsed, spec.episode_id, config.pack.code, support)

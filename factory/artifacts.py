@@ -15,6 +15,8 @@ from pydantic import BaseModel
 from factory.config import REPO_ROOT
 
 ARTIFACT_ROOT = REPO_ROOT / "artifacts"
+# Adapter code shapes every LLM station's request, so it is part of each station_version.
+ADAPTER_SOURCES = tuple(sorted((REPO_ROOT / "factory" / "adapters" / "llm").glob("*.py")))
 
 
 def sha256_text(text: str) -> str:

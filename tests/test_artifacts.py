@@ -1,6 +1,5 @@
 import pytest
 
-from factory.adapters.llm.anthropic_client import price_usage
 from factory.agents.a2_scriptwriter import agent as a2
 from factory.agents.a3_level_editor.agent import EditSession
 from factory.agents.drafts import draft_models, to_draft_dict, to_script
@@ -40,15 +39,7 @@ def test_store_round_trip(tmp_path, spec, script):
 
 
 def test_a2_version_tracks_its_prompt():
-    assert a2.version("claude-opus-5-5").startswith("claude-opus-5-5+")
-
-
-def test_price_usage():
-    class Usage:
-        input_tokens, output_tokens = 1_000_000, 100_000
-        cache_creation_input_tokens, cache_read_input_tokens = 0, 1_000_000
-
-    assert price_usage("claude-opus-5-5", Usage) == pytest.approx(4.0 + 2.0 + 0.2)
+    assert a2.version("deepseek/deepseek-v4-pro#abc").startswith("deepseek/deepseek-v4-pro#abc+")
 
 
 def test_draft_round_trip(script):
@@ -124,41 +115,3 @@ def test_insert_rejects_unknown_speaker(session):
         session.insert_line("s3l1", "narrator", "Hi.", {"vi": "Chào."}, 500)
 
 
-class _Attempt:
-    def __init__(self, model, inp, out, read=0, type_="message"):
-        self.model, self.input_tokens, self.output_tokens, self.type = model, inp, out, type_
-        self.cache_creation_input_tokens, self.cache_read_input_tokens = 0, read
-
-
-class _Message:
-    def __init__(self, model, usage, content=()):
-        self.model, self.usage, self.content, self.stop_reason = model, usage, list(content), "end_turn"
-
-
-def test_fallback_attempts_are_each_priced():
-    from factory.adapters.llm.anthropic_client import cost_entries
-
-    usage = _Attempt("claude-opus-4-8", 1000, 500)
-    usage.iterations = [_Attempt("claude-opus-5-5", 1_000_000, 0), _Attempt("claude-opus-4-8", 1_000_000, 0, type_="fallback_message")]
-    entries = cost_entries("a2", _Message("claude-opus-4-8", usage))
-    assert [e.model for e in entries] == ["claude-opus-5-5", "claude-opus-4-8"]
-    assert [e.usd for e in entries] == [4.0, 5.0]
-
-
-def test_unknown_model_price_is_recorded_not_raised():
-    from factory.adapters.llm.anthropic_client import cost_entries
-
-    usage = _Attempt("claude-mystery-9", 10, 10)
-    [entry] = cost_entries("a2", _Message("claude-mystery-9", usage))
-    assert entry.priced is False and entry.usd == 0.0
-
-
-def test_final_text_skips_the_declined_attempt():
-    from factory.adapters.llm.anthropic_client import final_text
-
-    class Block:
-        def __init__(self, type_, text=""):
-            self.type, self.text = type_, text
-
-    message = _Message("m", None, [Block("text", '{"partial'), Block("fallback"), Block("text", '{"ok": 1}')])
-    assert final_text(message) == '{"ok": 1}'

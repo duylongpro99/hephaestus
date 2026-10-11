@@ -11,8 +11,8 @@ from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field
 
-from factory.adapters.llm.anthropic_client import LLMClient
-from factory.artifacts import station_version
+from factory.adapters.llm.base import LLMProvider
+from factory.artifacts import ADAPTER_SOURCES, station_version
 from factory.contracts import CostEntry, EpisodeSpec, GateDecision, QAIssue, QAReport, Script
 from factory.contracts.qa_report import Severity
 
@@ -66,11 +66,12 @@ class Review:
 
 
 def station(persona: str) -> str:
+    """The station name, which is also the persona's role in config/llm.yaml."""
     return f"review_{persona}"
 
 
-def version(persona: str, model: str) -> str:
-    return station_version(model, PERSONAS[persona], Path(__file__).resolve())
+def version(persona: str, identity: str) -> str:
+    return station_version(identity, PERSONAS[persona], Path(__file__).resolve(), *ADAPTER_SOURCES)
 
 
 def enforce_rules(verdict: PanelVerdict) -> str:
@@ -119,16 +120,12 @@ def build_user(spec: EpisodeSpec, script: Script) -> str:
     )
 
 
-def review(persona: str, spec: EpisodeSpec, script: Script, llm: LLMClient) -> Review:
-    system = [{"type": "text", "text": PERSONAS[persona].read_text(encoding="utf-8"),
-               "cache_control": {"type": "ephemeral"}}]
+def review(persona: str, spec: EpisodeSpec, script: Script, llm: LLMProvider) -> Review:
+    """One persona's independent review, on the provider configured for its role."""
     result = llm.structured(
-        station=station(persona), system=system, user=build_user(spec, script),
-        output_model=PanelVerdict, effort="high", max_tokens=32_000,
+        station=station(persona),
+        system=[PERSONAS[persona].read_text(encoding="utf-8")],
+        user=build_user(spec, script),
+        output_model=PanelVerdict,
     )
     return to_review(result.parsed, persona, spec.episode_id, result.costs)
-
-
-def run_panel(spec: EpisodeSpec, script: Script, llm: LLMClient) -> list[Review]:
-    """Both personas, each in its own independent call."""
-    return [review(persona, spec, script, llm) for persona in PERSONAS]

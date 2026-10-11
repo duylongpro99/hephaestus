@@ -10,14 +10,13 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Literal
 
-from anthropic import beta_tool
 
-from pydantic import ValidationError
+from pydantic import BaseModel, ConfigDict, Field, ValidationError
 
-from factory.adapters.llm.anthropic_client import LLMClient, LLMError
+from factory.adapters.llm.base import LLMError, LLMProvider, ToolSpec
 from factory.agents.drafts import to_draft_dict, translation_languages
 from factory.agents.prefix import system_blocks
-from factory.artifacts import station_version
+from factory.artifacts import ADAPTER_SOURCES, station_version
 from factory.config import ResolvedConfig
 from factory.contracts import CostEntry, EpisodeSpec, LevelReport, Line, Script, VocabItem
 from factory.tools.language_pack import LanguagePack
@@ -30,9 +29,9 @@ PROMPT_PATH = HERE / "prompt.md"
 Status = Literal["PASSED", "ESCALATED"]
 
 
-def version(model: str) -> str:
-    return station_version(model, PROMPT_PATH, Path(__file__).resolve(), HERE.parent / "prefix.py",
-                           HERE.parent / "drafts.py")
+def version(identity: str) -> str:
+    return station_version(identity, PROMPT_PATH, Path(__file__).resolve(), HERE.parent / "prefix.py",
+                           HERE.parent / "drafts.py", *ADAPTER_SOURCES)
 
 
 class EditError(ValueError):
@@ -202,109 +201,81 @@ class EditSession:
         })
 
 
-def make_tools(session: EditSession) -> list:
-    def guarded(fn, *args):
-        try:
-            return fn(*args)
-        except EditError as exc:
-            return f"error: {exc}"
+class _Args(BaseModel):
+    model_config = ConfigDict(extra="forbid")
 
-    @beta_tool
-    def lexical_profile() -> str:
-        """Run the code gates on the current script and return the failures, off-level words,
-        target-word counts, sentence-length stats, duration and the text of flagged lines."""
-        return session.profile_summary()
 
-    @beta_tool
-    def rate_estimate() -> str:
-        """Return spoken words, total pauses and estimated duration against the spec length."""
-        return session.rate_summary()
+class NoArgs(_Args):
+    pass
 
-    @beta_tool
-    def find_simpler_synonym(word: str) -> str:
-        """List in-level synonyms for a word, most common first. Empty if none are known.
 
-        Args:
-            word: The off-level word or its dictionary form.
-        """
-        found = session.pack.simpler_synonyms(word.lower(), session.config.level)
-        return json.dumps(found[:10])
+class WordArgs(_Args):
+    word: str = Field(description="The off-level word or its dictionary form.")
 
-    @beta_tool
-    def edit_line(line_id: str, text: str, translations: dict[str, str]) -> str:
-        """Replace the text of one line. Editing a dialogue line rebuilds the replay from the dialogue.
 
-        Args:
-            line_id: The id of the line to change, e.g. "s2l4".
-            text: The new line text in the target language.
-            translations: The new translation per translation language, e.g. {"vi": "..."}.
-        """
-        return guarded(session.edit_line, line_id, text, translations)
+class EditLineArgs(_Args):
+    line_id: str = Field(description='The id of the line to change, e.g. "s2l4".')
+    text: str = Field(description="The new line text in the target language.")
+    translations: dict[str, str] = Field(description='Translation per translation language, e.g. {"vi": "..."}.')
 
-    @beta_tool
-    def insert_line(after_line_id: str, speaker: str, text: str, translations: dict[str, str],
-                    pause_after_ms: int) -> str:
-        """Insert a new line after an existing line. In the dialogue, the replay is rebuilt to match.
 
-        Args:
-            after_line_id: The id of the line the new line follows.
-            speaker: A cast id from the resolved configuration.
-            text: The line text in the target language.
-            translations: Translation per translation language, e.g. {"vi": "..."}.
-            pause_after_ms: Pause after the line, in milliseconds.
-        """
-        return guarded(session.insert_line, after_line_id, speaker, text, translations, pause_after_ms)
+class InsertLineArgs(_Args):
+    after_line_id: str = Field(description="The id of the line the new line follows.")
+    speaker: str = Field(description="A cast id from the resolved configuration.")
+    text: str = Field(description="The line text in the target language.")
+    translations: dict[str, str] = Field(description='Translation per translation language, e.g. {"vi": "..."}.')
+    pause_after_ms: int = Field(description="Pause after the line, in milliseconds.")
 
-    @beta_tool
-    def delete_line(line_id: str) -> str:
-        """Delete one line. In the dialogue, the replay is rebuilt to match.
 
-        Args:
-            line_id: The id of the line to delete.
-        """
-        return guarded(session.delete_line, line_id)
+class LineIdArgs(_Args):
+    line_id: str = Field(description="The id of the line.")
 
-    @beta_tool
-    def set_pause(line_id: str, pause_after_ms: int) -> str:
-        """Change the pause after one line.
 
-        Args:
-            line_id: The id of the line.
-            pause_after_ms: The new pause in milliseconds.
-        """
-        return guarded(session.set_pause, line_id, pause_after_ms)
+class PauseArgs(_Args):
+    line_id: str = Field(description="The id of the line.")
+    pause_after_ms: int = Field(description="The new pause in milliseconds.")
 
-    @beta_tool
-    def edit_quiz_item(item_id: str, question: str, options: list[str], answer_index: int,
-                       translations: dict[str, str]) -> str:
-        """Replace an on-screen quiz item (question, options, answer).
 
-        Args:
-            item_id: The id of the quiz item, e.g. "s5q1".
-            question: The new question in the target language.
-            options: The answer options in the target language, at least 2.
-            answer_index: Zero-based index of the correct option.
-            translations: Translation of the question per translation language, e.g. {"vi": "..."}.
-        """
-        return guarded(session.edit_quiz_item, item_id, question, options, answer_index, translations)
+class QuizItemArgs(_Args):
+    item_id: str = Field(description='The id of the quiz item, e.g. "s5q1".')
+    question: str = Field(description="The new question in the target language.")
+    options: list[str] = Field(description="The answer options in the target language, at least 2.")
+    answer_index: int = Field(description="Zero-based index of the correct option.")
+    translations: dict[str, str] = Field(description='Translation of the question per translation language.')
 
-    @beta_tool
-    def sync_replay() -> str:
-        """Rebuild the replay segment from the dialogue, line for line (fixes replay_mismatch)."""
-        return session.sync_replay()
 
-    @beta_tool
-    def set_vocab_gloss(word: str, glosses: dict[str, str]) -> str:
-        """Add or replace the glosses of a vocabulary item.
+class GlossArgs(_Args):
+    word: str = Field(description="The vocabulary word, exactly as in the spec for a target word.")
+    glosses: dict[str, str] = Field(description='A gloss per support language, e.g. {"en": "...", "vi": "..."}.')
 
-        Args:
-            word: The vocabulary word, exactly as in the spec for a target word.
-            glosses: A gloss per support language, e.g. {"en": "...", "vi": "..."}.
-        """
-        return guarded(session.set_vocab_gloss, word, glosses)
 
-    return [lexical_profile, rate_estimate, find_simpler_synonym, edit_line, insert_line,
-            delete_line, set_pause, edit_quiz_item, sync_replay, set_vocab_gloss]
+def make_tools(session: EditSession) -> list[ToolSpec]:
+    level = session.config.level
+    return [
+        ToolSpec("lexical_profile", "Run the code gates on the current script and return the failures, "
+                 "off-level words, target-word counts, sentence-length stats, duration and the text of flagged "
+                 "lines.", NoArgs, lambda a: session.profile_summary()),
+        ToolSpec("rate_estimate", "Return spoken words, total pauses and estimated duration against the spec "
+                 "length.", NoArgs, lambda a: session.rate_summary()),
+        ToolSpec("find_simpler_synonym", "List in-level synonyms for a word, most common first. Empty if none "
+                 "are known.", WordArgs,
+                 lambda a: json.dumps(session.pack.simpler_synonyms(a.word.lower(), level)[:10])),
+        ToolSpec("edit_line", "Replace the text of one line. Editing a dialogue line rebuilds the replay from "
+                 "the dialogue.", EditLineArgs, lambda a: session.edit_line(a.line_id, a.text, a.translations)),
+        ToolSpec("insert_line", "Insert a new line after an existing line. In the dialogue, the replay is "
+                 "rebuilt to match.", InsertLineArgs,
+                 lambda a: session.insert_line(a.after_line_id, a.speaker, a.text, a.translations, a.pause_after_ms)),
+        ToolSpec("delete_line", "Delete one line. In the dialogue, the replay is rebuilt to match.", LineIdArgs,
+                 lambda a: session.delete_line(a.line_id)),
+        ToolSpec("set_pause", "Change the pause after one line.", PauseArgs,
+                 lambda a: session.set_pause(a.line_id, a.pause_after_ms)),
+        ToolSpec("edit_quiz_item", "Replace an on-screen quiz item (question, options, answer).", QuizItemArgs,
+                 lambda a: session.edit_quiz_item(a.item_id, a.question, a.options, a.answer_index, a.translations)),
+        ToolSpec("sync_replay", "Rebuild the replay segment from the dialogue, line for line (fixes "
+                 "replay_mismatch).", NoArgs, lambda a: session.sync_replay()),
+        ToolSpec("set_vocab_gloss", "Add or replace the glosses of a vocabulary item.", GlossArgs,
+                 lambda a: session.set_vocab_gloss(a.word, a.glosses)),
+    ]
 
 
 @dataclass
@@ -329,7 +300,7 @@ def build_user(session: EditSession, report: LevelReport) -> str:
 
 
 def level_loop(
-    script: Script, spec: EpisodeSpec, config: ResolvedConfig, pack: LanguagePack, llm: LLMClient,
+    script: Script, spec: EpisodeSpec, config: ResolvedConfig, pack: LanguagePack, llm: LLMProvider,
     max_turns: int = 4,
 ) -> LevelLoopResult:
     session = EditSession(script, spec, config, pack)

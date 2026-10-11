@@ -11,8 +11,12 @@ two-persona review panel.
 ```bash
 uv sync                      # installs Python 3.12 deps and the pinned spaCy model
 uv run python -m packs.en.ingest   # downloads NGSL data and builds packs/en/data/lexicon.jsonl
-export ANTHROPIC_API_KEY=...       # needed only for the agent commands
 ```
+
+The agent commands call the LLM provider configured for each role in
+[`config/llm.yaml`](config/llm.yaml). Set the key variable each provider names, for example
+`DEEPSEEK_API_KEY` and `DASHSCOPE_API_KEY` for the default routing. See
+[ADR 0002](docs/decisions/0002-per-role-llm-providers.md).
 
 ## Commands
 
@@ -20,7 +24,9 @@ export ANTHROPIC_API_KEY=...       # needed only for the agent commands
 uv run pytest                                            # all tests, no network
 uv run factory profile <script.json> --spec <spec.json>  # code gates on a script
 uv run factory script <spec.json>                        # A2 draft + A3 level loop
-uv run factory review <script.json> --spec <spec.json>   # two-persona review panel
+uv run factory review <spec.json>                        # two-persona review panel
+uv run factory decide <spec.json> --decision ... --level-fit ...  # record a human spot-check
+uv run factory summary evals/en/adult/specs              # aggregate runs and reviews
 ```
 
 ## Docs
@@ -28,4 +34,5 @@ uv run factory review <script.json> --spec <spec.json>   # two-persona review pa
 - [Architecture](docs/architecture.md): the multi-agent factory design.
 - [Research](docs/research.md): market, pedagogy and licensing research.
 - [Decisions](docs/decisions/): architecture decision records, starting with
-  [ADR 0001: first slice and spike scope](docs/decisions/0001-first-slice-and-spike-scope.md).
+  [ADR 0001: first slice and spike scope](docs/decisions/0001-first-slice-and-spike-scope.md) and
+  [ADR 0002: per-role LLM providers](docs/decisions/0002-per-role-llm-providers.md).

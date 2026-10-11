@@ -22,17 +22,14 @@ def wordlist_block(config: ResolvedConfig, pack: LanguagePack) -> str:
 
 def system_blocks(
     instructions: str, config: ResolvedConfig, pack: LanguagePack, example: dict | None = None,
-) -> list[dict]:
+) -> list[str]:
+    """Stable system text, in cache order. Providers place their cache breakpoint after the last block."""
     blocks = [
-        {"type": "text", "text": instructions},
-        {"type": "text", "text": "# Resolved configuration\n" + config.canonical_json()},
-        {"type": "text", "text": wordlist_block(config, pack)},
+        instructions,
+        "# Resolved configuration\n" + config.canonical_json(),
+        wordlist_block(config, pack),
     ]
     if example is not None:
-        blocks.append({
-            "type": "text",
-            "text": "# Example of the output shape (shorter than a real episode)\n"
-            + json.dumps(example, ensure_ascii=False, sort_keys=True),
-        })
-    blocks[-1]["cache_control"] = {"type": "ephemeral"}
+        blocks.append("# Example of the output shape (shorter than a real episode)\n"
+                      + json.dumps(example, ensure_ascii=False, sort_keys=True))
     return blocks

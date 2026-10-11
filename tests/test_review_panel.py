@@ -52,5 +52,5 @@ def test_reviewer_sees_only_spec_and_script(spec, script):
 
 
 def test_personas_have_distinct_versions():
-    versions = {version(p, "claude-opus-5-5") for p in PERSONAS}
+    versions = {version(p, "qwen/qwen3-max#abc") for p in PERSONAS}
     assert len(versions) == 2

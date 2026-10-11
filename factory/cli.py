@@ -7,6 +7,7 @@ from pathlib import Path
 
 import typer
 
+from factory.adapters.llm.base import LLMError
 from factory.config import REPO_ROOT, ResolvedConfig, resolve
 from factory.contracts import CostEntry, CostLedger, EpisodeSpec, GateDecision, Script
 from factory.tools.language_pack import load_pack
@@ -27,6 +28,12 @@ def eval_dir(config: ResolvedConfig) -> Path:
 def write_json(path: Path, data) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+
+
+def fail(exc: LLMError):
+    spent = sum(c.usd for c in exc.costs)
+    typer.echo(f"error: {exc}" + (f" (already spent ${spent:.4f})" if exc.costs else ""), err=True)
+    raise typer.Exit(1)
 
 
 def read_json(path: Path):
@@ -70,7 +77,7 @@ def script_cmd(
     max_turns: int = typer.Option(4, help="Maximum A3 editing turns"),
 ):
     """Draft a script with A2, run the code gates, and patch it with A3 until it passes or escalates."""
-    from factory.adapters.llm.anthropic_client import LLMClient
+    from factory.adapters.llm.router import provider_for
     from factory.agents.a2_scriptwriter import agent as a2
     from factory.agents.a3_level_editor import agent as a3
     from factory.artifacts import ArtifactStore
@@ -82,12 +89,15 @@ def script_cmd(
         typer.echo(f"warning: spec config_hash {spec.config_hash[:19]} differs from the live config "
                    f"{config.config_hash[:19]}; using the live config")
     pack = load_pack(config.pack.code)
-    llm = LLMClient()
+    try:
+        writer, editor = provider_for(a2.STATION), provider_for(a3.STATION)
+    except LLMError as exc:
+        fail(exc)
     store = ArtifactStore()
     where = {"channel": spec.channel, "episode": spec.episode_id, "season": spec.season_id}
     ledger = CostLedger(episode_id=spec.episode_id, budget_usd=spec.budget_usd)
 
-    a2_version = a2.version(llm.model)
+    a2_version = a2.version(writer.identity)
     from factory.agents.prefix import wordlist_block
     from factory.artifacts import sha256_text
 
@@ -101,17 +111,20 @@ def script_cmd(
         a2_costs = [CostEntry.model_validate(c) for c in envelope.get("cost", [])]
         typer.echo(f"A2: reusing stored draft {a2.STATION}@{envelope['hash']}")
     else:
-        typer.echo(f"A2: drafting {spec.episode_id} with {llm.model} ...")
-        draft, a2_costs = a2.write_script(spec, config, pack, llm)
+        typer.echo(f"A2: drafting {spec.episode_id} with {writer.identity} ...")
+        try:
+            draft, a2_costs = a2.write_script(spec, config, pack, writer)
+        except LLMError as exc:
+            fail(exc)
         store.write(**where, station=a2.STATION, version=a2_version, inputs=a2_inputs, artifact=draft,
                     extra={"cost": [c.model_dump(mode="json") for c in a2_costs]})
         typer.echo(f"A2: done, ${sum(c.usd for c in a2_costs):.4f}, "
                    f"cache read {sum(c.cache_read_input_tokens for c in a2_costs)} tokens")
     ledger.entries += a2_costs
 
-    result = a3.level_loop(draft, spec, config, pack, llm, max_turns=max_turns)
+    result = a3.level_loop(draft, spec, config, pack, editor, max_turns=max_turns)
     ledger.entries += result.costs
-    a3_version = a3.version(llm.model)
+    a3_version = a3.version(editor.identity)
     a3_inputs = [draft, spec, config.config_hash, wordlist_hash]
     script_path = store.write(**where, station=a3.STATION, version=a3_version, inputs=a3_inputs,
                               artifact=result.script,
@@ -152,19 +165,22 @@ def review_cmd(
     script_path: Path | None = typer.Option(None, "--script", help="Script JSON (default: the exported eval script)"),
 ):
     """Run the two-persona review panel on a script, one independent call per persona."""
-    from factory.adapters.llm.anthropic_client import LLMClient
+    from factory.adapters.llm.router import provider_for
     from factory.agents.review_panel import agent as panel
 
     spec = load_spec(spec_path)
     config = resolve(spec.channel, spec.level)
     script_path = script_path or eval_dir(config) / "scripts" / f"{spec.episode_id}.json"
     script = Script.model_validate_json(script_path.read_text(encoding="utf-8"))
-    llm = LLMClient()
     run_path = eval_dir(config) / "runs" / f"{spec.episode_id}.json"
     for persona in panel.PERSONAS:
-        result = panel.review(persona, spec, script, llm)
+        try:
+            llm = provider_for(panel.station(persona))
+            result = panel.review(persona, spec, script, llm)
+        except LLMError as exc:
+            fail(exc)
         write_json(eval_dir(config) / "reviews" / spec.episode_id / f"{persona}.json", {
-            "station_version": panel.version(persona, llm.model),
+            "station_version": panel.version(persona, llm.identity),
             "level_fit_verdict": result.level_fit_verdict,
             "qa_report": result.qa_report.model_dump(mode="json"),
             "gate_decision": result.decision.model_dump(mode="json"),
