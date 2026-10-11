@@ -39,6 +39,7 @@ class LevelBand(_Layer):
     target_repetition_min: int
     sentence_length: tuple[int, int]
     long_sentence_share_max: float
+    sentence_length_gate: Literal["band", "ceiling"] = "band"
     rate: RateBand
     pause_ms: tuple[int, int]
 

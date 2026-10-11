@@ -10,6 +10,7 @@ bands:
     target_repetition_min: 5      # occurrences of each target word per episode
     sentence_length: [6, 8]       # mean words per sentence
     long_sentence_share_max: 0.10 # share of sentences longer than the band maximum
+    sentence_length_gate: band    # band: mean must sit inside the band; ceiling: only the maximum is gated
     rate: {unit: wpm, min: 80, max: 100}
     pause_ms: [2000, 4000]
   A2:
@@ -18,6 +19,7 @@ bands:
     target_repetition_min: 5
     sentence_length: [8, 12]      # [P] interpolated between A1 (6-8) and B1 (12-15)
     long_sentence_share_max: 0.10
+    sentence_length_gate: band    # band: mean must sit inside the band; ceiling: only the maximum is gated
     rate: {unit: wpm, min: 100, max: 120}
     pause_ms: [1500, 3000]
   B1:
@@ -26,5 +28,6 @@ bands:
     target_repetition_min: 5
     sentence_length: [12, 15]
     long_sentence_share_max: 0.10
+    sentence_length_gate: band    # band: mean must sit inside the band; ceiling: only the maximum is gated
     rate: {unit: wpm, min: 120, max: 140}
     pause_ms: [1000, 2000]
