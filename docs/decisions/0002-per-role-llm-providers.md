@@ -31,21 +31,21 @@ its `station_version`, so changing the routing never reuses an old artifact.
 
 ## First routing (EN A2 spike)
 
-All roles go through one provider, `gateway`: the user's own OpenAI-compatible endpoint. Its
-URL and key are read from `LLM_GATEWAY_URL` and `LLM_GATEWAY_API_KEY`, set in the shell or in
-the gitignored `.env` (see `.env.example`). `uv run factory models gateway` lists the model
-names the endpoint offers.
+All roles go through one provider, `gateway`: AI Box (`https://api.ai-box.vn/v1`), an
+OpenAI-compatible reseller gateway chosen by the user. Its URL and key are read from
+`LLM_GATEWAY_URL` and `LLM_GATEWAY_API_KEY`, set in the shell or in the gitignored `.env` (see
+`.env.example`). `uv run factory models gateway` lists the model ids the account can use.
 
-| Role | Model (to confirm against the gateway's list) |
-|---|---|
-| a2_scriptwriter | deepseek-v4-pro |
-| a3_level_editor | deepseek-v4-pro (needs tool calls) |
-| review_examiner | qwen3-max |
-| review_learner | qwen3-max |
+| Role | Model | Family |
+|---|---|---|
+| a2_scriptwriter | ds/deepseek-v4-pro | DeepSeek |
+| a3_level_editor | ds/deepseek-v4-pro (needs tool calls) | DeepSeek |
+| review_examiner | kimi/kimi-k3 | Moonshot |
+| review_learner | qwen3.8-max-0902 | Qwen |
 
-The reviewers use a different model family from the writer, so the panel does not judge its
-own family's output, the main risk in [ADR 0001](0001-first-slice-and-spike-scope.md)
-decision 3. The two personas still share one model.
+Three model families mean neither reviewer judges its own family's output, the main risk in
+[ADR 0001](0001-first-slice-and-spike-scope.md) decision 3. The evidence and alternatives are in
+`plans/reports/researcher-261011-1937-ai-box-model-selection.md`.
 
 ## Consequences
 
@@ -54,7 +54,8 @@ decision 3. The two personas still share one model.
 - Vendors differ in caching. DeepSeek caches prefixes automatically and reports
   `prompt_cache_hit_tokens`. The stable-first prompt order from architecture §8 applies to
   every provider.
-- Gateway prices are not filled in yet, so costs are recorded as tokens with `priced: false`
-  until the gateway's per-model prices are added under `prices.gateway`.
+- Prices come from AI Box's public pricing endpoint, in its internal dollars (billed at 26,000 VND
+  each). The gateway is a reseller: it may reroute a model to another host without notice, and
+  JSON mode and tool calls through it are unverified until the first keyed run.
 - A provider's URL can come from the environment (`base_url_env`) as well as its key, so a
   private endpoint's address is not committed either.

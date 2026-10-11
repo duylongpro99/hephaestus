@@ -12,35 +12,38 @@ providers:
     api_key_env: LLM_GATEWAY_API_KEY
 
 # USD per million tokens, per provider and model. A model without a price still runs;
-# its tokens are recorded and its cost is marked unpriced. Fill these in from the
-# gateway's own billing, e.g.:
-#   gateway:
-#     some-model: {input: 1.00, cached_input: 0.10, output: 4.00}
+# its tokens are recorded and its cost is marked unpriced.
+# AI Box (new-api) prices in internal dollars and bills 26,000 VND per dollar. Derived from
+# https://home.ai-box.vn/api/pricing on 2026-10-11 (ratio 1 = $2 per million input tokens).
 prices:
-  gateway: {}
+  gateway:
+    ds/deepseek-v4-pro: {input: 0.22, cached_input: 0.0073, output: 0.66}
+    kimi/kimi-k3: {input: 0.60, cached_input: 0.06, output: 3.00}
+    qwen3.8-max-0902: {input: 0.40, cached_input: 0.025, output: 1.20}
 
 # One entry per factory role. `params` are passed to the request as-is.
 # List the model names your endpoint offers with: uv run factory models gateway
+# Routing rationale: plans/reports/researcher-261011-1937-ai-box-model-selection.md
 roles:
   a2_scriptwriter:
     provider: gateway
-    model: deepseek-v4-pro
-    max_tokens: 32000
+    model: ds/deepseek-v4-pro
+    max_tokens: 64000   # reasoning tokens share the output budget with the ~15K-token script
     params: {}
   a3_level_editor:
     provider: gateway
-    model: deepseek-v4-pro
+    model: ds/deepseek-v4-pro
     max_tokens: 16000
     params: {}
-  # The reviewers should use a different model family from the writer, so the panel
-  # never judges its own family's output (ADR 0001, decision 3).
+  # Three model families: DeepSeek writes, Moonshot examines, Qwen reads as the learner, so
+  # neither reviewer judges its own family's output (ADR 0001, decision 3).
   review_examiner:
     provider: gateway
-    model: qwen3-max
-    max_tokens: 16000
+    model: kimi/kimi-k3
+    max_tokens: 32000   # Kimi K3 always reasons; leave room for it
     params: {}
   review_learner:
     provider: gateway
-    model: qwen3-max
-    max_tokens: 16000
+    model: qwen3.8-max-0902
+    max_tokens: 32000
     params: {}
