@@ -1,0 +1,67 @@
+{
+  "episode_id": "example",
+  "title_working": "The Lost Umbrella",
+  "hook": "Ben was cycling home when the rain started. And his umbrella was not in his bag!",
+  "segments": [
+    {
+      "id": "s1", "type": "hook", "speed": "natural", "layout": "podcast_a",
+      "lines": [
+        {"id": "s1l1", "speaker": "anna", "text": "Hello and welcome back! I'm Anna.", "translation": {"vi": "Xin chào và chào mừng các bạn quay lại! Mình là Anna."}, "pause_after_ms": 500, "visual_cue": null},
+        {"id": "s1l2", "speaker": "anna", "text": "Today my friend Ben has a wet story for us.", "translation": {"vi": "Hôm nay bạn mình là Ben có một câu chuyện ướt sũng cho chúng ta."}, "pause_after_ms": 500, "visual_cue": "rain on a window"},
+        {"id": "s1l3", "speaker": "anna", "text": "Listen for the word borrow. What did Ben borrow?", "translation": {"vi": "Hãy nghe từ borrow nhé. Ben đã mượn cái gì?"}, "pause_after_ms": 800, "visual_cue": null}
+      ],
+      "items": []
+    },
+    {
+      "id": "s2", "type": "dialogue", "speed": "slow", "layout": "podcast_b",
+      "lines": [
+        {"id": "s2l1", "speaker": "ben", "text": "Anna, I was riding my bike home yesterday when it started to rain.", "translation": {"vi": "Anna này, hôm qua mình đang đạp xe về nhà thì trời bắt đầu mưa."}, "pause_after_ms": 1500, "visual_cue": "man on a bike in the rain"},
+        {"id": "s2l2", "speaker": "anna", "text": "Oh no! Did you have your umbrella?", "translation": {"vi": "Ôi không! Bạn có mang ô không?"}, "pause_after_ms": 1500, "visual_cue": null},
+        {"id": "s2l3", "speaker": "ben", "text": "No. I was looking for it in my bag, but it was not there.", "translation": {"vi": "Không. Mình đang tìm nó trong túi, nhưng nó không có ở đó."}, "pause_after_ms": 1500, "visual_cue": "open bag"},
+        {"id": "s2l4", "speaker": "anna", "text": "So what did you do?", "translation": {"vi": "Vậy bạn đã làm gì?"}, "pause_after_ms": 1500, "visual_cue": null},
+        {"id": "s2l5", "speaker": "ben", "text": "I stopped at a small shop and asked to borrow an umbrella.", "translation": {"vi": "Mình dừng ở một cửa hàng nhỏ và hỏi mượn một cái ô."}, "pause_after_ms": 1500, "visual_cue": "small shop"}
+      ],
+      "items": []
+    },
+    {
+      "id": "s3", "type": "explanation", "speed": "slow", "layout": "vocab_grid",
+      "lines": [
+        {"id": "s3l1", "speaker": "anna", "text": "Let's look at the word borrow.", "translation": {"vi": "Chúng ta cùng xem từ borrow nhé."}, "pause_after_ms": 1500, "visual_cue": null},
+        {"id": "s3l2", "speaker": "anna", "text": "When you borrow something, you take it and you give it back later.", "translation": {"vi": "Khi bạn borrow (mượn) một thứ, bạn lấy nó và trả lại sau."}, "pause_after_ms": 2000, "visual_cue": "two hands passing an umbrella"},
+        {"id": "s3l3", "speaker": "anna", "text": "Ben was riding his bike when it started to rain. The long action is was riding.", "translation": {"vi": "Ben đang đạp xe thì trời bắt đầu mưa. Hành động kéo dài là was riding."}, "pause_after_ms": 2000, "visual_cue": null}
+      ],
+      "items": []
+    },
+    {
+      "id": "s4", "type": "replay", "speed": "natural", "layout": "podcast_b",
+      "lines": [
+        {"id": "s4l1", "speaker": "ben", "text": "Anna, I was riding my bike home yesterday when it started to rain.", "translation": {"vi": "Anna này, hôm qua mình đang đạp xe về nhà thì trời bắt đầu mưa."}, "pause_after_ms": 500, "visual_cue": null},
+        {"id": "s4l2", "speaker": "anna", "text": "Oh no! Did you have your umbrella?", "translation": {"vi": "Ôi không! Bạn có mang ô không?"}, "pause_after_ms": 500, "visual_cue": null}
+      ],
+      "items": []
+    },
+    {
+      "id": "s5", "type": "quiz", "speed": "slow", "layout": "quiz",
+      "lines": [
+        {"id": "s5l1", "speaker": "anna", "text": "Question one. Where did Ben borrow an umbrella?", "translation": {"vi": "Câu hỏi một. Ben đã mượn ô ở đâu?"}, "pause_after_ms": 4000, "visual_cue": null},
+        {"id": "s5l2", "speaker": "anna", "text": "He borrowed it at a small shop.", "translation": {"vi": "Anh ấy mượn nó ở một cửa hàng nhỏ."}, "pause_after_ms": 1500, "visual_cue": null}
+      ],
+      "items": [
+        {"id": "s5q1", "question": "Where did Ben borrow an umbrella?", "options": ["At a small shop", "At home", "At the station"], "answer_index": 0, "translation": {"vi": "Ben đã mượn ô ở đâu?"}}
+      ]
+    },
+    {
+      "id": "s6", "type": "outro", "speed": "natural", "layout": "podcast_a",
+      "lines": [
+        {"id": "s6l1", "speaker": "anna", "text": "What do you borrow from your friends? Tell me in the comments. See you next time!", "translation": {"vi": "Bạn hay mượn gì từ bạn bè? Hãy kể cho mình trong phần bình luận nhé. Hẹn gặp lại lần sau!"}, "pause_after_ms": 500, "visual_cue": null}
+      ],
+      "items": []
+    }
+  ],
+  "vocab": [
+    {"word": "borrow", "gloss": {"en": "to take something and give it back later", "vi": "mượn"}, "is_target": true},
+    {"word": "umbrella", "gloss": {"en": "a thing you hold over your head when it rains", "vi": "cái ô, cái dù"}, "is_target": true}
+  ],
+  "grammar_notes": ["Past continuous (was/were + -ing) is the long background action; past simple is the short action that happens in the middle of it."],
+  "interaction_prompts": ["What do you borrow from your friends?"]
+}

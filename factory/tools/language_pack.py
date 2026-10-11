@@ -88,6 +88,8 @@ class LanguagePack(Protocol):
 
     def simpler_synonyms(self, lemma: str, level: str) -> list[str]: ...
 
+    def level_wordlist(self, level: str) -> dict[str, list[str]]: ...
+
 
 def load_pack(code: str) -> LanguagePack:
     return importlib.import_module(f"packs.{code}.pack").Pack()

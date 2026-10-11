@@ -42,6 +42,7 @@ class LevelBand(_Layer):
     sentence_length_gate: Literal["band", "ceiling"] = "band"
     rate: RateBand
     pause_ms: tuple[int, int]
+    grammar: list[str] = []
 
 
 class PackSummary(_Layer):

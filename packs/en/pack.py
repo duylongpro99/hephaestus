@@ -154,5 +154,14 @@ class EnPack:
 
         return sorted(found, key=rank)
 
+    def level_wordlist(self, level: str) -> dict[str, list[str]]:
+        """Headwords at or below `level`, grouped by level and sorted alphabetically."""
+        headwords, _ = self._lexicon
+        grouped: dict[str, list[str]] = {}
+        for word, entry in sorted(headwords.items()):
+            if at_or_below(entry["level"], level):
+                grouped.setdefault(entry["level"], []).append(word)
+        return {lv: grouped[lv] for lv in CEFR_LEVELS if lv in grouped}
+
 
 Pack = EnPack

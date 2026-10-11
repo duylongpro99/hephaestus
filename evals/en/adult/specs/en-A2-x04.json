@@ -1,0 +1,40 @@
+{
+  "schema_version": "1.0.0",
+  "episode_id": "en-A2-x04",
+  "channel": "en-podcast-spike",
+  "level": "A2",
+  "format": "slow_dialogue_explain_replay",
+  "theme": "planning a weekend trip to the mountains",
+  "target_words": [
+    "trip",
+    "mountain",
+    "lake",
+    "suitcase",
+    "hurry"
+  ],
+  "review_words": [
+    "weekend",
+    "bus",
+    "ticket",
+    "friend",
+    "go"
+  ],
+  "grammar_point": "going to for plans",
+  "rate_target": {
+    "unit": "wpm",
+    "min": 100.0,
+    "max": 120.0
+  },
+  "length_min": [
+    6.0,
+    8.0
+  ],
+  "cast": [
+    "anna",
+    "ben"
+  ],
+  "source": "adhoc",
+  "ordering": "loose",
+  "config_hash": "sha256:b0d00cae222b6951564a2c8d4343e19395040d42f4cbd1057c65e32c18b81e8d",
+  "budget_usd": 3.0
+}

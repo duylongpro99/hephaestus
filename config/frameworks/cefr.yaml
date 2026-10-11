@@ -13,6 +13,18 @@ bands:
     sentence_length_gate: band    # band: mean must sit inside the band; ceiling: only the maximum is gated
     rate: {unit: wpm, min: 80, max: 100}
     pause_ms: [2000, 4000]
+    grammar:
+      - present simple of be and have
+      - present simple
+      - present continuous for now
+      - can and can't for ability
+      - there is and there are
+      - imperatives
+      - possessive adjectives and possessive 's
+      - this, that, these, those
+      - a, an, the, some, any
+      - prepositions of place and time
+      - and, but, or, because
   A2:
     coverage_min: 0.95
     new_word_max: 0.05
@@ -22,6 +34,21 @@ bands:
     sentence_length_gate: band    # band: mean must sit inside the band; ceiling: only the maximum is gated
     rate: {unit: wpm, min: 100, max: 120}
     pause_ms: [1500, 3000]
+    grammar:
+      - everything allowed at A1
+      - past simple, regular and common irregular verbs
+      - past continuous for background actions
+      - going to for plans
+      - will for offers and quick decisions
+      - comparatives and superlatives
+      - present perfect with ever, never, just, already
+      - should and must for advice and rules
+      - have to and don't have to
+      - would like for polite requests
+      - adverbs of frequency
+      - countable and uncountable nouns with much, many, a lot of
+      - when and before/after clauses
+      - so for results
   B1:
     coverage_min: 0.95
     new_word_max: 0.05
@@ -31,3 +58,4 @@ bands:
     sentence_length_gate: band    # band: mean must sit inside the band; ceiling: only the maximum is gated
     rate: {unit: wpm, min: 120, max: 140}
     pause_ms: [1000, 2000]
+    grammar: []                   # not yet defined for B1

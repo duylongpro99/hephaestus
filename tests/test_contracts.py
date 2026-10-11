@@ -100,3 +100,18 @@ def test_channel_format_must_be_allowed_by_audience():
     bible = bible | {"formats": ["song_tpr"]}
     with pytest.raises(ValidationError):
         resolve_layers(pack, framework, audience, bible, "A2")
+
+
+def test_eval_specs_validate():
+    from factory.config import REPO_ROOT
+    from packs.en.pack import EnPack
+
+    pack = EnPack()
+    paths = sorted((REPO_ROOT / "evals" / "en" / "adult" / "specs").glob("*.json"))
+    assert len(paths) == 10
+    for path in paths:
+        spec = EpisodeSpec.model_validate_json(path.read_text(encoding="utf-8"))
+        assert 5 <= len(spec.target_words) <= 8, path.name
+        assert all(pack.word_level(w) == "A2" for w in spec.target_words), path.name
+        assert all(pack.word_level(w) == "A1" for w in spec.review_words), path.name
+        assert spec.length_min == (6, 8) and spec.source == "adhoc"
