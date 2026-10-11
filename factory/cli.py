@@ -1,12 +1,14 @@
 """The `factory` command line."""
 
+import json
 import time
+from datetime import datetime, timezone
 from pathlib import Path
 
 import typer
 
-from factory.config import resolve
-from factory.contracts import CostEntry, CostLedger, EpisodeSpec, Script
+from factory.config import REPO_ROOT, ResolvedConfig, resolve
+from factory.contracts import CostEntry, CostLedger, EpisodeSpec, GateDecision, Script
 from factory.tools.language_pack import load_pack
 from factory.tools.profiler import format_report, profile
 
@@ -15,6 +17,20 @@ app = typer.Typer(no_args_is_help=True, add_completion=False)
 
 def load_spec(path: Path) -> EpisodeSpec:
     return EpisodeSpec.model_validate_json(path.read_text(encoding="utf-8"))
+
+
+def eval_dir(config: ResolvedConfig) -> Path:
+    """Golden-eval home for a pack x audience pair (architecture §16)."""
+    return REPO_ROOT / "evals" / config.pack.code / config.audience.profile
+
+
+def write_json(path: Path, data) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+
+
+def read_json(path: Path):
+    return json.loads(path.read_text(encoding="utf-8"))
 
 
 @app.command("profile")
@@ -88,14 +104,125 @@ def script_cmd(
                 artifact=result.reports[-1], extra={"status": result.status, "turns": result.turns})
     store.write(**where, station="cost_ledger", version=a3_version, inputs=a3_inputs, artifact=ledger)
 
+    elapsed = round(time.monotonic() - started, 1)
+    out_dir = eval_dir(config)
+    write_json(out_dir / "scripts" / f"{spec.episode_id}.json", result.script.model_dump(mode="json"))
+    write_json(out_dir / "runs" / f"{spec.episode_id}.json", {
+        "episode_id": spec.episode_id,
+        "status": result.status,
+        "a3_turns": result.turns,
+        "elapsed_s": elapsed,
+        "station_versions": {a2.STATION: a2_version, a3.STATION: a3_version},
+        "first_report": result.reports[0].model_dump(mode="json"),
+        "final_report": result.reports[-1].model_dump(mode="json"),
+        "cost_ledger": ledger.model_dump(mode="json"),
+    })
+
     for entry in ledger.entries:
         typer.echo(f"  {entry.station:<16} {entry.model:<18} in={entry.input_tokens} out={entry.output_tokens} "
                    f"cache_w={entry.cache_creation_input_tokens} cache_r={entry.cache_read_input_tokens} ${entry.usd:.4f}")
     typer.echo(format_report(result.reports[-1]))
-    typer.echo(f"status {result.status} after {result.turns} A3 turn(s); total ${ledger.total_usd:.4f}; "
-               f"{time.monotonic() - started:.0f}s")
-    typer.echo(f"script: {script_path}")
+    typer.echo(f"status {result.status} after {result.turns} A3 turn(s); total ${ledger.total_usd:.4f}; {elapsed:.0f}s")
+    typer.echo(f"artifact: {script_path}")
     raise typer.Exit(0 if result.status == "PASSED" else 2)
+
+
+@app.command("review")
+def review_cmd(
+    spec_path: Path = typer.Argument(..., exists=True, help="EpisodeSpec JSON"),
+    script_path: Path | None = typer.Option(None, "--script", help="Script JSON (default: the exported eval script)"),
+):
+    """Run the two-persona review panel on a script, one independent call per persona."""
+    from factory.adapters.llm.anthropic_client import LLMClient
+    from factory.agents.review_panel import agent as panel
+
+    spec = load_spec(spec_path)
+    config = resolve(spec.channel, spec.level)
+    script_path = script_path or eval_dir(config) / "scripts" / f"{spec.episode_id}.json"
+    script = Script.model_validate_json(script_path.read_text(encoding="utf-8"))
+    llm = LLMClient()
+    for persona in panel.PERSONAS:
+        result = panel.review(persona, spec, script, llm)
+        write_json(eval_dir(config) / "reviews" / spec.episode_id / f"{persona}.json", {
+            "station_version": panel.version(persona, llm.model),
+            "level_fit_verdict": result.level_fit_verdict,
+            "qa_report": result.qa_report.model_dump(mode="json"),
+            "gate_decision": result.decision.model_dump(mode="json"),
+            "cost": result.cost.model_dump(mode="json") if result.cost else None,
+        })
+        counts = {sev: sum(i.severity == sev for i in result.qa_report.issues) for sev in ("critical", "major", "minor")}
+        typer.echo(f"{persona:<9} {result.decision.decision:<16} level {result.level_fit_verdict:<5} "
+                   f"issues {counts}  ${result.cost.usd if result.cost else 0:.4f}")
+
+
+@app.command("decide")
+def decide_cmd(
+    spec_path: Path = typer.Argument(..., exists=True, help="EpisodeSpec JSON"),
+    decision: str = typer.Option(..., help="approve | edit-and-approve | reject"),
+    notes: str = typer.Option("", help="What you found, using the panel's rubric"),
+    level_fit: str = typer.Option(..., help="below | at | above the spec level"),
+):
+    """Record a human spot-check GateDecision for a script (user: human)."""
+    spec = load_spec(spec_path)
+    config = resolve(spec.channel, spec.level)
+    if level_fit not in ("below", "at", "above"):
+        raise typer.BadParameter("level-fit must be below, at or above")
+    gate_decision = GateDecision(episode_id=spec.episode_id, gate=1, user="human", decision=decision, notes=notes)
+    path = eval_dir(config) / "reviews" / spec.episode_id / "human.json"
+    write_json(path, {"level_fit_verdict": level_fit, "gate_decision": gate_decision.model_dump(mode="json")})
+    typer.echo(f"wrote {path}")
+
+
+@app.command("summary")
+def summary_cmd(
+    specs_dir: Path = typer.Argument(..., exists=True, file_okay=False, help="Directory of EpisodeSpec JSON"),
+):
+    """Aggregate runs and reviews into one table and a JSON summary for the spike report."""
+    specs = [load_spec(p) for p in sorted(specs_dir.glob("*.json"))]
+    if not specs:
+        raise typer.BadParameter("no specs found")
+    config = resolve(specs[0].channel, specs[0].level)
+    base = eval_dir(config)
+    rows = []
+    for spec in specs:
+        run_path = base / "runs" / f"{spec.episode_id}.json"
+        run = read_json(run_path) if run_path.exists() else None
+        reviews = {}
+        for name in ("examiner", "learner", "human"):
+            path = base / "reviews" / spec.episode_id / f"{name}.json"
+            if path.exists():
+                reviews[name] = read_json(path)
+        panel_usd = sum((r.get("cost") or {}).get("usd", 0) for r in reviews.values())
+        script_usd = run["cost_ledger"]["total_usd"] if run else 0
+        final = run["final_report"] if run else None
+        rows.append({
+            "episode_id": spec.episode_id,
+            "theme": spec.theme,
+            "status": run["status"] if run else "NOT_RUN",
+            "a3_turns": run["a3_turns"] if run else None,
+            "elapsed_s": run["elapsed_s"] if run else None,
+            "first_gate_failures": [f["gate"] for f in run["first_report"]["gate_failures"]] if run else [],
+            "in_level_ratio": final["in_level_ratio"] if final else None,
+            "script_usd": round(script_usd, 4),
+            "panel_usd": round(panel_usd, 4),
+            "decisions": {k: v["gate_decision"]["decision"] for k, v in reviews.items()},
+            "level_fit": {k: v["level_fit_verdict"] for k, v in reviews.items()},
+            "critical": {k: sum(i["severity"] == "critical" for i in v.get("qa_report", {}).get("issues", []))
+                         for k, v in reviews.items() if k != "human"},
+            "scores": {k: v["qa_report"]["rubric_scores"] for k, v in reviews.items() if "qa_report" in v},
+        })
+    write_json(base / "reviews" / "summary.json", {
+        "generated_at": datetime.now(timezone.utc).isoformat(), "episodes": rows,
+    })
+    typer.echo("| episode | status | A3 turns | first failures | in-level | examiner | learner | human | $ script | $ panel |")
+    typer.echo("|---|---|---|---|---|---|---|---|---|---|")
+    for r in rows:
+        d = r["decisions"]
+        ratio = f"{r['in_level_ratio']:.1%}" if r["in_level_ratio"] is not None else "-"
+        typer.echo(f"| {r['episode_id']} | {r['status']} | {r['a3_turns']} | {', '.join(r['first_gate_failures']) or '-'} "
+                   f"| {ratio} | {d.get('examiner', '-')} | {d.get('learner', '-')} | {d.get('human', '-')} "
+                   f"| {r['script_usd']:.2f} | {r['panel_usd']:.2f} |")
+    typer.echo(f"wrote {base / 'reviews' / 'summary.json'}")
 
 
 @app.callback()
