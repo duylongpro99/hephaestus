@@ -1,0 +1,81 @@
+{
+  "schema_version": "1.0.0",
+  "episode_id": "en-A2-x09",
+  "title_working": "Motorbike to Work",
+  "hook": "Ben talks about going to work.",
+  "segments": [
+    {
+      "id": "s1",
+      "type": "dialogue",
+      "speed": "natural",
+      "layout": "podcast_a",
+      "lines": [
+        {
+          "id": "s1l1",
+          "speaker": "anna",
+          "text": "How do you go to work?",
+          "translation": {
+            "vi": "Bạn đi làm bằng gì?"
+          },
+          "pause_after_ms": 500,
+          "visual_cue": null
+        },
+        {
+          "id": "s1l2",
+          "speaker": "ben",
+          "text": "I usually go by motorbike.",
+          "translation": {
+            "vi": "Tôi thường đi bằng xe máy."
+          },
+          "pause_after_ms": 500,
+          "visual_cue": "a motorbike"
+        },
+        {
+          "id": "s1l3",
+          "speaker": "ben",
+          "text": "The streets are quiet in the morning.",
+          "translation": {
+            "vi": "Đường phố yên tĩnh vào buổi sáng."
+          },
+          "pause_after_ms": 500,
+          "visual_cue": "quiet morning street"
+        },
+        {
+          "id": "s1l4",
+          "speaker": "anna",
+          "text": "That is nice.",
+          "translation": {
+            "vi": "Thật tuyệt."
+          },
+          "pause_after_ms": 500,
+          "visual_cue": null
+        }
+      ],
+      "items": []
+    }
+  ],
+  "vocab": [
+    {
+      "word": "motorbike",
+      "gloss": {
+        "en": "a machine with two round parts that turn, for one or two people",
+        "vi": "xe máy"
+      },
+      "is_target": true
+    },
+    {
+      "word": "usually",
+      "gloss": {
+        "en": "most of the time",
+        "vi": "thường"
+      },
+      "is_target": false
+    }
+  ],
+  "grammar_notes": [
+    "We use 'usually' to say how often something happens. It goes before the action word."
+  ],
+  "interaction_prompts": [
+    "How do you usually go to work?"
+  ]
+}

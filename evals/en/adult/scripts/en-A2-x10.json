@@ -1,0 +1,71 @@
+{
+  "schema_version": "1.0.0",
+  "episode_id": "en-A2-x10",
+  "title_working": "After Work Gym",
+  "hook": "Anna and Ben talk about going to the gym.",
+  "segments": [
+    {
+      "id": "s1",
+      "type": "dialogue",
+      "speed": "natural",
+      "layout": "vocab_grid",
+      "lines": [
+        {
+          "id": "s1l1",
+          "speaker": "anna",
+          "text": "I go to the gym after work.",
+          "translation": {
+            "vi": "Tôi đi tập gym sau giờ làm."
+          },
+          "pause_after_ms": 500,
+          "visual_cue": "gym"
+        },
+        {
+          "id": "s1l2",
+          "speaker": "ben",
+          "text": "Before I go, I drink water.",
+          "translation": {
+            "vi": "Trước khi đi, tôi uống nước."
+          },
+          "pause_after_ms": 500,
+          "visual_cue": "glass of water"
+        },
+        {
+          "id": "s1l3",
+          "speaker": "anna",
+          "text": "After I go, my body feels great.",
+          "translation": {
+            "vi": "Sau khi đi, cơ thể tôi cảm thấy rất khỏe."
+          },
+          "pause_after_ms": 500,
+          "visual_cue": null
+        }
+      ],
+      "items": []
+    }
+  ],
+  "vocab": [
+    {
+      "word": "gym",
+      "gloss": {
+        "en": "a place with machines for exercise",
+        "vi": "phòng tập thể dục"
+      },
+      "is_target": true
+    },
+    {
+      "word": "body",
+      "gloss": {
+        "en": "your arms, legs, and head",
+        "vi": "cơ thể"
+      },
+      "is_target": false
+    }
+  ],
+  "grammar_notes": [
+    "Use 'before' or 'after' with a subject and verb to say when something happens: 'Before I go, I drink water.'"
+  ],
+  "interaction_prompts": [
+    "What do you do before or after you exercise?"
+  ]
+}

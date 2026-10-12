@@ -1,0 +1,74 @@
+{
+  "station_version": "gateway/qwen3.8-max-0902#44136fa3+73ad12238cc5",
+  "level_fit_verdict": "at",
+  "qa_report": {
+    "schema_version": "1.0.0",
+    "episode_id": "en-A2-x03",
+    "reviewer": "learner",
+    "issues": [
+      {
+        "line_id": "s1l3",
+        "category": "comprehension",
+        "severity": "minor",
+        "description": "At A2, 'one' may be a little hard to link back to 'a job interview'. Saying the full phrase would be clearer for listeners.",
+        "suggested_fix": "Change the English line to 'I have a job interview tomorrow.' and the Vietnamese translation to 'Ngày mai mình có một buổi phỏng vấn xin việc.'"
+      },
+      {
+        "line_id": "s1l2",
+        "category": "translation_naturalness",
+        "severity": "minor",
+        "description": "'mình chưa từng có một buổi phỏng vấn nào' is understandable, but it sounds a little literal in Vietnamese.",
+        "suggested_fix": "Chưa, mình chưa từng đi phỏng vấn lần nào."
+      },
+      {
+        "line_id": "s1l4",
+        "category": "engagement",
+        "severity": "minor",
+        "description": "This line could naturally recycle the review word 'work' while keeping the dialogue simple and motivating.",
+        "suggested_fix": "Change the line to 'I really want this job. I want to work there.' with Vietnamese: 'Mình thực sự muốn công việc này. Mình muốn làm việc ở đó.'"
+      },
+      {
+        "line_id": null,
+        "category": "explanation",
+        "severity": "minor",
+        "description": "'the third form of the verb' may confuse A2 learners. The grammar note would be more helpful with an example and clearer wording.",
+        "suggested_fix": "Use have/has + past participle (verb form 3). Example: 'Have you ever had a job interview?' / 'I have never had a job interview.' 'Ever' means at any time before now. 'Never' means not ever."
+      }
+    ],
+    "rubric_scores": {
+      "comprehensibility": 4,
+      "translation_accuracy": 5,
+      "translation_naturalness": 4,
+      "engagement": 4,
+      "explanation_helpfulness": 3
+    },
+    "hard_gate_failures": [
+      "The review word 'work' from the spec is not present in the dialogue or vocabulary."
+    ],
+    "summary": "The micro-dialogue is short, clear, and mostly natural for A2 learners. The Vietnamese translation is mostly accurate, but a few lines could sound more natural, and s1l3 would be easier if 'one' is replaced by the full phrase. The episode also needs to include the review word 'work'. The grammar note should be clearer and include an example."
+  },
+  "gate_decision": {
+    "schema_version": "1.0.0",
+    "episode_id": "en-A2-x03",
+    "gate": 1,
+    "user": "learner",
+    "decision": "edit-and-approve",
+    "diff": "s1l3: Change the English line to 'I have a job interview tomorrow.' and the Vietnamese translation to 'Ngày mai mình có một buổi phỏng vấn xin việc.'\ns1l2: Chưa, mình chưa từng đi phỏng vấn lần nào.\ns1l4: Change the line to 'I really want this job. I want to work there.' with Vietnamese: 'Mình thực sự muốn công việc này. Mình muốn làm việc ở đó.'\nepisode: Use have/has + past participle (verb form 3). Example: 'Have you ever had a job interview?' / 'I have never had a job interview.' 'Ever' means at any time before now. 'Never' means not ever.",
+    "notes": "The micro-dialogue is short, clear, and mostly natural for A2 learners. The Vietnamese translation is mostly accurate, but a few lines could sound more natural, and s1l3 would be easier if 'one' is replaced by the full phrase. The episode also needs to include the review word 'work'. The grammar note should be clearer and include an example.",
+    "timestamp": "2026-10-12T04:16:23.409540Z"
+  },
+  "costs": [
+    {
+      "station": "review_learner",
+      "vendor": "gateway",
+      "model": "qwen3.8-max-0902",
+      "input_tokens": 710,
+      "output_tokens": 7056,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 1024,
+      "usd": 0.008777,
+      "priced": true,
+      "timestamp": "2026-10-12T04:16:23.408850Z"
+    }
+  ]
+}

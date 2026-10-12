@@ -1,0 +1,63 @@
+{
+  "schema_version": "1.0.0",
+  "episode_id": "en-A2-x04",
+  "title_working": "Weekend Trip to the Mountains",
+  "hook": "Planning a weekend trip to the mountains.",
+  "segments": [
+    {
+      "id": "s1",
+      "type": "dialogue",
+      "speed": "natural",
+      "layout": "podcast_a",
+      "lines": [
+        {
+          "id": "s1l1",
+          "speaker": "anna",
+          "text": "Are you going to take the bus this weekend?",
+          "translation": {
+            "vi": "Bạn có định đi xe buýt vào cuối tuần này không?"
+          },
+          "pause_after_ms": 500,
+          "visual_cue": null
+        },
+        {
+          "id": "s1l2",
+          "speaker": "ben",
+          "text": "Yes, I'm going to take a trip to the mountains.",
+          "translation": {
+            "vi": "Ừ, mình định đi một chuyến lên núi."
+          },
+          "pause_after_ms": 500,
+          "visual_cue": "bus trip to the mountains"
+        },
+        {
+          "id": "s1l3",
+          "speaker": "anna",
+          "text": "That sounds great to me!",
+          "translation": {
+            "vi": "Mình thấy tuyệt đấy!"
+          },
+          "pause_after_ms": 500,
+          "visual_cue": null
+        }
+      ],
+      "items": []
+    }
+  ],
+  "vocab": [
+    {
+      "word": "trip",
+      "gloss": {
+        "en": "a time when you go somewhere and come back",
+        "vi": "chuyến đi"
+      },
+      "is_target": true
+    }
+  ],
+  "grammar_notes": [
+    "Use 'going to' + verb to talk about plans. Example: 'I'm going to take a trip.'"
+  ],
+  "interaction_prompts": [
+    "Where are you going to go this weekend?"
+  ]
+}

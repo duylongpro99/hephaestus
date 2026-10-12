@@ -1,0 +1,64 @@
+{
+  "schema_version": "1.0.0",
+  "episode_id": "en-A2-x06",
+  "title_working": "Useful Jeans",
+  "hook": "Anna and Ben look at jeans in a shop.",
+  "segments": [
+    {
+      "id": "s1",
+      "type": "dialogue",
+      "speed": "natural",
+      "layout": "podcast_a",
+      "lines": [
+        {
+          "id": "s1l1",
+          "speaker": "anna",
+          "text": "The blue jeans are more useful than the black jeans.",
+          "translation": {
+            "vi": "Chiếc quần jeans màu xanh hữu ích hơn chiếc quần jeans màu đen."
+          },
+          "pause_after_ms": 500,
+          "visual_cue": "blue and black jeans"
+        },
+        {
+          "id": "s1l2",
+          "speaker": "ben",
+          "text": "Yes, and this shop has the most useful jeans.",
+          "translation": {
+            "vi": "Đúng vậy, và cửa hàng này có quần jeans hữu ích nhất."
+          },
+          "pause_after_ms": 500,
+          "visual_cue": "a shop with jeans"
+        },
+        {
+          "id": "s1l3",
+          "speaker": "anna",
+          "text": "Let's buy them.",
+          "translation": {
+            "vi": "Mua chúng đi."
+          },
+          "pause_after_ms": 500,
+          "visual_cue": null
+        }
+      ],
+      "items": []
+    }
+  ],
+  "vocab": [
+    {
+      "word": "jeans",
+      "gloss": {
+        "en": "long clothes for your legs, often blue",
+        "vi": "quần jeans"
+      },
+      "is_target": true
+    }
+  ],
+  "grammar_notes": [
+    "Use 'more' + adjective to compare two things, like 'more useful than'.",
+    "Use 'the most' + adjective to say something is number one in a group, like 'the most useful jeans'."
+  ],
+  "interaction_prompts": [
+    "Which jeans do you like more: blue or black?"
+  ]
+}

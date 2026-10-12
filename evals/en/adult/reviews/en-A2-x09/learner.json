@@ -1,0 +1,79 @@
+{
+  "station_version": "gateway/qwen3.8-max-0902#44136fa3+73ad12238cc5",
+  "level_fit_verdict": "at",
+  "qa_report": {
+    "schema_version": "1.0.0",
+    "episode_id": "en-A2-x09",
+    "reviewer": "learner",
+    "issues": [
+      {
+        "line_id": "s1l2",
+        "category": "translation_naturalness",
+        "severity": "minor",
+        "description": "The Vietnamese line is correct, but 'Tôi' feels a bit formal and stiff for a casual podcast dialogue. Since Anna asks with 'Bạn', Ben could answer more naturally with 'Mình'. Adding 'đi làm' also makes the answer clearer.",
+        "suggested_fix": "Mình thường đi làm bằng xe máy."
+      },
+      {
+        "line_id": "s1l3",
+        "category": "translation_naturalness",
+        "severity": "minor",
+        "description": "The translation is understandable, but the word order feels a little like a direct translation from English. A more natural Vietnamese phrasing would put 'buổi sáng' closer to 'đường phố'.",
+        "suggested_fix": "Đường phố buổi sáng yên tĩnh."
+      },
+      {
+        "line_id": "s1l4",
+        "category": "translation_naturalness",
+        "severity": "minor",
+        "description": "'Thật tuyệt' is stronger than 'That is nice' and sounds a little translated. A shorter, more natural spoken response would fit better.",
+        "suggested_fix": "Thích nhỉ."
+      },
+      {
+        "line_id": null,
+        "category": "explanation",
+        "severity": "minor",
+        "description": "The English gloss for 'motorbike' is a little unclear for A2 learners. 'A machine with two round parts that turn' may be hard to picture and does not clearly show the meaning.",
+        "suggested_fix": "Use gloss.en: \"a vehicle with two wheels and a motor\". Keep gloss.vi: \"xe máy\"."
+      },
+      {
+        "line_id": null,
+        "category": "engagement",
+        "severity": "minor",
+        "description": "The hook is clear but very flat. It does not make me especially want to listen. A hook that mentions the motorbike or the morning ride would fit the theme better.",
+        "suggested_fix": "Ben rides a motorbike to work in the morning."
+      }
+    ],
+    "rubric_scores": {
+      "comprehensibility": 5,
+      "translation_accuracy": 5,
+      "translation_naturalness": 3,
+      "engagement": 3,
+      "explanation_helpfulness": 4
+    },
+    "hard_gate_failures": [],
+    "summary": "This is a good short A2 micro-dialogue. The target word 'motorbike' and review words 'street' and 'morning' are included naturally, and the grammar point with 'usually' is clear. The main issues are small Vietnamese naturalness points and a clearer English gloss for 'motorbike'. After these small edits, I would listen and learn."
+  },
+  "gate_decision": {
+    "schema_version": "1.0.0",
+    "episode_id": "en-A2-x09",
+    "gate": 1,
+    "user": "learner",
+    "decision": "edit-and-approve",
+    "diff": "s1l2: Mình thường đi làm bằng xe máy.\ns1l3: Đường phố buổi sáng yên tĩnh.\ns1l4: Thích nhỉ.\nepisode: Use gloss.en: \"a vehicle with two wheels and a motor\". Keep gloss.vi: \"xe máy\".\nepisode: Ben rides a motorbike to work in the morning.",
+    "notes": "This is a good short A2 micro-dialogue. The target word 'motorbike' and review words 'street' and 'morning' are included naturally, and the grammar point with 'usually' is clear. The main issues are small Vietnamese naturalness points and a clearer English gloss for 'motorbike'. After these small edits, I would listen and learn.",
+    "timestamp": "2026-10-12T04:19:16.509047Z"
+  },
+  "costs": [
+    {
+      "station": "review_learner",
+      "vendor": "gateway",
+      "model": "qwen3.8-max-0902",
+      "input_tokens": 680,
+      "output_tokens": 4117,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 1024,
+      "usd": 0.005238,
+      "priced": true,
+      "timestamp": "2026-10-12T04:19:16.508696Z"
+    }
+  ]
+}

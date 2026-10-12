@@ -1,0 +1,88 @@
+{
+  "station_version": "gateway/qwen3.8-max-0902#44136fa3+73ad12238cc5",
+  "level_fit_verdict": "at",
+  "qa_report": {
+    "schema_version": "1.0.0",
+    "episode_id": "en-A2-x10",
+    "reviewer": "learner",
+    "issues": [
+      {
+        "line_id": null,
+        "category": "explanation",
+        "severity": "major",
+        "description": "The spec lists 'week' as a review word, but it never appears in the dialogue, vocab, or glosses. I would not get to review 'week'.",
+        "suggested_fix": "Add 'week' naturally, e.g. change s1l1 to: 'I go to the gym twice a week after work.' with Vietnamese: 'Mình đi tập gym hai lần mỗi tuần sau giờ làm.'"
+      },
+      {
+        "line_id": "s1l3",
+        "category": "translation_naturalness",
+        "severity": "major",
+        "description": "'Sau khi đi, cơ thể tôi cảm thấy rất khỏe' sounds machine-translated. Vietnamese speakers would say the person feels healthy/strong, and 'sau khi đi' needs 'đi tập' to be clear.",
+        "suggested_fix": "Change the line to: 'Sau khi đi tập, mình thấy cơ thể rất khỏe khoắn.'"
+      },
+      {
+        "line_id": null,
+        "category": "translation_naturalness",
+        "severity": "minor",
+        "description": "Anna and Ben sound like peers, but the Vietnamese uses 'tôi' everywhere, which feels formal for a casual podcast.",
+        "suggested_fix": "Use 'mình' for the speakers: 'Mình đi tập gym sau giờ làm.', 'Trước khi đi tập, mình uống nước.', 'Sau khi đi tập, mình thấy cơ thể rất khỏe khoắn.'"
+      },
+      {
+        "line_id": null,
+        "category": "explanation",
+        "severity": "minor",
+        "description": "The grammar note mentions 'after' but only gives a 'before' example. At A2, an 'after' example would help me.",
+        "suggested_fix": "Add an after example, e.g. 'After work, I go to the gym.' or 'After I go, my body feels great.'"
+      },
+      {
+        "line_id": null,
+        "category": "explanation",
+        "severity": "minor",
+        "description": "The gloss for 'body' says 'your arms, legs, and head', which leaves out the rest of the body and could be a little misleading.",
+        "suggested_fix": "Use a simpler gloss: 'your whole body: arms, legs, head, etc.' Keep Vietnamese as 'cơ thể'."
+      },
+      {
+        "line_id": null,
+        "category": "engagement",
+        "severity": "minor",
+        "description": "The hook is a plain summary and does not make me curious.",
+        "suggested_fix": "Try a hook like: 'What should you do before and after the gym?'"
+      }
+    ],
+    "rubric_scores": {
+      "comprehensibility": 4,
+      "translation_accuracy": 4,
+      "translation_naturalness": 3,
+      "engagement": 3,
+      "explanation_helpfulness": 3
+    },
+    "hard_gate_failures": [
+      "Review word 'week' from the spec is missing."
+    ],
+    "summary": "The episode is short, simple, and the before/after grammar is clear for A2. But the Vietnamese line s1l3 is unnatural, the pronoun register is formal, and the required review word 'week' is missing. With small edits, it would work well for me."
+  },
+  "gate_decision": {
+    "schema_version": "1.0.0",
+    "episode_id": "en-A2-x10",
+    "gate": 1,
+    "user": "learner",
+    "decision": "edit-and-approve",
+    "diff": "episode: Add 'week' naturally, e.g. change s1l1 to: 'I go to the gym twice a week after work.' with Vietnamese: 'Mình đi tập gym hai lần mỗi tuần sau giờ làm.'\ns1l3: Change the line to: 'Sau khi đi tập, mình thấy cơ thể rất khỏe khoắn.'\nepisode: Use 'mình' for the speakers: 'Mình đi tập gym sau giờ làm.', 'Trước khi đi tập, mình uống nước.', 'Sau khi đi tập, mình thấy cơ thể rất khỏe khoắn.'\nepisode: Add an after example, e.g. 'After work, I go to the gym.' or 'After I go, my body feels great.'\nepisode: Use a simpler gloss: 'your whole body: arms, legs, head, etc.' Keep Vietnamese as 'cơ thể'.\nepisode: Try a hook like: 'What should you do before and after the gym?'",
+    "notes": "The episode is short, simple, and the before/after grammar is clear for A2. But the Vietnamese line s1l3 is unnatural, the pronoun register is formal, and the required review word 'week' is missing. With small edits, it would work well for me.",
+    "timestamp": "2026-10-12T04:23:23.758826Z"
+  },
+  "costs": [
+    {
+      "station": "review_learner",
+      "vendor": "gateway",
+      "model": "qwen3.8-max-0902",
+      "input_tokens": 659,
+      "output_tokens": 10422,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 1024,
+      "usd": 0.012796,
+      "priced": true,
+      "timestamp": "2026-10-12T04:23:23.757414Z"
+    }
+  ]
+}

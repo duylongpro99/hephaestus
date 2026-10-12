@@ -1,0 +1,86 @@
+{
+  "station_version": "gateway/qwen3.8-max-0902#44136fa3+73ad12238cc5",
+  "level_fit_verdict": "at",
+  "qa_report": {
+    "schema_version": "1.0.0",
+    "episode_id": "en-A2-x01",
+    "reviewer": "learner",
+    "issues": [
+      {
+        "line_id": "s1l2",
+        "category": "translation_naturalness",
+        "severity": "major",
+        "description": "Anna and Ben sound like friends talking about a flat, but the Vietnamese uses 'Vâng, tôi', which feels too formal and stiff. I understand it, but it does not sound like natural casual speech.",
+        "suggested_fix": "Change the Vietnamese line to: \"Ừ, mình vừa mới từ đó về.\""
+      },
+      {
+        "line_id": "s1l2",
+        "category": "comprehension",
+        "severity": "minor",
+        "description": "As an A2 listener, 'I've just come from there' is mostly clear, but 'come back from there' would make the meaning easier and match the Vietnamese 'về' better.",
+        "suggested_fix": "Change the English line to: \"Yes, I've just come back from there.\" Keep the Vietnamese as: \"Ừ, mình vừa mới từ đó về.\""
+      },
+      {
+        "line_id": "s1l1",
+        "category": "translation_naturalness",
+        "severity": "minor",
+        "description": "'Bạn đã xem căn hộ mới chưa?' is correct, but for visiting or viewing a flat, 'đi xem' sounds more natural in Vietnamese.",
+        "suggested_fix": "Change the line to: \"Bạn đã đi xem căn hộ mới chưa?\""
+      },
+      {
+        "line_id": null,
+        "category": "engagement",
+        "severity": "minor",
+        "description": "The hook is clear but quite flat. It does not make me very curious to listen.",
+        "suggested_fix": "Change the hook to something more concrete, for example: \"Anna asks Ben about the rent in the new flat.\" or \"Is the rent okay in the new flat?\""
+      },
+      {
+        "line_id": null,
+        "category": "explanation",
+        "severity": "minor",
+        "description": "The grammar notes explain the meaning of 'just' and 'already', but an A2 learner would also benefit from seeing the word order.",
+        "suggested_fix": "Add a short note such as: \"In these examples, 'just' and 'already' usually come after have/has: Have you already seen...? / I've just come...\""
+      },
+      {
+        "line_id": null,
+        "category": "comprehension",
+        "severity": "minor",
+        "description": "The interaction prompt uses 'moved into', which may be a little difficult for some A2 listeners.",
+        "suggested_fix": "Simplify the prompt to: \"Have you already moved to a new flat? Tell us about the rent.\""
+      }
+    ],
+    "rubric_scores": {
+      "comprehensibility": 4,
+      "translation_accuracy": 5,
+      "translation_naturalness": 3,
+      "engagement": 3,
+      "explanation_helpfulness": 4
+    },
+    "hard_gate_failures": [],
+    "summary": "The episode is short, clear, and suitable for A2 learners. The target word 'rent' is easy to understand, and the grammar point is relevant. The main problem is the Vietnamese translation in s1l2, which uses a formal pronoun and sounds unnatural between friends. A few small changes to the hook, prompt, and grammar note would make it more helpful and natural."
+  },
+  "gate_decision": {
+    "schema_version": "1.0.0",
+    "episode_id": "en-A2-x01",
+    "gate": 1,
+    "user": "learner",
+    "decision": "edit-and-approve",
+    "diff": "s1l2: Change the Vietnamese line to: \"Ừ, mình vừa mới từ đó về.\"\ns1l2: Change the English line to: \"Yes, I've just come back from there.\" Keep the Vietnamese as: \"Ừ, mình vừa mới từ đó về.\"\ns1l1: Change the line to: \"Bạn đã đi xem căn hộ mới chưa?\"\nepisode: Change the hook to something more concrete, for example: \"Anna asks Ben about the rent in the new flat.\" or \"Is the rent okay in the new flat?\"\nepisode: Add a short note such as: \"In these examples, 'just' and 'already' usually come after have/has: Have you already seen...? / I've just come...\"\nepisode: Simplify the prompt to: \"Have you already moved to a new flat? Tell us about the rent.\"",
+    "notes": "The episode is short, clear, and suitable for A2 learners. The target word 'rent' is easy to understand, and the grammar point is relevant. The main problem is the Vietnamese translation in s1l2, which uses a formal pronoun and sounds unnatural between friends. A few small changes to the hook, prompt, and grammar note would make it more helpful and natural.",
+    "timestamp": "2026-10-12T04:16:02.856651Z"
+  },
+  "costs": [
+    {
+      "station": "review_learner",
+      "vendor": "gateway",
+      "model": "qwen3.8-max-0902",
+      "input_tokens": 1695,
+      "output_tokens": 7175,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "usd": 0.009288,
+      "priced": true,
+      "timestamp": "2026-10-12T04:16:02.856327Z"
+    }
+  ]
+}

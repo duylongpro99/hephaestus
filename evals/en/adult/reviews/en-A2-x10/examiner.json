@@ -1,0 +1,65 @@
+{
+  "station_version": "gateway/kimi/kimi-k3#44136fa3+3c685428554d",
+  "level_fit_verdict": "at",
+  "qa_report": {
+    "schema_version": "1.0.0",
+    "episode_id": "en-A2-x10",
+    "reviewer": "examiner",
+    "issues": [
+      {
+        "line_id": "s1l3",
+        "category": "collocation",
+        "severity": "major",
+        "description": "\"After I go, my body feels great\" uses bare \"go\" to mean \"go to the gym\". Out of context \"after I go\" means \"after I leave\", and the ellipsis is a poor model for A2 learners. It also weakens the after-clause demonstration.",
+        "suggested_fix": "Change to \"After I exercise, my body feels great.\" (keeps the after clause, uses A2-level \"exercise\") or \"After I go to the gym, my body feels great.\""
+      },
+      {
+        "line_id": null,
+        "category": "gloss",
+        "severity": "minor",
+        "description": "The gloss for \"body\" (\"your arms, legs, and head\") omits the torso and could mislead a learner into thinking \"body\" means only the limbs and head.",
+        "suggested_fix": "Change the gloss to \"all of you: your head, arms, legs and the rest\" or \"the whole physical person\"."
+      },
+      {
+        "line_id": null,
+        "category": "consistency",
+        "severity": "minor",
+        "description": "The spec lists \"week\" as a review word, but it never appears in the script. \"body\" is recycled; \"week\" is not.",
+        "suggested_fix": "If the format allows, add a natural use of \"week\" (e.g. Anna: \"I go to the gym three times a week, after work.\"), or accept the omission given the 10-15 second limit."
+      }
+    ],
+    "rubric_scores": {
+      "grammar_accuracy": 5,
+      "naturalness": 4,
+      "level_fit": 5,
+      "grammar_point_teaching": 4,
+      "gloss_quality": 4
+    },
+    "hard_gate_failures": [],
+    "summary": "A clean, on-level micro dialogue: grammar is correct throughout and the before/after clauses are taught and modelled accurately (\"after work\" as a prepositional phrase alongside two genuine clauses is acceptable). One major collocation issue: \"After I go, my body feels great\" uses bare \"go\" where a native would say \"after I exercise\" or \"after I go to the gym\", and it muddies the grammar model. Minor issues: the \"body\" gloss is incomplete (omits the torso), and the review word \"week\" is not recycled. Fix the line s1l3 wording and the gloss, and this is ready to record."
+  },
+  "gate_decision": {
+    "schema_version": "1.0.0",
+    "episode_id": "en-A2-x10",
+    "gate": 1,
+    "user": "examiner",
+    "decision": "edit-and-approve",
+    "diff": "s1l3: Change to \"After I exercise, my body feels great.\" (keeps the after clause, uses A2-level \"exercise\") or \"After I go to the gym, my body feels great.\"\nepisode: Change the gloss to \"all of you: your head, arms, legs and the rest\" or \"the whole physical person\".\nepisode: If the format allows, add a natural use of \"week\" (e.g. Anna: \"I go to the gym three times a week, after work.\"), or accept the omission given the 10-15 second limit.",
+    "notes": "A clean, on-level micro dialogue: grammar is correct throughout and the before/after clauses are taught and modelled accurately (\"after work\" as a prepositional phrase alongside two genuine clauses is acceptable). One major collocation issue: \"After I go, my body feels great\" uses bare \"go\" where a native would say \"after I exercise\" or \"after I go to the gym\", and it muddies the grammar model. Minor issues: the \"body\" gloss is incomplete (omits the torso), and the review word \"week\" is not recycled. Fix the line s1l3 wording and the gloss, and this is ready to record.",
+    "timestamp": "2026-10-12T04:18:57.755173Z"
+  },
+  "costs": [
+    {
+      "station": "review_examiner",
+      "vendor": "gateway",
+      "model": "kimi/kimi-k3",
+      "input_tokens": 694,
+      "output_tokens": 2237,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 1024,
+      "usd": 0.007189,
+      "priced": true,
+      "timestamp": "2026-10-12T04:18:57.754894Z"
+    }
+  ]
+}

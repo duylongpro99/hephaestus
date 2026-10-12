@@ -1,0 +1,86 @@
+{
+  "station_version": "gateway/qwen3.8-max-0902#44136fa3+73ad12238cc5",
+  "level_fit_verdict": "at",
+  "qa_report": {
+    "schema_version": "1.0.0",
+    "episode_id": "en-A2-x02",
+    "reviewer": "learner",
+    "issues": [
+      {
+        "line_id": "s1l2",
+        "category": "translation_naturalness",
+        "severity": "major",
+        "description": "'Dạ, làm ơn' is a literal translation of 'Yes, please' and sounds unnatural in Vietnamese. 'Tôi' is also too formal for two friends. In addition, 'too' is unclear because nobody has said they want noodles yet.",
+        "suggested_fix": "English: Yes, please. I would like noodles. Vietnamese: Vâng, cho mình xin. Mình muốn ăn mì."
+      },
+      {
+        "line_id": "s1l3",
+        "category": "translation_naturalness",
+        "severity": "minor",
+        "description": "'Tốt' sounds stiff as a reaction to food. A natural spoken reaction would be 'Tuyệt' or 'Hay quá'.",
+        "suggested_fix": "Tuyệt. Đồ ăn ở đây rất ngon."
+      },
+      {
+        "line_id": "s1l4",
+        "category": "translation_naturalness",
+        "severity": "minor",
+        "description": "'Chúng ta' is correct but a bit formal for two friends. 'Chúng mình' sounds more natural.",
+        "suggested_fix": "Chúng mình có thể ăn ở đây."
+      },
+      {
+        "line_id": null,
+        "category": "explanation",
+        "severity": "minor",
+        "description": "The English gloss 'a long, white food' may teach that noodles are always white. The key idea is long, thin strands, often in soup.",
+        "suggested_fix": "Change the gloss to: en: a long, thin food, often eaten in soup; vi: mì, bún, phở (món ăn sợi)."
+      },
+      {
+        "line_id": null,
+        "category": "explanation",
+        "severity": "minor",
+        "description": "The grammar note only mentions polite requests, but the first line uses 'Would you like...?' as an offer. This may confuse A2 learners.",
+        "suggested_fix": "Use 'would like' for polite requests and offers. Say 'I would like a noodle soup' to order politely. 'Would you like...?' asks what someone wants."
+      },
+      {
+        "line_id": null,
+        "category": "engagement",
+        "severity": "minor",
+        "description": "The scene is clear but a little flat. A tiny sensory detail in the hook would make the night market feel more real.",
+        "suggested_fix": "Change the hook to: Ben and Anna smell hot noodle soup at a night market and decide to eat."
+      }
+    ],
+    "rubric_scores": {
+      "comprehensibility": 4,
+      "translation_accuracy": 3,
+      "translation_naturalness": 2,
+      "engagement": 3,
+      "explanation_helpfulness": 3
+    },
+    "hard_gate_failures": [],
+    "summary": "The micro-dialogue is simple and fits A2, with target and review words present. The main problem is unnatural Vietnamese, especially 'Dạ, làm ơn' and the formal pronouns. A few small clarity fixes to 'too', the gloss, and the grammar note would make it much better."
+  },
+  "gate_decision": {
+    "schema_version": "1.0.0",
+    "episode_id": "en-A2-x02",
+    "gate": 1,
+    "user": "learner",
+    "decision": "edit-and-approve",
+    "diff": "s1l2: English: Yes, please. I would like noodles. Vietnamese: Vâng, cho mình xin. Mình muốn ăn mì.\ns1l3: Tuyệt. Đồ ăn ở đây rất ngon.\ns1l4: Chúng mình có thể ăn ở đây.\nepisode: Change the gloss to: en: a long, thin food, often eaten in soup; vi: mì, bún, phở (món ăn sợi).\nepisode: Use 'would like' for polite requests and offers. Say 'I would like a noodle soup' to order politely. 'Would you like...?' asks what someone wants.\nepisode: Change the hook to: Ben and Anna smell hot noodle soup at a night market and decide to eat.",
+    "notes": "The micro-dialogue is simple and fits A2, with target and review words present. The main problem is unnatural Vietnamese, especially 'Dạ, làm ơn' and the formal pronouns. A few small clarity fixes to 'too', the gloss, and the grammar note would make it much better.",
+    "timestamp": "2026-10-12T04:17:59.191527Z"
+  },
+  "costs": [
+    {
+      "station": "review_learner",
+      "vendor": "gateway",
+      "model": "qwen3.8-max-0902",
+      "input_tokens": 698,
+      "output_tokens": 9424,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 1024,
+      "usd": 0.011614,
+      "priced": true,
+      "timestamp": "2026-10-12T04:17:59.191170Z"
+    }
+  ]
+}

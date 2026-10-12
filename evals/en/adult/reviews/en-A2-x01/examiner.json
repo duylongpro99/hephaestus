@@ -1,0 +1,51 @@
+{
+  "station_version": "gateway/kimi/kimi-k3#44136fa3+3c685428554d",
+  "level_fit_verdict": "at",
+  "qa_report": {
+    "schema_version": "1.0.0",
+    "episode_id": "en-A2-x01",
+    "reviewer": "examiner",
+    "issues": [
+      {
+        "line_id": null,
+        "category": "spec",
+        "severity": "minor",
+        "description": "The spec's review words 'room' and 'house' are never used in the dialogue, so the recycling opportunity the spec calls for is missed. The target word 'rent' is well covered.",
+        "suggested_fix": "Work one review word into Ben's reply, e.g. 'Yes, I've just come from there. The rooms are big.' — this keeps the clip within the 10-15 second limit."
+      }
+    ],
+    "rubric_scores": {
+      "grammar_accuracy": 5,
+      "naturalness": 5,
+      "level_fit": 5,
+      "grammar_point_teaching": 5,
+      "gloss_quality": 5
+    },
+    "hard_gate_failures": [],
+    "summary": "A clean micro-dialogue at A2. All four lines are grammatically correct and natural British English ('I've just come from there' is idiomatic BrE for having just been somewhere). The grammar point — present perfect with 'just' and 'already' — is used correctly in both lines, and the two grammar notes state accurate, level-appropriate rules. The gloss for 'rent' is precise and written in simpler English than the target word. All vocabulary is A1-A2. The only gap is that neither review word ('room', 'house') appears; this is a minor spec-coverage point, not an error, so the script is approved as is."
+  },
+  "gate_decision": {
+    "schema_version": "1.0.0",
+    "episode_id": "en-A2-x01",
+    "gate": 1,
+    "user": "examiner",
+    "decision": "approve",
+    "diff": "episode: Work one review word into Ben's reply, e.g. 'Yes, I've just come from there. The rooms are big.' — this keeps the clip within the 10-15 second limit.",
+    "notes": "A clean micro-dialogue at A2. All four lines are grammatically correct and natural British English ('I've just come from there' is idiomatic BrE for having just been somewhere). The grammar point — present perfect with 'just' and 'already' — is used correctly in both lines, and the two grammar notes state accurate, level-appropriate rules. The gloss for 'rent' is precise and written in simpler English than the target word. All vocabulary is A1-A2. The only gap is that neither review word ('room', 'house') appears; this is a minor spec-coverage point, not an error, so the script is approved as is.",
+    "timestamp": "2026-10-12T04:12:55.281345Z"
+  },
+  "costs": [
+    {
+      "station": "review_examiner",
+      "vendor": "gateway",
+      "model": "kimi/kimi-k3",
+      "input_tokens": 1722,
+      "output_tokens": 1809,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "usd": 0.00646,
+      "priced": true,
+      "timestamp": "2026-10-12T04:12:55.281068Z"
+    }
+  ]
+}

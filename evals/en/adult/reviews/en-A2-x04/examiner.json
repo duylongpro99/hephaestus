@@ -1,0 +1,51 @@
+{
+  "station_version": "gateway/kimi/kimi-k3#44136fa3+3c685428554d",
+  "level_fit_verdict": "at",
+  "qa_report": {
+    "schema_version": "1.0.0",
+    "episode_id": "en-A2-x04",
+    "reviewer": "examiner",
+    "issues": [
+      {
+        "line_id": "s1l2",
+        "category": "consistency",
+        "severity": "minor",
+        "description": "Anna asks specifically about taking the bus, but Ben's 'Yes, I'm going to take a trip to the mountains' shifts from the bus to the trip, so the 'Yes' and the sentence that follows sit slightly loosely together. Coherent in casual speech, but a tighter link would model clearer question-answer alignment for learners.",
+        "suggested_fix": "Yes, I'm going to take a bus trip to the mountains."
+      }
+    ],
+    "rubric_scores": {
+      "grammar_accuracy": 5,
+      "naturalness": 5,
+      "level_fit": 5,
+      "grammar_point_teaching": 5,
+      "gloss_quality": 5
+    },
+    "hard_gate_failures": [],
+    "summary": "A clean A2 micro_dialogue. All three lines are grammatical and natural; every word is at or below A2 apart from the intended target 'trip'. Both review words ('weekend', 'bus') appear, and the grammar point 'going to' for plans is modelled in both question form ('Are you going to take...?') and affirmative form ('I'm going to take...'), matching the accurate grammar note. The gloss for 'trip' ('a time when you go somewhere and come back') is correct and simpler than the word itself. The only note is a minor one: Ben's answer shifts from the bus to the trip, and 'a bus trip to the mountains' would tie the answer more tightly to the question while keeping the target word. Length (three short lines, roughly 10-12 seconds) fits the 0.17-0.25 minute spec. Approve as is."
+  },
+  "gate_decision": {
+    "schema_version": "1.0.0",
+    "episode_id": "en-A2-x04",
+    "gate": 1,
+    "user": "examiner",
+    "decision": "approve",
+    "diff": "s1l2: Yes, I'm going to take a bus trip to the mountains.",
+    "notes": "A clean A2 micro_dialogue. All three lines are grammatical and natural; every word is at or below A2 apart from the intended target 'trip'. Both review words ('weekend', 'bus') appear, and the grammar point 'going to' for plans is modelled in both question form ('Are you going to take...?') and affirmative form ('I'm going to take...'), matching the accurate grammar note. The gloss for 'trip' ('a time when you go somewhere and come back') is correct and simpler than the word itself. The only note is a minor one: Ben's answer shifts from the bus to the trip, and 'a bus trip to the mountains' would tie the answer more tightly to the question while keeping the target word. Length (three short lines, roughly 10-12 seconds) fits the 0.17-0.25 minute spec. Approve as is.",
+    "timestamp": "2026-10-12T04:12:57.377118Z"
+  },
+  "costs": [
+    {
+      "station": "review_examiner",
+      "vendor": "gateway",
+      "model": "kimi/kimi-k3",
+      "input_tokens": 1681,
+      "output_tokens": 1886,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "usd": 0.006667,
+      "priced": true,
+      "timestamp": "2026-10-12T04:12:57.376903Z"
+    }
+  ]
+}

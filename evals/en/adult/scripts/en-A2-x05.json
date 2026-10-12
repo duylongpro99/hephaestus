@@ -1,0 +1,89 @@
+{
+  "schema_version": "1.0.0",
+  "episode_id": "en-A2-x05",
+  "title_working": "A Headache at Work",
+  "hook": "Anna sees Ben is not well. Let's listen.",
+  "segments": [
+    {
+      "id": "s1",
+      "type": "dialogue",
+      "speed": "natural",
+      "layout": "vocab_grid",
+      "lines": [
+        {
+          "id": "s1l1",
+          "speaker": "Anna",
+          "text": "You look sick, Ben.",
+          "translation": {
+            "vi": "Trông bạn có vẻ ốm, Ben."
+          },
+          "pause_after_ms": 500,
+          "visual_cue": "Ben looking unwell"
+        },
+        {
+          "id": "s1l2",
+          "speaker": "Ben",
+          "text": "I have a headache.",
+          "translation": {
+            "vi": "Tôi bị đau đầu."
+          },
+          "pause_after_ms": 500,
+          "visual_cue": "Ben rubbing his forehead"
+        },
+        {
+          "id": "s1l3",
+          "speaker": "Anna",
+          "text": "You should drink water and rest.",
+          "translation": {
+            "vi": "Bạn nên uống nước và nghỉ ngơi."
+          },
+          "pause_after_ms": 500,
+          "visual_cue": "glass of water"
+        },
+        {
+          "id": "s1l4",
+          "speaker": "Ben",
+          "text": "Should I see a doctor?",
+          "translation": {
+            "vi": "Tôi có nên đi khám bác sĩ không?"
+          },
+          "pause_after_ms": 500,
+          "visual_cue": "doctor's office"
+        }
+      ],
+      "items": []
+    }
+  ],
+  "vocab": [
+    {
+      "word": "headache",
+      "gloss": {
+        "en": "a bad feeling in your head",
+        "vi": "đau đầu"
+      },
+      "is_target": true
+    },
+    {
+      "word": "sick",
+      "gloss": {
+        "en": "not well",
+        "vi": "ốm"
+      },
+      "is_target": false
+    },
+    {
+      "word": "doctor",
+      "gloss": {
+        "en": "a person who helps sick people",
+        "vi": "bác sĩ"
+      },
+      "is_target": false
+    }
+  ],
+  "grammar_notes": [
+    "Use 'should' to give advice: You should drink water. Use 'shouldn't' to say what is not a good idea."
+  ],
+  "interaction_prompts": [
+    "What do you do when you have a headache?"
+  ]
+}

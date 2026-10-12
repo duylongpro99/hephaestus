@@ -1,0 +1,86 @@
+{
+  "station_version": "gateway/qwen3.8-max-0902#44136fa3+73ad12238cc5",
+  "level_fit_verdict": "at",
+  "qa_report": {
+    "schema_version": "1.0.0",
+    "episode_id": "en-A2-x06",
+    "reviewer": "learner",
+    "issues": [
+      {
+        "line_id": "s1l1",
+        "category": "translation_naturalness",
+        "severity": "major",
+        "description": "'hữu ích' is too formal and unnatural for jeans; it sounds machine-translated. Also 'màu xanh' is ambiguous because it can mean blue or green.",
+        "suggested_fix": "Change the line to EN 'The blue jeans are more comfortable than the black jeans.' and VI 'Quần jeans màu xanh dương thoải mái hơn quần jeans màu đen.'"
+      },
+      {
+        "line_id": "s1l2",
+        "category": "translation_naturalness",
+        "severity": "major",
+        "description": "'hữu ích nhất' is unnatural for clothing. The line would feel more natural if it talked about comfort and pointed to the jeans in the shop.",
+        "suggested_fix": "Change the line to EN 'Yes, these are the most comfortable jeans in this shop.' and VI 'Đúng vậy, đây là quần jeans thoải mái nhất trong cửa hàng này.'"
+      },
+      {
+        "line_id": "s1l3",
+        "category": "translation_naturalness",
+        "severity": "minor",
+        "description": "'Mua chúng đi' is understandable but a little literal. Friends would more naturally use 'mình' or refer to the jeans directly.",
+        "suggested_fix": "Change VI to 'Mình mua chúng đi.' or more naturally 'Mình mua đôi này đi.'"
+      },
+      {
+        "line_id": null,
+        "category": "explanation",
+        "severity": "minor",
+        "description": "The grammar notes use examples with 'useful'. If the dialogue changes to 'comfortable', the examples need to match the dialogue.",
+        "suggested_fix": "Change the notes to: 'Use more + adjective to compare two things, like more comfortable than.' and 'Use the most + adjective to say something is number one in a group, like the most comfortable jeans.'"
+      },
+      {
+        "line_id": null,
+        "category": "engagement",
+        "severity": "minor",
+        "description": "The hook is very plain, and 'useful jeans' is not a strong or natural reason to listen. A concrete shopping adjective makes the micro-dialogue more believable.",
+        "suggested_fix": "Change the hook to 'Anna and Ben look for comfortable jeans in a shop.'"
+      },
+      {
+        "line_id": null,
+        "category": "explanation",
+        "severity": "minor",
+        "description": "The gloss 'long clothes for your legs' is understandable but a little awkward.",
+        "suggested_fix": "Change gloss.en to 'clothes that cover your legs, often blue'. Keep gloss.vi as 'quần jeans'."
+      }
+    ],
+    "rubric_scores": {
+      "comprehensibility": 4,
+      "translation_accuracy": 4,
+      "translation_naturalness": 2,
+      "engagement": 3,
+      "explanation_helpfulness": 3
+    },
+    "hard_gate_failures": [],
+    "summary": "The episode is short and simple enough for A2, but the Vietnamese feels machine-translated because 'hữu ích' is not natural for jeans. I would keep listening if the dialogue used 'comfortable/thoải mái', specified 'xanh dương', and made the final line sound friendly. No critical meaning errors."
+  },
+  "gate_decision": {
+    "schema_version": "1.0.0",
+    "episode_id": "en-A2-x06",
+    "gate": 1,
+    "user": "learner",
+    "decision": "edit-and-approve",
+    "diff": "s1l1: Change the line to EN 'The blue jeans are more comfortable than the black jeans.' and VI 'Quần jeans màu xanh dương thoải mái hơn quần jeans màu đen.'\ns1l2: Change the line to EN 'Yes, these are the most comfortable jeans in this shop.' and VI 'Đúng vậy, đây là quần jeans thoải mái nhất trong cửa hàng này.'\ns1l3: Change VI to 'Mình mua chúng đi.' or more naturally 'Mình mua đôi này đi.'\nepisode: Change the notes to: 'Use more + adjective to compare two things, like more comfortable than.' and 'Use the most + adjective to say something is number one in a group, like the most comfortable jeans.'\nepisode: Change the hook to 'Anna and Ben look for comfortable jeans in a shop.'\nepisode: Change gloss.en to 'clothes that cover your legs, often blue'. Keep gloss.vi as 'quần jeans'.",
+    "notes": "The episode is short and simple enough for A2, but the Vietnamese feels machine-translated because 'hữu ích' is not natural for jeans. I would keep listening if the dialogue used 'comfortable/thoải mái', specified 'xanh dương', and made the final line sound friendly. No critical meaning errors.",
+    "timestamp": "2026-10-12T04:21:00.274536Z"
+  },
+  "costs": [
+    {
+      "station": "review_learner",
+      "vendor": "gateway",
+      "model": "qwen3.8-max-0902",
+      "input_tokens": 656,
+      "output_tokens": 11407,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 1024,
+      "usd": 0.013976,
+      "priced": true,
+      "timestamp": "2026-10-12T04:21:00.274208Z"
+    }
+  ]
+}

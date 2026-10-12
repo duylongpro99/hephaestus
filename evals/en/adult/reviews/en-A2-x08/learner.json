@@ -1,0 +1,79 @@
+{
+  "station_version": "gateway/qwen3.8-max-0902#44136fa3+73ad12238cc5",
+  "level_fit_verdict": "at",
+  "qa_report": {
+    "schema_version": "1.0.0",
+    "episode_id": "en-A2-x08",
+    "reviewer": "learner",
+    "issues": [
+      {
+        "line_id": null,
+        "category": "translation_naturalness",
+        "severity": "major",
+        "description": "Throughout the dialogue, the Vietnamese uses “Chúng ta” for Anna and Ben. In a casual conversation between two friends planning dinner, “chúng ta” sounds formal, like a teacher speaking to a class. It makes the translation feel stiff. Friends would more naturally say “chúng mình” or “tụi mình”.",
+        "suggested_fix": "Replace “Chúng ta” with “Chúng mình” (or “Tụi mình” for a casual Southern tone): s1l1 “Chúng mình phải nấu ăn cho bạn bè.” s1l2 “Chúng mình có phải nấu rau không?” s1l3 “Ừ, chúng mình phải nấu rau.” s1l4 “Chúng mình không phải mua thịt.”"
+      },
+      {
+        "line_id": "s1l3",
+        "category": "translation_naturalness",
+        "severity": "minor",
+        "description": "“Yes, we have to use vegetables” translated as “dùng rau” is understandable, but “dùng rau” sounds formal and a little unnatural in this cooking context. A more natural subtitle would connect the idea to cooking or having vegetables.",
+        "suggested_fix": "If possible, change the English to “Yes, we have to cook vegetables.” and the Vietnamese to “Ừ, chúng mình phải nấu rau.” If keeping “use”, use “Ừ, chúng mình phải có rau.”"
+      },
+      {
+        "line_id": null,
+        "category": "translation_accuracy",
+        "severity": "minor",
+        "description": "The gloss for “vegetable” as “rau” is common, but in Vietnamese “rau” can feel narrow, often meaning leafy greens or herbs. For general vegetables, “rau củ” is clearer.",
+        "suggested_fix": "Change the Vietnamese gloss for “vegetable” to “rau củ”."
+      },
+      {
+        "line_id": null,
+        "category": "explanation",
+        "severity": "minor",
+        "description": "The grammar note explains the meaning of “have to” and “don’t have to”, but the dialogue also uses the question form “Do we have to...?”. A2 learners may need to see this pattern.",
+        "suggested_fix": "Add: “Question: Do we have to + verb? Example: Do we have to cook vegetables?”"
+      },
+      {
+        "line_id": null,
+        "category": "engagement",
+        "severity": "minor",
+        "description": "The episode is clear and short, but the hook and dialogue are very plain and repetitive. A small concrete detail, such as “tonight” or “dinner”, would make it feel more like a real plan.",
+        "suggested_fix": "Make the hook stronger: “Anna and Ben have to cook dinner for friends tonight.” If length allows, change s1l1 to “We have to cook dinner for friends tonight.”"
+      }
+    ],
+    "rubric_scores": {
+      "comprehensibility": 5,
+      "translation_accuracy": 4,
+      "translation_naturalness": 3,
+      "engagement": 3,
+      "explanation_helpfulness": 4
+    },
+    "hard_gate_failures": [],
+    "summary": "This micro-dialogue is simple and suitable for A2 learners. The grammar point and target word are clear, and the English lines are easy to follow. The main problem is the Vietnamese register: “Chúng ta” sounds too formal for two friends planning dinner. Changing it to “chúng mình” or “tụi mình” will make the dialogue much more natural. A few small fixes to the vegetable gloss, grammar note, and hook would improve the episode."
+  },
+  "gate_decision": {
+    "schema_version": "1.0.0",
+    "episode_id": "en-A2-x08",
+    "gate": 1,
+    "user": "learner",
+    "decision": "edit-and-approve",
+    "diff": "episode: Replace “Chúng ta” with “Chúng mình” (or “Tụi mình” for a casual Southern tone): s1l1 “Chúng mình phải nấu ăn cho bạn bè.” s1l2 “Chúng mình có phải nấu rau không?” s1l3 “Ừ, chúng mình phải nấu rau.” s1l4 “Chúng mình không phải mua thịt.”\ns1l3: If possible, change the English to “Yes, we have to cook vegetables.” and the Vietnamese to “Ừ, chúng mình phải nấu rau.” If keeping “use”, use “Ừ, chúng mình phải có rau.”\nepisode: Change the Vietnamese gloss for “vegetable” to “rau củ”.\nepisode: Add: “Question: Do we have to + verb? Example: Do we have to cook vegetables?”\nepisode: Make the hook stronger: “Anna and Ben have to cook dinner for friends tonight.” If length allows, change s1l1 to “We have to cook dinner for friends tonight.”",
+    "notes": "This micro-dialogue is simple and suitable for A2 learners. The grammar point and target word are clear, and the English lines are easy to follow. The main problem is the Vietnamese register: “Chúng ta” sounds too formal for two friends planning dinner. Changing it to “chúng mình” or “tụi mình” will make the dialogue much more natural. A few small fixes to the vegetable gloss, grammar note, and hook would improve the episode.",
+    "timestamp": "2026-10-12T04:21:18.786882Z"
+  },
+  "costs": [
+    {
+      "station": "review_learner",
+      "vendor": "gateway",
+      "model": "qwen3.8-max-0902",
+      "input_tokens": 726,
+      "output_tokens": 9634,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 1024,
+      "usd": 0.011877,
+      "priced": true,
+      "timestamp": "2026-10-12T04:21:18.786551Z"
+    }
+  ]
+}

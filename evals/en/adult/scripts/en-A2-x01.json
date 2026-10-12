@@ -1,0 +1,74 @@
+{
+  "schema_version": "1.0.0",
+  "episode_id": "en-A2-x01",
+  "title_working": "New Flat Rent",
+  "hook": "Anna and Ben talk about a new flat.",
+  "segments": [
+    {
+      "id": "s1",
+      "type": "dialogue",
+      "speed": "natural",
+      "layout": "podcast_a",
+      "lines": [
+        {
+          "id": "s1l1",
+          "speaker": "anna",
+          "text": "Have you already seen the new flat?",
+          "translation": {
+            "vi": "Bạn đã xem căn hộ mới chưa?"
+          },
+          "pause_after_ms": 400,
+          "visual_cue": "new flat"
+        },
+        {
+          "id": "s1l2",
+          "speaker": "ben",
+          "text": "Yes, I've just come from there.",
+          "translation": {
+            "vi": "Vâng, tôi vừa mới từ đó về."
+          },
+          "pause_after_ms": 400,
+          "visual_cue": null
+        },
+        {
+          "id": "s1l3",
+          "speaker": "anna",
+          "text": "Is the rent okay?",
+          "translation": {
+            "vi": "Tiền thuê có ổn không?"
+          },
+          "pause_after_ms": 500,
+          "visual_cue": null
+        },
+        {
+          "id": "s1l4",
+          "speaker": "ben",
+          "text": "The rent is low.",
+          "translation": {
+            "vi": "Tiền thuê thấp."
+          },
+          "pause_after_ms": 500,
+          "visual_cue": null
+        }
+      ],
+      "items": []
+    }
+  ],
+  "vocab": [
+    {
+      "word": "rent",
+      "gloss": {
+        "en": "the money you pay every month to live in a place",
+        "vi": "tiền thuê nhà"
+      },
+      "is_target": true
+    }
+  ],
+  "grammar_notes": [
+    "Use 'already' in questions to ask if something happened before now.",
+    "Use 'just' to say something happened a very short time ago."
+  ],
+  "interaction_prompts": [
+    "Have you already moved into a new flat? Tell us about the rent."
+  ]
+}

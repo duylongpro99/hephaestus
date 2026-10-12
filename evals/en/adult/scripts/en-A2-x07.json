@@ -1,0 +1,79 @@
+{
+  "schema_version": "1.0.0",
+  "episode_id": "en-A2-x07",
+  "title_working": "A Surprise Birthday Cake",
+  "hook": "A birthday cake surprise",
+  "segments": [
+    {
+      "id": "s1",
+      "type": "dialogue",
+      "speed": "natural",
+      "layout": "podcast_a",
+      "lines": [
+        {
+          "id": "s1l1",
+          "speaker": "anna",
+          "text": "I was walking home when I saw a birthday cake.",
+          "translation": {
+            "vi": "Tôi đang đi bộ về nhà thì tôi thấy một chiếc bánh sinh nhật."
+          },
+          "pause_after_ms": 500,
+          "visual_cue": "birthday cake in a shop window"
+        },
+        {
+          "id": "s1l2",
+          "speaker": "ben",
+          "text": "Was it for your party?",
+          "translation": {
+            "vi": "Nó có phải cho bữa tiệc của bạn không?"
+          },
+          "pause_after_ms": 500,
+          "visual_cue": null
+        },
+        {
+          "id": "s1l3",
+          "speaker": "anna",
+          "text": "No, today is my sister's birthday.",
+          "translation": {
+            "vi": "Không, hôm nay là sinh nhật của em gái tôi."
+          },
+          "pause_after_ms": 500,
+          "visual_cue": null
+        }
+      ],
+      "items": []
+    }
+  ],
+  "vocab": [
+    {
+      "word": "birthday",
+      "gloss": {
+        "en": "the day every year when a person has a party and cake",
+        "vi": "sinh nhật"
+      },
+      "is_target": true
+    },
+    {
+      "word": "party",
+      "gloss": {
+        "en": "a fun time with friends, food and music",
+        "vi": "bữa tiệc"
+      },
+      "is_target": false
+    },
+    {
+      "word": "cake",
+      "gloss": {
+        "en": "a sweet food for parties",
+        "vi": "bánh ngọt"
+      },
+      "is_target": false
+    }
+  ],
+  "grammar_notes": [
+    "Use 'was/were + verb-ing' with 'when' to show what was happening when another action happened."
+  ],
+  "interaction_prompts": [
+    "What was the last birthday party you enjoyed?"
+  ]
+}

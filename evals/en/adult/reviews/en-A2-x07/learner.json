@@ -1,0 +1,79 @@
+{
+  "station_version": "gateway/qwen3.8-max-0902#44136fa3+73ad12238cc5",
+  "level_fit_verdict": "at",
+  "qa_report": {
+    "schema_version": "1.0.0",
+    "episode_id": "en-A2-x07",
+    "reviewer": "learner",
+    "issues": [
+      {
+        "line_id": "s1l2",
+        "category": "translation_naturalness",
+        "severity": "major",
+        "description": "The Vietnamese line sounds too literal. 'Nó có phải cho bữa tiệc của bạn không?' is understandable, but a native speaker would usually name the cake and use 'dành cho' rather than 'cho'.",
+        "suggested_fix": "Bánh đó có phải dành cho bữa tiệc của bạn không?"
+      },
+      {
+        "line_id": null,
+        "category": "translation_naturalness",
+        "severity": "minor",
+        "description": "The pronouns 'tôi/bạn' are a little formal for a friendly dialogue about a birthday. If Anna and Ben are friends, 'mình/bạn' sounds warmer and more natural.",
+        "suggested_fix": "Use a friendly pronoun set, for example: 'Mình đang đi bộ về nhà thì thấy một chiếc bánh sinh nhật.' and 'Không, hôm nay là sinh nhật em gái mình.'"
+      },
+      {
+        "line_id": "s1l3",
+        "category": "comprehension",
+        "severity": "minor",
+        "description": "The answer gives a reason but does not directly say what the cake is for. An A2 listener may need one more clear link.",
+        "suggested_fix": "No, it is for my sister's birthday. / Không, nó dành cho sinh nhật của em gái tôi."
+      },
+      {
+        "line_id": null,
+        "category": "translation_accuracy",
+        "severity": "minor",
+        "description": "The gloss for 'cake' as 'bánh ngọt' is not wrong, but in this birthday context 'bánh sinh nhật' or 'bánh kem' may match the picture and dialogue better.",
+        "suggested_fix": "Update the Vietnamese gloss to 'bánh ngọt (bánh sinh nhật/bánh kem)' or keep it simple: 'bánh sinh nhật / bánh kem'."
+      },
+      {
+        "line_id": null,
+        "category": "engagement",
+        "severity": "minor",
+        "description": "The title and hook mention a surprise, but the dialogue only says Anna saw a cake. It is clear but not very engaging as a surprise.",
+        "suggested_fix": "Add a small surprise line if length allows, e.g. 'It is a surprise for my sister.' / 'Đó là món quà bất ngờ cho em gái mình.'"
+      }
+    ],
+    "rubric_scores": {
+      "comprehensibility": 4,
+      "translation_accuracy": 4,
+      "translation_naturalness": 3,
+      "engagement": 3,
+      "explanation_helpfulness": 4
+    },
+    "hard_gate_failures": [],
+    "summary": "The episode is short, clear, and suitable for A2. The grammar point is visible in the first line, and the vocabulary is simple. The main edit is to make the Vietnamese translation of Ben's question more natural. Smaller edits to pronouns, clarity, and the 'surprise' idea would make it better."
+  },
+  "gate_decision": {
+    "schema_version": "1.0.0",
+    "episode_id": "en-A2-x07",
+    "gate": 1,
+    "user": "learner",
+    "decision": "edit-and-approve",
+    "diff": "s1l2: Bánh đó có phải dành cho bữa tiệc của bạn không?\nepisode: Use a friendly pronoun set, for example: 'Mình đang đi bộ về nhà thì thấy một chiếc bánh sinh nhật.' and 'Không, hôm nay là sinh nhật em gái mình.'\ns1l3: No, it is for my sister's birthday. / Không, nó dành cho sinh nhật của em gái tôi.\nepisode: Update the Vietnamese gloss to 'bánh ngọt (bánh sinh nhật/bánh kem)' or keep it simple: 'bánh sinh nhật / bánh kem'.\nepisode: Add a small surprise line if length allows, e.g. 'It is a surprise for my sister.' / 'Đó là món quà bất ngờ cho em gái mình.'",
+    "notes": "The episode is short, clear, and suitable for A2. The grammar point is visible in the first line, and the vocabulary is simple. The main edit is to make the Vietnamese translation of Ben's question more natural. Smaller edits to pronouns, clarity, and the 'surprise' idea would make it better.",
+    "timestamp": "2026-10-12T04:20:32.295679Z"
+  },
+  "costs": [
+    {
+      "station": "review_learner",
+      "vendor": "gateway",
+      "model": "qwen3.8-max-0902",
+      "input_tokens": 687,
+      "output_tokens": 6336,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 1024,
+      "usd": 0.007904,
+      "priced": true,
+      "timestamp": "2026-10-12T04:20:32.295319Z"
+    }
+  ]
+}

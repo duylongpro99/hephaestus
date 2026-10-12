@@ -1,0 +1,65 @@
+{
+  "station_version": "gateway/qwen3.8-max-0902#44136fa3+73ad12238cc5",
+  "level_fit_verdict": "at",
+  "qa_report": {
+    "schema_version": "1.0.0",
+    "episode_id": "en-A2-x04",
+    "reviewer": "learner",
+    "issues": [
+      {
+        "line_id": "s1l3",
+        "category": "translation_naturalness",
+        "severity": "minor",
+        "description": "The Vietnamese is understandable, but it sounds a little literal. In natural conversation between friends, I would expect a response with “nghe” because the English says “sounds”.",
+        "suggested_fix": "Change the vi translation to: “Nghe tuyệt đấy!” or “Nghe hay đấy!”"
+      },
+      {
+        "line_id": "s1l3",
+        "category": "comprehension",
+        "severity": "minor",
+        "description": "“That sounds great to me!” is clear, but “to me” feels unnecessary at A2 and makes the line slightly less simple.",
+        "suggested_fix": "Simplify the English line to: “That sounds great!”"
+      },
+      {
+        "line_id": null,
+        "category": "explanation",
+        "severity": "minor",
+        "description": "The grammar note is clear, but at A2 I need the full pattern with am/is/are. Without that, I might say “I going to take”.",
+        "suggested_fix": "Change the note to: “Use 'am/is/are going to' + verb to talk about plans. Example: 'I'm going to take a trip.'”"
+      }
+    ],
+    "rubric_scores": {
+      "comprehensibility": 5,
+      "translation_accuracy": 5,
+      "translation_naturalness": 4,
+      "engagement": 4,
+      "explanation_helpfulness": 4
+    },
+    "hard_gate_failures": [],
+    "summary": "This micro-dialogue is short, clear, and suitable for A2 learners. It uses the target word “trip” and review words “weekend” and “bus” naturally. The translations are mostly accurate, but the final line could sound more natural in Vietnamese and be slightly simpler in English. The grammar note is helpful but should include the full “am/is/are going to” pattern."
+  },
+  "gate_decision": {
+    "schema_version": "1.0.0",
+    "episode_id": "en-A2-x04",
+    "gate": 1,
+    "user": "learner",
+    "decision": "edit-and-approve",
+    "diff": "s1l3: Change the vi translation to: “Nghe tuyệt đấy!” or “Nghe hay đấy!”\ns1l3: Simplify the English line to: “That sounds great!”\nepisode: Change the note to: “Use 'am/is/are going to' + verb to talk about plans. Example: 'I'm going to take a trip.'”",
+    "notes": "This micro-dialogue is short, clear, and suitable for A2 learners. It uses the target word “trip” and review words “weekend” and “bus” naturally. The translations are mostly accurate, but the final line could sound more natural in Vietnamese and be slightly simpler in English. The grammar note is helpful but should include the full “am/is/are going to” pattern.",
+    "timestamp": "2026-10-12T04:14:52.798139Z"
+  },
+  "costs": [
+    {
+      "station": "review_learner",
+      "vendor": "gateway",
+      "model": "qwen3.8-max-0902",
+      "input_tokens": 632,
+      "output_tokens": 4380,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 1024,
+      "usd": 0.005534,
+      "priced": true,
+      "timestamp": "2026-10-12T04:14:52.794288Z"
+    }
+  ]
+}

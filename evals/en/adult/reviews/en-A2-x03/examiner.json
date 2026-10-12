@@ -1,0 +1,58 @@
+{
+  "station_version": "gateway/kimi/kimi-k3#44136fa3+3c685428554d",
+  "level_fit_verdict": "at",
+  "qa_report": {
+    "schema_version": "1.0.0",
+    "episode_id": "en-A2-x03",
+    "reviewer": "examiner",
+    "issues": [
+      {
+        "line_id": "s1l2",
+        "category": "collocation",
+        "severity": "minor",
+        "description": "In natural spoken English a native speaker would contract here: 'No, I've never had one.' The full form 'I have never had one' is grammatical and arguably useful for highlighting the structure, but the script is marked 'natural' speed and the uncontracted form sounds slightly stiff in casual dialogue.",
+        "suggested_fix": "Change to: \"No, I've never had one.\""
+      },
+      {
+        "line_id": null,
+        "category": "consistency",
+        "severity": "minor",
+        "description": "The spec lists review words ['work','job'], but 'work' never appears in the dialogue; only 'job' is recycled (s1l1, s1l4). The target word 'interview' and review word 'job' are covered.",
+        "suggested_fix": "Change s1l4 to \"I really want to work there.\" so 'work' is also reviewed; 'job' is still recycled in s1l1 ('a job interview')."
+      }
+    ],
+    "rubric_scores": {
+      "grammar_accuracy": 5,
+      "naturalness": 4,
+      "level_fit": 5,
+      "grammar_point_teaching": 5,
+      "gloss_quality": 5
+    },
+    "hard_gate_failures": [],
+    "summary": "A clean, level-appropriate micro-dialogue. Present perfect with 'ever' and 'never' is modelled correctly in both the question and the answer, and the grammar note ('have/has + third form', 'ever = at any time', 'never = not at any time') is accurate and simple. All vocabulary is A2 or below apart from the intended target 'interview'. Both glosses are accurate and simpler than the words they explain. Two minor points only: the uncontracted 'I have never had one' is slightly formal for natural-speed speech ('I've never had one' is what a native would say), and the spec's review word 'work' is not recycled. Neither blocks approval; the four lines fit the 10-15 second format."
+  },
+  "gate_decision": {
+    "schema_version": "1.0.0",
+    "episode_id": "en-A2-x03",
+    "gate": 1,
+    "user": "examiner",
+    "decision": "approve",
+    "diff": "s1l2: Change to: \"No, I've never had one.\"\nepisode: Change s1l4 to \"I really want to work there.\" so 'work' is also reviewed; 'job' is still recycled in s1l1 ('a job interview').",
+    "notes": "A clean, level-appropriate micro-dialogue. Present perfect with 'ever' and 'never' is modelled correctly in both the question and the answer, and the grammar note ('have/has + third form', 'ever = at any time', 'never = not at any time') is accurate and simple. All vocabulary is A2 or below apart from the intended target 'interview'. Both glosses are accurate and simpler than the words they explain. Two minor points only: the uncontracted 'I have never had one' is slightly formal for natural-speed speech ('I've never had one' is what a native would say), and the spec's review word 'work' is not recycled. Neither blocks approval; the four lines fit the 10-15 second format.",
+    "timestamp": "2026-10-12T04:13:24.093306Z"
+  },
+  "costs": [
+    {
+      "station": "review_examiner",
+      "vendor": "gateway",
+      "model": "kimi/kimi-k3",
+      "input_tokens": 1794,
+      "output_tokens": 2790,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "usd": 0.009446,
+      "priced": true,
+      "timestamp": "2026-10-12T04:13:24.092967Z"
+    }
+  ]
+}

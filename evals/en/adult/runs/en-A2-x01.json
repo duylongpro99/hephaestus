@@ -1,0 +1,370 @@
+{
+  "attempts": [
+    {
+      "episode_id": "en-A2-x01",
+      "status": "ESCALATED",
+      "error": "a3_level_editor: response hit max_tokens (16000)",
+      "a3_turns": 1,
+      "elapsed_s": 355.3,
+      "station_versions": {
+        "a2_scriptwriter": "gateway/ds/deepseek-v4-pro#44136fa3+7cae5cbaa386",
+        "a3_level_editor": "gateway/ds/deepseek-v4-pro#44136fa3+34241d8f55dd"
+      },
+      "first_report": {
+        "schema_version": "1.1.0",
+        "episode_id": "en-A2-x01",
+        "level": "A2",
+        "config_hash": "sha256:028f8dd15da39124b69ab7e9656a41be06de9572ecb838b2f67c925899bbcd70",
+        "content_token_count": 20,
+        "in_level_ratio": 1.0,
+        "new_word_ratio": 0.0667,
+        "off_level_tokens": [],
+        "target_word_counts": {
+          "rent": 2
+        },
+        "sentence_length": {
+          "mean": 4.6,
+          "min": 1,
+          "max": 7,
+          "band": [
+            8,
+            12
+          ],
+          "sentence_count": 5,
+          "long_lines": [],
+          "long_share": 0.0
+        },
+        "word_count": 23,
+        "estimated_duration_min": 0.24,
+        "gate_failures": [
+          {
+            "gate": "new_words",
+            "detail": "new-word ratio 6.7% > 5% (1 new of 15 distinct lemmas)",
+            "line_ids": []
+          }
+        ],
+        "passed": false
+      },
+      "final_report": {
+        "schema_version": "1.1.0",
+        "episode_id": "en-A2-x01",
+        "level": "A2",
+        "config_hash": "sha256:028f8dd15da39124b69ab7e9656a41be06de9572ecb838b2f67c925899bbcd70",
+        "content_token_count": 20,
+        "in_level_ratio": 1.0,
+        "new_word_ratio": 0.0714,
+        "off_level_tokens": [],
+        "target_word_counts": {
+          "rent": 2
+        },
+        "sentence_length": {
+          "mean": 4.6,
+          "min": 1,
+          "max": 7,
+          "band": [
+            8,
+            12
+          ],
+          "sentence_count": 5,
+          "long_lines": [],
+          "long_share": 0.0
+        },
+        "word_count": 23,
+        "estimated_duration_min": 0.24,
+        "gate_failures": [
+          {
+            "gate": "new_words",
+            "detail": "new-word ratio 7.1% > 5% (1 new of 14 distinct lemmas)",
+            "line_ids": []
+          }
+        ],
+        "passed": false
+      },
+      "cost_ledger": {
+        "schema_version": "1.1.0",
+        "episode_id": "en-A2-x01",
+        "budget_usd": 0.5,
+        "entries": [
+          {
+            "station": "a2_scriptwriter",
+            "vendor": "gateway",
+            "model": "deepseek-v4-pro",
+            "input_tokens": 5447,
+            "output_tokens": 4698,
+            "cache_creation_input_tokens": 0,
+            "cache_read_input_tokens": 0,
+            "usd": 0.004299,
+            "priced": true,
+            "timestamp": "2026-10-12T03:55:37.667862Z"
+          },
+          {
+            "station": "a3_level_editor",
+            "vendor": "gateway",
+            "model": "deepseek-v4-pro",
+            "input_tokens": 6277,
+            "output_tokens": 2034,
+            "cache_creation_input_tokens": 0,
+            "cache_read_input_tokens": 0,
+            "usd": 0.002723,
+            "priced": true,
+            "timestamp": "2026-10-12T03:56:04.196671Z"
+          },
+          {
+            "station": "a3_level_editor",
+            "vendor": "gateway",
+            "model": "deepseek-v4-pro",
+            "input_tokens": 273,
+            "output_tokens": 1385,
+            "cache_creation_input_tokens": 0,
+            "cache_read_input_tokens": 8192,
+            "usd": 0.001034,
+            "priced": true,
+            "timestamp": "2026-10-12T03:56:20.370668Z"
+          },
+          {
+            "station": "a3_level_editor",
+            "vendor": "gateway",
+            "model": "deepseek-v4-pro",
+            "input_tokens": 143,
+            "output_tokens": 35,
+            "cache_creation_input_tokens": 0,
+            "cache_read_input_tokens": 9728,
+            "usd": 0.000126,
+            "priced": true,
+            "timestamp": "2026-10-12T03:56:22.035862Z"
+          },
+          {
+            "station": "a3_level_editor",
+            "vendor": "gateway",
+            "model": "deepseek-v4-pro",
+            "input_tokens": 204,
+            "output_tokens": 5225,
+            "cache_creation_input_tokens": 0,
+            "cache_read_input_tokens": 9856,
+            "usd": 0.003565,
+            "priced": true,
+            "timestamp": "2026-10-12T03:57:22.800253Z"
+          },
+          {
+            "station": "a3_level_editor",
+            "vendor": "gateway",
+            "model": "deepseek-v4-pro",
+            "input_tokens": 133,
+            "output_tokens": 16000,
+            "cache_creation_input_tokens": 0,
+            "cache_read_input_tokens": 15232,
+            "usd": 0.0107,
+            "priced": true,
+            "timestamp": "2026-10-12T04:00:33.803448Z"
+          }
+        ],
+        "total_usd": 0.022447
+      },
+      "finished_at": "2026-10-12T04:00:33.861945+00:00"
+    },
+    {
+      "episode_id": "en-A2-x01",
+      "status": "PASSED",
+      "error": null,
+      "a3_turns": 0,
+      "elapsed_s": 33.5,
+      "station_versions": {
+        "a2_scriptwriter": "gateway/ds/deepseek-v4-pro#44136fa3+7cae5cbaa386",
+        "a3_level_editor": "gateway/ds/deepseek-v4-pro#44136fa3+34241d8f55dd"
+      },
+      "first_report": {
+        "schema_version": "1.1.0",
+        "episode_id": "en-A2-x01",
+        "level": "A2",
+        "config_hash": "sha256:13a7daa2d52412098748448c65b06721da4bed46fe5cd5263f602723a655c7e9",
+        "content_token_count": 21,
+        "in_level_ratio": 1.0,
+        "new_word_ratio": 0.0667,
+        "off_level_tokens": [],
+        "target_word_counts": {
+          "rent": 2
+        },
+        "sentence_length": {
+          "mean": 5.25,
+          "min": 4,
+          "max": 6,
+          "band": [
+            8,
+            12
+          ],
+          "sentence_count": 4,
+          "long_lines": [],
+          "long_share": 0.0
+        },
+        "word_count": 21,
+        "estimated_duration_min": 0.22,
+        "gate_failures": [],
+        "passed": true
+      },
+      "final_report": {
+        "schema_version": "1.1.0",
+        "episode_id": "en-A2-x01",
+        "level": "A2",
+        "config_hash": "sha256:13a7daa2d52412098748448c65b06721da4bed46fe5cd5263f602723a655c7e9",
+        "content_token_count": 21,
+        "in_level_ratio": 1.0,
+        "new_word_ratio": 0.0667,
+        "off_level_tokens": [],
+        "target_word_counts": {
+          "rent": 2
+        },
+        "sentence_length": {
+          "mean": 5.25,
+          "min": 4,
+          "max": 6,
+          "band": [
+            8,
+            12
+          ],
+          "sentence_count": 4,
+          "long_lines": [],
+          "long_share": 0.0
+        },
+        "word_count": 21,
+        "estimated_duration_min": 0.22,
+        "gate_failures": [],
+        "passed": true
+      },
+      "cost_ledger": {
+        "schema_version": "1.1.0",
+        "episode_id": "en-A2-x01",
+        "budget_usd": 0.5,
+        "entries": [
+          {
+            "station": "a2_scriptwriter",
+            "vendor": "gateway",
+            "model": "deepseek-v4-pro",
+            "input_tokens": 5455,
+            "output_tokens": 2511,
+            "cache_creation_input_tokens": 0,
+            "cache_read_input_tokens": 0,
+            "usd": 0.002857,
+            "priced": true,
+            "timestamp": "2026-10-12T04:01:33.008990Z"
+          }
+        ],
+        "total_usd": 0.002857
+      },
+      "finished_at": "2026-10-12T04:01:33.726634+00:00"
+    },
+    {
+      "episode_id": "en-A2-x01",
+      "status": "PASSED",
+      "error": null,
+      "a3_turns": 0,
+      "elapsed_s": 81.7,
+      "station_versions": {
+        "a2_scriptwriter": "gateway/ds/deepseek-v4-pro#44136fa3+7cae5cbaa386",
+        "a3_level_editor": "gateway/ds/deepseek-v4-pro#44136fa3+34241d8f55dd"
+      },
+      "first_report": {
+        "schema_version": "1.1.0",
+        "episode_id": "en-A2-x01",
+        "level": "A2",
+        "config_hash": "sha256:1bb30abe00c08cc2ffbd9d9410aa5556752f20e68fa4c8ac5f6ca9d76185f60d",
+        "content_token_count": 20,
+        "in_level_ratio": 1.0,
+        "new_word_ratio": 0.0625,
+        "off_level_tokens": [],
+        "target_word_counts": {
+          "rent": 2
+        },
+        "sentence_length": {
+          "mean": 5.25,
+          "min": 4,
+          "max": 7,
+          "band": [
+            8,
+            12
+          ],
+          "sentence_count": 4,
+          "long_lines": [],
+          "long_share": 0.0
+        },
+        "word_count": 21,
+        "estimated_duration_min": 0.22,
+        "gate_failures": [],
+        "passed": true
+      },
+      "final_report": {
+        "schema_version": "1.1.0",
+        "episode_id": "en-A2-x01",
+        "level": "A2",
+        "config_hash": "sha256:1bb30abe00c08cc2ffbd9d9410aa5556752f20e68fa4c8ac5f6ca9d76185f60d",
+        "content_token_count": 20,
+        "in_level_ratio": 1.0,
+        "new_word_ratio": 0.0625,
+        "off_level_tokens": [],
+        "target_word_counts": {
+          "rent": 2
+        },
+        "sentence_length": {
+          "mean": 5.25,
+          "min": 4,
+          "max": 7,
+          "band": [
+            8,
+            12
+          ],
+          "sentence_count": 4,
+          "long_lines": [],
+          "long_share": 0.0
+        },
+        "word_count": 21,
+        "estimated_duration_min": 0.22,
+        "gate_failures": [],
+        "passed": true
+      },
+      "cost_ledger": {
+        "schema_version": "1.1.0",
+        "episode_id": "en-A2-x01",
+        "budget_usd": 0.5,
+        "entries": [
+          {
+            "station": "a2_scriptwriter",
+            "vendor": "gateway",
+            "model": "deepseek-v4-pro",
+            "input_tokens": 4307,
+            "output_tokens": 7171,
+            "cache_creation_input_tokens": 0,
+            "cache_read_input_tokens": 1152,
+            "usd": 0.005689,
+            "priced": true,
+            "timestamp": "2026-10-12T04:03:34.336789Z"
+          },
+          {
+            "station": "review_examiner",
+            "vendor": "gateway",
+            "model": "kimi/kimi-k3",
+            "input_tokens": 1722,
+            "output_tokens": 1809,
+            "cache_creation_input_tokens": 0,
+            "cache_read_input_tokens": 0,
+            "usd": 0.00646,
+            "priced": true,
+            "timestamp": "2026-10-12T04:12:55.281068Z"
+          },
+          {
+            "station": "review_learner",
+            "vendor": "gateway",
+            "model": "qwen3.8-max-0902",
+            "input_tokens": 1695,
+            "output_tokens": 7175,
+            "cache_creation_input_tokens": 0,
+            "cache_read_input_tokens": 0,
+            "usd": 0.009288,
+            "priced": true,
+            "timestamp": "2026-10-12T04:16:02.856327Z"
+          }
+        ],
+        "total_usd": 0.021437
+      },
+      "finished_at": "2026-10-12T04:03:35.164949+00:00"
+    }
+  ]
+}

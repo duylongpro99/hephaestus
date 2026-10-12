@@ -1,0 +1,65 @@
+{
+  "station_version": "gateway/kimi/kimi-k3#44136fa3+3c685428554d",
+  "level_fit_verdict": "at",
+  "qa_report": {
+    "schema_version": "1.0.0",
+    "episode_id": "en-A2-x09",
+    "reviewer": "examiner",
+    "issues": [
+      {
+        "line_id": null,
+        "category": "gloss",
+        "severity": "major",
+        "description": "The gloss for the target word 'motorbike' ('a machine with two round parts that turn, for one or two people') never mentions an engine or motor, so it describes a bicycle just as well as a motorbike. It also avoids the simple A2 word 'wheels' with the awkward circumlocution 'two round parts that turn'. A learner could wrongly conclude a bicycle is a motorbike.",
+        "suggested_fix": "Rewrite as: 'a vehicle with two wheels and a motor; you ride it like a bicycle' (or 'like a bicycle, but with a motor')."
+      },
+      {
+        "line_id": "s1l4",
+        "category": "collocation",
+        "severity": "minor",
+        "description": "At natural speed, the uncontracted 'That is nice' sounds stiff; native speakers say 'That's nice' in casual speech.",
+        "suggested_fix": "Change to \"That's nice.\""
+      },
+      {
+        "line_id": null,
+        "category": "grammar_point",
+        "severity": "minor",
+        "description": "The grammar note says 'usually' 'goes before the action word', which is true for this dialogue but wrong as a general rule when the verb is 'be' ('She is usually late'). A learner may overgeneralise.",
+        "suggested_fix": "Extend the note: \"It goes before the action word, but after 'be' ('I am usually early').\""
+      }
+    ],
+    "rubric_scores": {
+      "grammar_accuracy": 5,
+      "naturalness": 4,
+      "level_fit": 5,
+      "grammar_point_teaching": 4,
+      "gloss_quality": 3
+    },
+    "hard_gate_failures": [],
+    "summary": "A clean, level-appropriate micro-dialogue: all four lines are grammatical and use A2-or-below language, 'usually' is placed correctly, and the review words 'streets' and 'morning' appear naturally. The one real problem is the gloss for the target word 'motorbike', which omits any mention of a motor/engine and thus fits a bicycle equally well; it also uses an odd circumlocution instead of the A2 word 'wheels'. Fix that gloss, contract 'That is nice' to 'That's nice' for natural speech, and optionally qualify the position rule for 'be'."
+  },
+  "gate_decision": {
+    "schema_version": "1.0.0",
+    "episode_id": "en-A2-x09",
+    "gate": 1,
+    "user": "examiner",
+    "decision": "edit-and-approve",
+    "diff": "episode: Rewrite as: 'a vehicle with two wheels and a motor; you ride it like a bicycle' (or 'like a bicycle, but with a motor').\ns1l4: Change to \"That's nice.\"\nepisode: Extend the note: \"It goes before the action word, but after 'be' ('I am usually early').\"",
+    "notes": "A clean, level-appropriate micro-dialogue: all four lines are grammatical and use A2-or-below language, 'usually' is placed correctly, and the review words 'streets' and 'morning' appear naturally. The one real problem is the gloss for the target word 'motorbike', which omits any mention of a motor/engine and thus fits a bicycle equally well; it also uses an odd circumlocution instead of the A2 word 'wheels'. Fix that gloss, contract 'That is nice' to 'That's nice' for natural speech, and optionally qualify the position rule for 'be'.",
+    "timestamp": "2026-10-12T04:17:28.935048Z"
+  },
+  "costs": [
+    {
+      "station": "review_examiner",
+      "vendor": "gateway",
+      "model": "kimi/kimi-k3",
+      "input_tokens": 714,
+      "output_tokens": 2685,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 1024,
+      "usd": 0.008545,
+      "priced": true,
+      "timestamp": "2026-10-12T04:17:28.934394Z"
+    }
+  ]
+}

@@ -1,0 +1,89 @@
+{
+  "schema_version": "1.0.0",
+  "episode_id": "en-A2-x08",
+  "title_working": "Cooking for Friends",
+  "hook": "Anna and Ben plan a dinner for friends.",
+  "segments": [
+    {
+      "id": "s1",
+      "type": "dialogue",
+      "speed": "natural",
+      "layout": "podcast_a",
+      "lines": [
+        {
+          "id": "s1l1",
+          "speaker": "anna",
+          "text": "We have to cook for friends.",
+          "translation": {
+            "vi": "Chúng ta phải nấu ăn cho bạn bè."
+          },
+          "pause_after_ms": 400,
+          "visual_cue": "friends"
+        },
+        {
+          "id": "s1l2",
+          "speaker": "ben",
+          "text": "Do we have to cook vegetables?",
+          "translation": {
+            "vi": "Chúng ta có phải nấu rau không?"
+          },
+          "pause_after_ms": 400,
+          "visual_cue": "vegetables"
+        },
+        {
+          "id": "s1l3",
+          "speaker": "anna",
+          "text": "Yes, we have to use vegetables.",
+          "translation": {
+            "vi": "Ừ, chúng ta phải dùng rau."
+          },
+          "pause_after_ms": 400,
+          "visual_cue": "vegetables"
+        },
+        {
+          "id": "s1l4",
+          "speaker": "ben",
+          "text": "We don't have to buy meat.",
+          "translation": {
+            "vi": "Chúng ta không phải mua thịt."
+          },
+          "pause_after_ms": 400,
+          "visual_cue": "meat"
+        }
+      ],
+      "items": []
+    }
+  ],
+  "vocab": [
+    {
+      "word": "vegetable",
+      "gloss": {
+        "en": "a plant we eat as food",
+        "vi": "rau"
+      },
+      "is_target": true
+    },
+    {
+      "word": "kitchen",
+      "gloss": {
+        "en": "the room where we cook food",
+        "vi": "nhà bếp"
+      },
+      "is_target": false
+    },
+    {
+      "word": "food",
+      "gloss": {
+        "en": "things we eat",
+        "vi": "thức ăn"
+      },
+      "is_target": false
+    }
+  ],
+  "grammar_notes": [
+    "We use 'have to' for things that are necessary. We use 'don't have to' for things that are not necessary."
+  ],
+  "interaction_prompts": [
+    "What do you have to do this week? What don't you have to do?"
+  ]
+}
