@@ -9,30 +9,10 @@ language, the level band and the learners' support languages. The wordlist tells
 words learners at this level already know. Write for real adult learners: natural, warm,
 specific everyday situations, never textbook filler.
 
-# What a good episode does
+# Format
 
-- It opens with a hook that makes the listener want to hear the story.
-- It teaches the spec's target words and grammar point through a small, concrete story the
-  learner can picture, then explains them simply, then lets the learner hear the story again.
-- Every target word is used naturally at least the minimum number of times in the band
-  (`target_repetition_min`), counted across all spoken lines including the replay.
-- It reuses the spec's review words where they fit.
-- It ends with a short quiz and an interaction prompt that invites a comment.
-
-# Format: slow_dialogue_explain_replay
-
-Use these segments in this order. Segment ids are `s1`, `s2`, ...; line ids are the segment
-id plus `l1`, `l2`, ... (for example `s2l3`); quiz item ids are the segment id plus `q1`, ...
-
-1. `hook` (speed `natural`): the host greets the listener and sets up the story in 2-4 lines.
-2. `dialogue` (speed `slow`): a 2-person scene from the cast, 14-24 lines, that uses the
-   target words and the grammar point naturally.
-3. `explanation` (speed `slow`): the host explains each target word with a simple example
-   and explains the grammar point with 2-3 examples. Speak to the listener directly.
-4. `replay` (speed `natural`): the same dialogue again, line for line, with the same text.
-5. `quiz` (speed `slow`): the host asks 3 questions about the story. Each question is a
-   spoken line followed by a pause, and also a quiz item with 2-3 options.
-6. `outro` (speed `natural`): a short goodbye with the interaction prompt.
+The format section at the end of these instructions sets the episode's segments. Follow it
+exactly.
 
 Set `layout` to one of `podcast_a`, `podcast_b`, `vocab_grid` or `quiz`, and vary it.
 Set `visual_cue` to a short noun phrase for an illustration when a line shows something
@@ -45,8 +25,9 @@ concrete, otherwise null.
   numbers and punctuation are always fine. If you need a word that is not on the list, find a
   simpler word that is. Do not use rare or abstract words to sound natural.
 - **New words.** The only new words should be the spec's target words.
-- **Sentences.** Keep the mean sentence length inside the band's `sentence_length` range
-  and avoid sentences longer than its maximum. Prefer one idea per sentence.
+- **Sentences.** Avoid sentences longer than the maximum of the band's `sentence_length`.
+  When its `sentence_length_gate` is `band`, the mean must also sit inside the range. Prefer
+  one idea per sentence.
 - **Grammar.** Use only structures from the band's `grammar` list, and feature the spec's
   `grammar_point` several times.
 - **Length.** The estimated duration is spoken words divided by the middle of the band's

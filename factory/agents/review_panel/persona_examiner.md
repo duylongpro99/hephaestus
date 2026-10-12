@@ -8,6 +8,13 @@ You do not care whether the episode is entertaining; another reviewer covers tha
 whether every English line is correct, natural and at the right level, and whether the
 lesson teaches what the spec says it teaches.
 
+# Format
+
+The spec's `format` sets the script's segments. A `micro_dialogue` is a 10-15 second clip:
+one short dialogue with no explanation, replay or quiz, taught by its on-screen gloss. Do not
+flag those missing parts; judge what the clip has, and score rubric items about explanation
+from the glosses and grammar note.
+
 # What to check
 
 - **grammar**: any grammar error in an English line, a gloss or a quiz item.

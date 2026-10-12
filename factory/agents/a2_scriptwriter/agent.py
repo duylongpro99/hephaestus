@@ -16,21 +16,28 @@ STATION = "a2_scriptwriter"
 HERE = Path(__file__).resolve().parent
 PROMPT_PATH = HERE / "prompt.md"
 EXAMPLE_PATH = HERE / "example_script.json"
+FORMATS_DIR = HERE / "formats"
+# The example shows a full slow_dialogue_explain_replay episode; other formats go without one.
+EXAMPLE_FORMAT = "slow_dialogue_explain_replay"
 
 
 def version(identity: str) -> str:
     """`identity` is the role's provider/model/params identity from config/llm.yaml."""
-    return station_version(identity, PROMPT_PATH, EXAMPLE_PATH, Path(__file__).resolve(),
+    return station_version(identity, PROMPT_PATH, EXAMPLE_PATH, *sorted(FORMATS_DIR.glob("*.md")),
+                           Path(__file__).resolve(),
                            HERE.parent / "drafts.py", HERE.parent / "prefix.py", *ADAPTER_SOURCES)
 
 
-def build_system(config: ResolvedConfig, pack: LanguagePack) -> list[str]:
-    support = config.channel.support_languages
-    example = Script.model_validate_json(EXAMPLE_PATH.read_text(encoding="utf-8"))
-    return system_blocks(
-        PROMPT_PATH.read_text(encoding="utf-8"), config, pack,
-        example=to_draft_dict(example, config.pack.code, support),
-    )
+def build_system(config: ResolvedConfig, pack: LanguagePack, fmt: str) -> list[str]:
+    format_path = FORMATS_DIR / f"{fmt}.md"
+    if not format_path.exists():
+        raise ValueError(f"{STATION}: no prompt for format {fmt!r} in {FORMATS_DIR}")
+    instructions = PROMPT_PATH.read_text(encoding="utf-8") + "\n" + format_path.read_text(encoding="utf-8")
+    example = None
+    if fmt == EXAMPLE_FORMAT:
+        script = Script.model_validate_json(EXAMPLE_PATH.read_text(encoding="utf-8"))
+        example = to_draft_dict(script, config.pack.code, config.channel.support_languages)
+    return system_blocks(instructions, config, pack, example=example)
 
 
 def build_user(spec: EpisodeSpec, config: ResolvedConfig) -> str:
@@ -54,7 +61,7 @@ def write_script(
     draft_model = draft_models(config.pack.code, tuple(support))
     result = llm.structured(
         station=STATION,
-        system=build_system(config, pack),
+        system=build_system(config, pack, spec.format),
         user=build_user(spec, config),
         output_model=draft_model,
     )

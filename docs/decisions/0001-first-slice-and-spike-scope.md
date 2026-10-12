@@ -65,6 +65,16 @@ A script spike produces no audio. The choice is needed before TTS work begins.
 
 It does not affect script quality. The choice is needed before publishing work begins.
 
+### 6. Spike episodes: 10-15 second clips (2026-10-12)
+
+To keep the spike short and cheap, each spec is a `micro_dialogue` clip of 0.17-0.25 minutes:
+one dialogue of 2-4 lines, one target word, no explanation, replay or quiz. The channel's
+`band_overrides` lower `target_repetition_min` to 1 and raise `new_word_max` to 0.10 so a
+clip is not failed for its own target word. Sentence length is gated by its ceiling only.
+Three specs are also drafted by `qwen3.8-max-0902` (`*-qwen`) to compare its Vietnamese with
+DeepSeek's. A go result proves clip-level quality only; full 6-8 minute episodes need their own
+run before production.
+
 ## Consequences
 
 - `config/channels/en-podcast-spike.yaml` sets `target.pack: en`, `audience: adult`,

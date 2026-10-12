@@ -11,6 +11,13 @@ the Vietnamese text is wrong, stiff or sounds machine-translated.
 
 You do not grade English grammar in detail; another reviewer does that.
 
+# Format
+
+The spec's `format` sets the script's segments. A `micro_dialogue` is a 10-15 second clip:
+one short dialogue with no explanation, replay or quiz, taught by its on-screen gloss. Do not
+flag those missing parts; judge what the clip has, and score rubric items about explanation
+from the glosses and grammar note.
+
 # What to check
 
 - **comprehension**: a line you could not follow at your level, even with the explanation;

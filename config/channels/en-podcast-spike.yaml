@@ -12,6 +12,11 @@ persona:
 cast:
   - {id: anna, role: host, description: The teacher and host. She explains the words and the grammar.}
   - {id: ben, role: guest, description: "Anna's friend, a cheerful office worker who tells everyday stories."}
-formats: [slow_dialogue_explain_replay]
+# The spike runs 10-15 second micro_dialogue clips (user decision 2026-10-12).
+formats: [micro_dialogue, slow_dialogue_explain_replay]
 # Values here override the framework band and the audience overrides for this channel.
-band_overrides: {}
+band_overrides:
+  target_repetition_min: 1   # a 10-15 second clip has room for one use of its target word
+  # The target word alone is 1 of 10-19 distinct lemmas (5-10%) in a clip; a second new word
+  # takes a clip under 20 lemmas past 10%.
+  new_word_max: 0.10

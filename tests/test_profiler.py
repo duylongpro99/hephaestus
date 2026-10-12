@@ -26,6 +26,10 @@ def config():
     return resolve("en-podcast-spike", "A2")
 
 
+def with_band(config, **overrides):
+    return config.model_copy(update={"band": config.band.model_copy(update=overrides)})
+
+
 def make_spec(length=(0.3, 1.0)) -> EpisodeSpec:
     data = load_fixture("spec_example.json") | {"target_words": ["cheap"], "review_words": [], "length_min": list(length)}
     return EpisodeSpec.model_validate(data)
@@ -63,7 +67,7 @@ def test_clean_script_passes(pack, config):
 def test_one_b2_word_is_reported_with_its_line(pack, config):
     lines = CLEAN_LINES.copy()
     lines[1] = "Nevertheless, the coffee at the small shop is cheap."
-    report = profile(make_script(lines), make_spec(), config, pack)
+    report = profile(make_script(lines), make_spec(), with_band(config, new_word_max=0.05), pack)
     assert [(t.lemma, t.line_id) for t in report.off_level_tokens] == [("nevertheless", "s1l2")]
     assert not report.passed
     assert "new_words" in gates(report)
@@ -80,7 +84,7 @@ def test_coverage_gate_fails_when_off_level_share_is_high(pack, config):
 
 def test_too_few_target_repetitions(pack, config):
     lines = [line.replace("cheap", "good") for line in CLEAN_LINES[:3]] + CLEAN_LINES[3:]
-    report = profile(make_script(lines), make_spec(), config, pack)
+    report = profile(make_script(lines), make_spec(), with_band(config, target_repetition_min=5), pack)
     assert report.target_word_counts == {"cheap": 3}
     assert "target_repetition" in gates(report)
 
@@ -102,11 +106,9 @@ def test_long_sentences_are_flagged(pack, config):
 def test_short_sentences_pass_only_in_ceiling_mode(pack, config):
     lines = ["It is cheap.", "Yes, very cheap!", "Cheap tea, cheap coffee.", "I like cheap food."] * 2
     spec = make_spec(length=(0.05, 1.0))
-    def with_gate(mode):
-        return config.model_copy(update={"band": config.band.model_copy(update={"sentence_length_gate": mode})})
-
-    assert "sentence_length" in gates(profile(make_script(lines), spec, with_gate("band"), pack))
-    assert "sentence_length" not in gates(profile(make_script(lines), spec, with_gate("ceiling"), pack))
+    assert "sentence_length" in gates(profile(make_script(lines), spec, with_band(config, sentence_length_gate="band"), pack))
+    assert "sentence_length" not in gates(
+        profile(make_script(lines), spec, with_band(config, sentence_length_gate="ceiling"), pack))
 
 
 def test_missing_vi_gloss_fails(pack, config):
@@ -116,7 +118,7 @@ def test_missing_vi_gloss_fails(pack, config):
 
 
 def test_phase_three_fixture_profiles(pack, config, script, spec):
-    report = profile(script, spec, config, pack)
+    report = profile(script, spec, with_band(config, target_repetition_min=5), pack)
     text = format_report(report)
     assert "in-level ratio" in text and not report.passed
     assert {"target_repetition", "duration"} <= gates(report)

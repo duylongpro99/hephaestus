@@ -6,6 +6,7 @@ made_for_kids: false
 rate_multiplier: 1.0
 length_min: [6, 25]
 formats:
+  - micro_dialogue
   - graded_story
   - slow_dialogue_explain_replay
   - topic_talk

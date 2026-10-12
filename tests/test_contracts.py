@@ -108,10 +108,10 @@ def test_eval_specs_validate():
 
     pack = EnPack()
     paths = sorted((REPO_ROOT / "evals" / "en" / "adult" / "specs").glob("*.json"))
-    assert len(paths) == 10
+    assert len(paths) == 13  # ten specs plus three copies drafted by the A/B writer
     for path in paths:
         spec = EpisodeSpec.model_validate_json(path.read_text(encoding="utf-8"))
-        assert 5 <= len(spec.target_words) <= 8, path.name
+        assert len(spec.target_words) == 1 and spec.format == "micro_dialogue", path.name
         assert all(pack.word_level(w) == "A2" for w in spec.target_words), path.name
         assert all(pack.word_level(w) == "A1" for w in spec.review_words), path.name
-        assert spec.length_min == (6, 8) and spec.source == "adhoc"
+        assert spec.length_min == (0.17, 0.25) and spec.source == "adhoc"  # 10-15 seconds

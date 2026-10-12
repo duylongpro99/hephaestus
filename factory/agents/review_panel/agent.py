@@ -113,8 +113,8 @@ def to_review(verdict: PanelVerdict, persona: str, episode_id: str, costs: list[
 def build_user(spec: EpisodeSpec, script: Script) -> str:
     return (
         f"Review this episode script for adult learners at CEFR {spec.level}.\n\n"
-        f"Episode Spec (theme, target words, review words, grammar point):\n"
-        f"{spec.model_dump_json(include={'level', 'theme', 'target_words', 'review_words', 'grammar_point', 'length_min'})}\n\n"
+        f"Episode Spec (format, theme, target words, review words, grammar point):\n"
+        f"{spec.model_dump_json(include={'level', 'format', 'theme', 'target_words', 'review_words', 'grammar_point', 'length_min'})}\n\n"
         f"Script (the `vi` text is the Vietnamese translation; `gloss.en` is a simple-English gloss):\n"
         f"{script.model_dump_json(exclude={'schema_version'})}"
     )
