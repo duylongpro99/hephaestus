@@ -36,6 +36,6 @@
   ],
   "source": "adhoc",
   "ordering": "loose",
-  "config_hash": "sha256:b0d00cae222b6951564a2c8d4343e19395040d42f4cbd1057c65e32c18b81e8d",
+  "config_hash": "sha256:3886050f610b913d12d8cc7249f81d09cb787f8bb5e067910c475f23bf78fb18",
   "budget_usd": 3.0
 }

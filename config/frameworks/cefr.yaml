@@ -31,7 +31,7 @@ bands:
     target_repetition_min: 5
     sentence_length: [8, 12]      # [P] interpolated between A1 (6-8) and B1 (12-15)
     long_sentence_share_max: 0.10
-    sentence_length_gate: band    # band: mean must sit inside the band; ceiling: only the maximum is gated
+    sentence_length_gate: ceiling # natural dialogue averages ~7 words; only long sentences are gated (user decision 2026-10-12)
     rate: {unit: wpm, min: 100, max: 120}
     pause_ms: [1500, 3000]
     grammar:

@@ -75,6 +75,7 @@ def script_cmd(
     spec_path: Path = typer.Argument(..., exists=True, help="EpisodeSpec JSON"),
     fresh: bool = typer.Option(False, help="Ignore a stored A2 draft and call the model again"),
     max_turns: int = typer.Option(4, help="Maximum A3 editing turns"),
+    writer_role: str = typer.Option("a2_scriptwriter", "--writer", help="config/llm.yaml role that drafts the script"),
 ):
     """Draft a script with A2, run the code gates, and patch it with A3 until it passes or escalates."""
     from factory.adapters.llm.router import provider_for
@@ -90,7 +91,7 @@ def script_cmd(
                    f"{config.config_hash[:19]}; using the live config")
     pack = load_pack(config.pack.code)
     try:
-        writer, editor = provider_for(a2.STATION), provider_for(a3.STATION)
+        writer, editor = provider_for(writer_role), provider_for(a3.STATION)
     except LLMError as exc:
         fail(exc)
     store = ArtifactStore()

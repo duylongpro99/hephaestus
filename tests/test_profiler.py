@@ -102,9 +102,11 @@ def test_long_sentences_are_flagged(pack, config):
 def test_short_sentences_pass_only_in_ceiling_mode(pack, config):
     lines = ["It is cheap.", "Yes, very cheap!", "Cheap tea, cheap coffee.", "I like cheap food."] * 2
     spec = make_spec(length=(0.05, 1.0))
-    assert "sentence_length" in gates(profile(make_script(lines), spec, config, pack))
-    ceiling = config.model_copy(update={"band": config.band.model_copy(update={"sentence_length_gate": "ceiling"})})
-    assert "sentence_length" not in gates(profile(make_script(lines), spec, ceiling, pack))
+    def with_gate(mode):
+        return config.model_copy(update={"band": config.band.model_copy(update={"sentence_length_gate": mode})})
+
+    assert "sentence_length" in gates(profile(make_script(lines), spec, with_gate("band"), pack))
+    assert "sentence_length" not in gates(profile(make_script(lines), spec, with_gate("ceiling"), pack))
 
 
 def test_missing_vi_gloss_fails(pack, config):
