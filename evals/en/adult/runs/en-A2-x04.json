@@ -113,6 +113,120 @@
         "total_usd": 0.015455
       },
       "finished_at": "2026-10-12T04:04:32.952114+00:00"
+    },
+    {
+      "episode_id": "en-A2-x04",
+      "status": "PASSED",
+      "error": null,
+      "a3_turns": 0,
+      "elapsed_s": 58.6,
+      "station_versions": {
+        "a2_scriptwriter": "gateway/ds/deepseek-v4-pro#44136fa3+8079494f0f76",
+        "a3_level_editor": "gateway/ds/deepseek-v4-pro#44136fa3+34241d8f55dd"
+      },
+      "first_report": {
+        "schema_version": "1.1.0",
+        "episode_id": "en-A2-x04",
+        "level": "A2",
+        "config_hash": "sha256:1bb30abe00c08cc2ffbd9d9410aa5556752f20e68fa4c8ac5f6ca9d76185f60d",
+        "content_token_count": 21,
+        "in_level_ratio": 1.0,
+        "new_word_ratio": 0.0714,
+        "off_level_tokens": [],
+        "target_word_counts": {
+          "trip": 2
+        },
+        "sentence_length": {
+          "mean": 7.33,
+          "min": 2,
+          "max": 11,
+          "band": [
+            8,
+            12
+          ],
+          "sentence_count": 3,
+          "long_lines": [],
+          "long_share": 0.0
+        },
+        "word_count": 22,
+        "estimated_duration_min": 0.23,
+        "gate_failures": [],
+        "passed": true
+      },
+      "final_report": {
+        "schema_version": "1.1.0",
+        "episode_id": "en-A2-x04",
+        "level": "A2",
+        "config_hash": "sha256:1bb30abe00c08cc2ffbd9d9410aa5556752f20e68fa4c8ac5f6ca9d76185f60d",
+        "content_token_count": 21,
+        "in_level_ratio": 1.0,
+        "new_word_ratio": 0.0714,
+        "off_level_tokens": [],
+        "target_word_counts": {
+          "trip": 2
+        },
+        "sentence_length": {
+          "mean": 7.33,
+          "min": 2,
+          "max": 11,
+          "band": [
+            8,
+            12
+          ],
+          "sentence_count": 3,
+          "long_lines": [],
+          "long_share": 0.0
+        },
+        "word_count": 22,
+        "estimated_duration_min": 0.23,
+        "gate_failures": [],
+        "passed": true
+      },
+      "cost_ledger": {
+        "schema_version": "1.1.0",
+        "episode_id": "en-A2-x04",
+        "budget_usd": 0.5,
+        "entries": [
+          {
+            "station": "a2_scriptwriter",
+            "vendor": "gateway",
+            "model": "deepseek-v4-pro",
+            "input_tokens": 5605,
+            "output_tokens": 4894,
+            "cache_creation_input_tokens": 0,
+            "cache_read_input_tokens": 0,
+            "usd": 0.004463,
+            "priced": true,
+            "timestamp": "2026-10-20T10:47:14.010572Z"
+          },
+          {
+            "station": "review_examiner",
+            "vendor": "gateway",
+            "model": "kimi/kimi-k3",
+            "input_tokens": 1739,
+            "output_tokens": 3690,
+            "cache_creation_input_tokens": 0,
+            "cache_read_input_tokens": 0,
+            "usd": 0.012113,
+            "priced": true,
+            "timestamp": "2026-10-20T10:50:09.080939Z"
+          },
+          {
+            "station": "review_learner",
+            "vendor": "gateway",
+            "model": "qwen3.8-max-0902",
+            "input_tokens": 1707,
+            "output_tokens": 6630,
+            "cache_creation_input_tokens": 0,
+            "cache_read_input_tokens": 0,
+            "usd": 0.008639,
+            "priced": true,
+            "timestamp": "2026-10-20T10:52:52.727397Z"
+          }
+        ],
+        "total_usd": 0.025215
+      },
+      "finished_at": "2026-10-20T10:47:14.655723+00:00"
     }
   ]
 }

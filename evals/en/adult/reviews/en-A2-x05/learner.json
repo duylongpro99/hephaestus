@@ -9,62 +9,41 @@
       {
         "line_id": "s1l1",
         "category": "translation_naturalness",
-        "severity": "major",
-        "description": "In Ho Chi Minh City, 'ốm' can sound more like 'thin' than 'sick', so this translation could confuse me. It also sounds a little literal.",
-        "suggested_fix": "Change the Vietnamese line to: 'Ben, trông bạn có vẻ không khỏe.'"
-      },
-      {
-        "line_id": null,
-        "category": "translation_accuracy",
         "severity": "minor",
-        "description": "The Vietnamese gloss for 'sick' is 'ốm', which can be ambiguous in southern Vietnamese. For this audience, 'bệnh' or 'không khỏe' is clearer.",
-        "suggested_fix": "Update the vi gloss for 'sick' to: 'bệnh' or 'không khỏe'."
-      },
-      {
-        "line_id": null,
-        "category": "translation_accuracy",
-        "severity": "minor",
-        "description": "The English gloss for 'headache' says 'a bad feeling in your head', which is vague. It could mean worry or dizziness, not pain.",
-        "suggested_fix": "Change the English gloss for 'headache' to: 'a pain in your head'. Keep the Vietnamese gloss: 'đau đầu'."
-      },
-      {
-        "line_id": "s1l2",
-        "category": "translation_naturalness",
-        "severity": "minor",
-        "description": "'Tôi bị đau đầu' is correct but feels a little stiff if Anna and Ben are friendly coworkers. 'Mình' sounds more natural in a casual dialogue.",
-        "suggested_fix": "If they are friendly, change to: 'Mình bị đau đầu.' and optionally change s1l4 to: 'Mình có nên đi khám bác sĩ không?'"
-      },
-      {
-        "line_id": null,
-        "category": "engagement",
-        "severity": "minor",
-        "description": "The hook is clear but very flat. It does not make me curious to listen.",
-        "suggested_fix": "Change the hook to: 'Ben has a headache at work. What should he do?'"
-      },
-      {
-        "line_id": null,
-        "category": "engagement",
-        "severity": "minor",
-        "description": "The spec theme includes visiting the pharmacy, but the dialogue only mentions a doctor. I would expect at least one pharmacy mention.",
-        "suggested_fix": "Add a pharmacy mention, for example change s1l3 to: 'You should go to the pharmacy and rest.' vi: 'Bạn nên đi nhà thuốc và nghỉ ngơi.'"
+        "description": "The Vietnamese line can sound ambiguous because ốm can mean thin in some contexts, and it feels a little stronger than You look sick. A clearer and more natural line would say Ben looks unwell.",
+        "suggested_fix": "Ben ơi, trông bạn có vẻ không khỏe."
       },
       {
         "line_id": null,
         "category": "explanation",
         "severity": "minor",
-        "description": "The grammar note mentions 'shouldn't', but there is no example, and the dialogue only uses 'should'. A short example would help me understand better.",
-        "suggested_fix": "Add an example in the grammar note: 'Example: You shouldn't work too much.'"
+        "description": "The target-word gloss for headache is understandable, but when your head feels sick is not the clearest meaning for A2 learners. The Vietnamese gloss could also be the direct, common phrase.",
+        "suggested_fix": "headache gloss: en = when your head hurts; vi = đau đầu"
+      },
+      {
+        "line_id": null,
+        "category": "translation_naturalness",
+        "severity": "minor",
+        "description": "For sick, bị ốm is acceptable, but it can feel dialect-dependent or ambiguous. A slightly clearer Vietnamese gloss would include bị bệnh or không khỏe.",
+        "suggested_fix": "sick gloss vi: bị bệnh, cảm thấy không khỏe"
+      },
+      {
+        "line_id": null,
+        "category": "engagement",
+        "severity": "minor",
+        "description": "The hook is clear but a little flat. A question hook would make me more curious to listen on my commute.",
+        "suggested_fix": "Hook: Ben has a headache. Should he go to work?"
       }
     ],
     "rubric_scores": {
       "comprehensibility": 5,
-      "translation_accuracy": 3,
-      "translation_naturalness": 3,
-      "engagement": 3,
-      "explanation_helpfulness": 3
+      "translation_accuracy": 5,
+      "translation_naturalness": 4,
+      "engagement": 4,
+      "explanation_helpfulness": 4
     },
     "hard_gate_failures": [],
-    "summary": "The episode is short, clear, and suitable for A2 learners. The target word 'headache' and review words 'doctor' and 'sick' are present, and the grammar point is simple enough. However, the Vietnamese translation for 'sick' needs to be clearer for southern listeners, the headache gloss should be more exact, and the episode could be more engaging if the hook and pharmacy theme are improved."
+    "summary": "This micro-dialogue is short, clear, and suitable for A2 learners. The grammar point is easy to notice, and the target and review words appear naturally. I could follow it easily. The main edits are small Vietnamese naturalness improvements and a clearer gloss for headache. After those edits, I would happily listen and learn."
   },
   "gate_decision": {
     "schema_version": "1.0.0",
@@ -72,22 +51,22 @@
     "gate": 1,
     "user": "learner",
     "decision": "edit-and-approve",
-    "diff": "s1l1: Change the Vietnamese line to: 'Ben, trông bạn có vẻ không khỏe.'\nepisode: Update the vi gloss for 'sick' to: 'bệnh' or 'không khỏe'.\nepisode: Change the English gloss for 'headache' to: 'a pain in your head'. Keep the Vietnamese gloss: 'đau đầu'.\ns1l2: If they are friendly, change to: 'Mình bị đau đầu.' and optionally change s1l4 to: 'Mình có nên đi khám bác sĩ không?'\nepisode: Change the hook to: 'Ben has a headache at work. What should he do?'\nepisode: Add a pharmacy mention, for example change s1l3 to: 'You should go to the pharmacy and rest.' vi: 'Bạn nên đi nhà thuốc và nghỉ ngơi.'\nepisode: Add an example in the grammar note: 'Example: You shouldn't work too much.'",
-    "notes": "The episode is short, clear, and suitable for A2 learners. The target word 'headache' and review words 'doctor' and 'sick' are present, and the grammar point is simple enough. However, the Vietnamese translation for 'sick' needs to be clearer for southern listeners, the headache gloss should be more exact, and the episode could be more engaging if the hook and pharmacy theme are improved.",
-    "timestamp": "2026-10-12T04:16:18.011970Z"
+    "diff": "s1l1: Ben ơi, trông bạn có vẻ không khỏe.\nepisode: headache gloss: en = when your head hurts; vi = đau đầu\nepisode: sick gloss vi: bị bệnh, cảm thấy không khỏe\nepisode: Hook: Ben has a headache. Should he go to work?",
+    "notes": "This micro-dialogue is short, clear, and suitable for A2 learners. The grammar point is easy to notice, and the target and review words appear naturally. I could follow it easily. The main edits are small Vietnamese naturalness improvements and a clearer gloss for headache. After those edits, I would happily listen and learn.",
+    "timestamp": "2026-10-20T10:53:32.409049Z"
   },
   "costs": [
     {
       "station": "review_learner",
       "vendor": "gateway",
       "model": "qwen3.8-max-0902",
-      "input_tokens": 723,
-      "output_tokens": 7604,
+      "input_tokens": 687,
+      "output_tokens": 8616,
       "cache_creation_input_tokens": 0,
       "cache_read_input_tokens": 1024,
-      "usd": 0.00944,
+      "usd": 0.01064,
       "priced": true,
-      "timestamp": "2026-10-12T04:16:18.011096Z"
+      "timestamp": "2026-10-20T10:53:32.408131Z"
     }
   ]
 }

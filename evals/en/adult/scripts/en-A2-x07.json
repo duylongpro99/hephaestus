@@ -1,44 +1,44 @@
 {
   "schema_version": "1.0.0",
   "episode_id": "en-A2-x07",
-  "title_working": "A Surprise Birthday Cake",
-  "hook": "A birthday cake surprise",
+  "title_working": "A Birthday Cake Surprise",
+  "hook": "",
   "segments": [
     {
       "id": "s1",
       "type": "dialogue",
       "speed": "natural",
-      "layout": "podcast_a",
+      "layout": null,
       "lines": [
         {
           "id": "s1l1",
           "speaker": "anna",
-          "text": "I was walking home when I saw a birthday cake.",
+          "text": "I was making a cake when you called.",
           "translation": {
-            "vi": "Tôi đang đi bộ về nhà thì tôi thấy một chiếc bánh sinh nhật."
+            "vi": "Mình đang làm bánh thì bạn gọi đến."
           },
           "pause_after_ms": 500,
-          "visual_cue": "birthday cake in a shop window"
+          "visual_cue": "Anna making a cake"
         },
         {
           "id": "s1l2",
           "speaker": "ben",
-          "text": "Was it for your party?",
+          "text": "Great! Is it for my birthday party?",
           "translation": {
-            "vi": "Nó có phải cho bữa tiệc của bạn không?"
+            "vi": "Tuyệt! Có phải cho bữa tiệc sinh nhật của mình không?"
           },
-          "pause_after_ms": 500,
-          "visual_cue": null
+          "pause_after_ms": 600,
+          "visual_cue": "birthday party decorations"
         },
         {
           "id": "s1l3",
           "speaker": "anna",
-          "text": "No, today is my sister's birthday.",
+          "text": "Yes! I have a big cake.",
           "translation": {
-            "vi": "Không, hôm nay là sinh nhật của em gái tôi."
+            "vi": "Ừ! Mình có một cái bánh to."
           },
           "pause_after_ms": 500,
-          "visual_cue": null
+          "visual_cue": "a big birthday cake"
         }
       ],
       "items": []
@@ -48,7 +48,7 @@
     {
       "word": "birthday",
       "gloss": {
-        "en": "the day every year when a person has a party and cake",
+        "en": "the day you were born",
         "vi": "sinh nhật"
       },
       "is_target": true
@@ -56,7 +56,7 @@
     {
       "word": "party",
       "gloss": {
-        "en": "a fun time with friends, food and music",
+        "en": "a fun event with friends and food",
         "vi": "bữa tiệc"
       },
       "is_target": false
@@ -64,16 +64,16 @@
     {
       "word": "cake",
       "gloss": {
-        "en": "a sweet food for parties",
+        "en": "a sweet food made with flour, eggs and sugar",
         "vi": "bánh ngọt"
       },
       "is_target": false
     }
   ],
   "grammar_notes": [
-    "Use 'was/were + verb-ing' with 'when' to show what was happening when another action happened."
+    "Use the past continuous to talk about an action that was happening when another action happened. For example: 'I was making a cake when you called.'"
   ],
   "interaction_prompts": [
-    "What was the last birthday party you enjoyed?"
+    "What were you doing when a friend called you last time?"
   ]
 }

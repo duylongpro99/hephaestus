@@ -1,31 +1,55 @@
 {
-  "generated_at": "2026-10-12T04:23:29.350279+00:00",
+  "generated_at": "2026-10-20T10:57:34.518652+00:00",
   "episodes": [
-    {
-      "episode_id": "en-A2-x01-qwen",
-      "theme": "moving into a new flat",
-      "status": "NOT_RUN",
-      "a3_turns": null,
-      "elapsed_s": null,
-      "first_gate_failures": [],
-      "in_level_ratio": null,
-      "script_usd": 0,
-      "panel_usd": 0,
-      "decisions": {},
-      "level_fit": {},
-      "critical": {},
-      "scores": {}
-    },
     {
       "episode_id": "en-A2-x01",
       "theme": "moving into a new flat",
       "status": "PASSED",
       "a3_turns": 0,
-      "elapsed_s": 81.7,
+      "elapsed_s": 57.9,
       "first_gate_failures": [],
       "in_level_ratio": 1.0,
-      "script_usd": 0.0057,
-      "panel_usd": 0.0157,
+      "script_usd": 0.0044,
+      "panel_usd": 0.0168,
+      "decisions": {
+        "examiner": "edit-and-approve",
+        "learner": "edit-and-approve"
+      },
+      "level_fit": {
+        "examiner": "at",
+        "learner": "at"
+      },
+      "critical": {
+        "examiner": 0,
+        "learner": 0
+      },
+      "scores": {
+        "examiner": {
+          "grammar_accuracy": 5,
+          "naturalness": 4,
+          "level_fit": 5,
+          "grammar_point_teaching": 5,
+          "gloss_quality": 3
+        },
+        "learner": {
+          "comprehensibility": 4,
+          "translation_accuracy": 3,
+          "translation_naturalness": 4,
+          "engagement": 3,
+          "explanation_helpfulness": 4
+        }
+      }
+    },
+    {
+      "episode_id": "en-A2-x02",
+      "theme": "street food at a night market",
+      "status": "PASSED",
+      "a3_turns": 0,
+      "elapsed_s": 37.5,
+      "first_gate_failures": [],
+      "in_level_ratio": 1.0,
+      "script_usd": 0.0031,
+      "panel_usd": 0.0118,
       "decisions": {
         "examiner": "approve",
         "learner": "edit-and-approve"
@@ -44,42 +68,27 @@
           "naturalness": 5,
           "level_fit": 5,
           "grammar_point_teaching": 5,
-          "gloss_quality": 5
+          "gloss_quality": 4
         },
         "learner": {
-          "comprehensibility": 4,
-          "translation_accuracy": 5,
+          "comprehensibility": 5,
+          "translation_accuracy": 4,
           "translation_naturalness": 3,
-          "engagement": 3,
+          "engagement": 4,
           "explanation_helpfulness": 4
         }
       }
     },
     {
-      "episode_id": "en-A2-x02-qwen",
-      "theme": "street food at a night market",
-      "status": "NOT_RUN",
-      "a3_turns": null,
-      "elapsed_s": null,
-      "first_gate_failures": [],
-      "in_level_ratio": null,
-      "script_usd": 0,
-      "panel_usd": 0,
-      "decisions": {},
-      "level_fit": {},
-      "critical": {},
-      "scores": {}
-    },
-    {
-      "episode_id": "en-A2-x02",
-      "theme": "street food at a night market",
+      "episode_id": "en-A2-x03",
+      "theme": "a job interview",
       "status": "PASSED",
       "a3_turns": 0,
-      "elapsed_s": 52.9,
+      "elapsed_s": 58.1,
       "first_gate_failures": [],
       "in_level_ratio": 1.0,
-      "script_usd": 0.0038,
-      "panel_usd": 0.0265,
+      "script_usd": 0.0037,
+      "panel_usd": 0.0213,
       "decisions": {
         "examiner": "edit-and-approve",
         "learner": "edit-and-approve"
@@ -98,67 +107,13 @@
           "naturalness": 3,
           "level_fit": 5,
           "grammar_point_teaching": 4,
-          "gloss_quality": 3
+          "gloss_quality": 4
         },
         "learner": {
           "comprehensibility": 4,
-          "translation_accuracy": 3,
-          "translation_naturalness": 2,
-          "engagement": 3,
-          "explanation_helpfulness": 3
-        }
-      }
-    },
-    {
-      "episode_id": "en-A2-x03-qwen",
-      "theme": "a job interview",
-      "status": "NOT_RUN",
-      "a3_turns": null,
-      "elapsed_s": null,
-      "first_gate_failures": [],
-      "in_level_ratio": null,
-      "script_usd": 0,
-      "panel_usd": 0,
-      "decisions": {},
-      "level_fit": {},
-      "critical": {},
-      "scores": {}
-    },
-    {
-      "episode_id": "en-A2-x03",
-      "theme": "a job interview",
-      "status": "PASSED",
-      "a3_turns": 0,
-      "elapsed_s": 59.0,
-      "first_gate_failures": [],
-      "in_level_ratio": 1.0,
-      "script_usd": 0.0041,
-      "panel_usd": 0.0182,
-      "decisions": {
-        "examiner": "approve",
-        "learner": "edit-and-approve"
-      },
-      "level_fit": {
-        "examiner": "at",
-        "learner": "at"
-      },
-      "critical": {
-        "examiner": 0,
-        "learner": 0
-      },
-      "scores": {
-        "examiner": {
-          "grammar_accuracy": 5,
-          "naturalness": 4,
-          "level_fit": 5,
-          "grammar_point_teaching": 5,
-          "gloss_quality": 5
-        },
-        "learner": {
-          "comprehensibility": 4,
-          "translation_accuracy": 5,
+          "translation_accuracy": 4,
           "translation_naturalness": 4,
-          "engagement": 4,
+          "engagement": 3,
           "explanation_helpfulness": 3
         }
       }
@@ -168,89 +123,11 @@
       "theme": "planning a weekend trip to the mountains",
       "status": "PASSED",
       "a3_turns": 0,
-      "elapsed_s": 56.9,
+      "elapsed_s": 58.6,
       "first_gate_failures": [],
       "in_level_ratio": 1.0,
-      "script_usd": 0.0033,
-      "panel_usd": 0.0122,
-      "decisions": {
-        "examiner": "approve",
-        "learner": "edit-and-approve"
-      },
-      "level_fit": {
-        "examiner": "at",
-        "learner": "at"
-      },
-      "critical": {
-        "examiner": 0,
-        "learner": 0
-      },
-      "scores": {
-        "examiner": {
-          "grammar_accuracy": 5,
-          "naturalness": 5,
-          "level_fit": 5,
-          "grammar_point_teaching": 5,
-          "gloss_quality": 5
-        },
-        "learner": {
-          "comprehensibility": 5,
-          "translation_accuracy": 5,
-          "translation_naturalness": 4,
-          "engagement": 4,
-          "explanation_helpfulness": 4
-        }
-      }
-    },
-    {
-      "episode_id": "en-A2-x05",
-      "theme": "feeling sick and visiting the pharmacy",
-      "status": "PASSED",
-      "a3_turns": 0,
-      "elapsed_s": 33.9,
-      "first_gate_failures": [],
-      "in_level_ratio": 1.0,
-      "script_usd": 0.0019,
-      "panel_usd": 0.0164,
-      "decisions": {
-        "examiner": "approve",
-        "learner": "edit-and-approve"
-      },
-      "level_fit": {
-        "examiner": "at",
-        "learner": "at"
-      },
-      "critical": {
-        "examiner": 0,
-        "learner": 0
-      },
-      "scores": {
-        "examiner": {
-          "grammar_accuracy": 5,
-          "naturalness": 5,
-          "level_fit": 5,
-          "grammar_point_teaching": 4,
-          "gloss_quality": 4
-        },
-        "learner": {
-          "comprehensibility": 5,
-          "translation_accuracy": 3,
-          "translation_naturalness": 3,
-          "engagement": 3,
-          "explanation_helpfulness": 3
-        }
-      }
-    },
-    {
-      "episode_id": "en-A2-x06",
-      "theme": "shopping for winter clothes",
-      "status": "PASSED",
-      "a3_turns": 0,
-      "elapsed_s": 79.6,
-      "first_gate_failures": [],
-      "in_level_ratio": 1.0,
-      "script_usd": 0.0043,
-      "panel_usd": 0.0237,
+      "script_usd": 0.0045,
+      "panel_usd": 0.0208,
       "decisions": {
         "examiner": "edit-and-approve",
         "learner": "edit-and-approve"
@@ -266,16 +143,96 @@
       "scores": {
         "examiner": {
           "grammar_accuracy": 5,
-          "naturalness": 4,
+          "naturalness": 3,
           "level_fit": 5,
-          "grammar_point_teaching": 3,
+          "grammar_point_teaching": 5,
           "gloss_quality": 3
         },
         "learner": {
           "comprehensibility": 4,
           "translation_accuracy": 4,
-          "translation_naturalness": 2,
+          "translation_naturalness": 4,
           "engagement": 3,
+          "explanation_helpfulness": 4
+        }
+      }
+    },
+    {
+      "episode_id": "en-A2-x05",
+      "theme": "feeling sick and visiting the pharmacy",
+      "status": "PASSED",
+      "a3_turns": 0,
+      "elapsed_s": 41.0,
+      "first_gate_failures": [],
+      "in_level_ratio": 1.0,
+      "script_usd": 0.0023,
+      "panel_usd": 0.0194,
+      "decisions": {
+        "examiner": "edit-and-approve",
+        "learner": "edit-and-approve"
+      },
+      "level_fit": {
+        "examiner": "at",
+        "learner": "at"
+      },
+      "critical": {
+        "examiner": 0,
+        "learner": 0
+      },
+      "scores": {
+        "examiner": {
+          "grammar_accuracy": 5,
+          "naturalness": 5,
+          "level_fit": 5,
+          "grammar_point_teaching": 5,
+          "gloss_quality": 3
+        },
+        "learner": {
+          "comprehensibility": 5,
+          "translation_accuracy": 5,
+          "translation_naturalness": 4,
+          "engagement": 4,
+          "explanation_helpfulness": 4
+        }
+      }
+    },
+    {
+      "episode_id": "en-A2-x06",
+      "theme": "shopping for winter clothes",
+      "status": "PASSED",
+      "a3_turns": 1,
+      "elapsed_s": 86.4,
+      "first_gate_failures": [
+        "duration"
+      ],
+      "in_level_ratio": 1.0,
+      "script_usd": 0.0064,
+      "panel_usd": 0.0175,
+      "decisions": {
+        "examiner": "edit-and-approve",
+        "learner": "edit-and-approve"
+      },
+      "level_fit": {
+        "examiner": "at",
+        "learner": "at"
+      },
+      "critical": {
+        "examiner": 0,
+        "learner": 0
+      },
+      "scores": {
+        "examiner": {
+          "grammar_accuracy": 5,
+          "naturalness": 5,
+          "level_fit": 5,
+          "grammar_point_teaching": 5,
+          "gloss_quality": 3
+        },
+        "learner": {
+          "comprehensibility": 5,
+          "translation_accuracy": 4,
+          "translation_naturalness": 4,
+          "engagement": 4,
           "explanation_helpfulness": 3
         }
       }
@@ -285,50 +242,11 @@
       "theme": "a surprise birthday party",
       "status": "PASSED",
       "a3_turns": 0,
-      "elapsed_s": 49.1,
+      "elapsed_s": 43.4,
       "first_gate_failures": [],
       "in_level_ratio": 1.0,
       "script_usd": 0.0027,
-      "panel_usd": 0.0216,
-      "decisions": {
-        "examiner": "reject",
-        "learner": "edit-and-approve"
-      },
-      "level_fit": {
-        "examiner": "at",
-        "learner": "at"
-      },
-      "critical": {
-        "examiner": 1,
-        "learner": 0
-      },
-      "scores": {
-        "examiner": {
-          "grammar_accuracy": 5,
-          "naturalness": 5,
-          "level_fit": 5,
-          "grammar_point_teaching": 5,
-          "gloss_quality": 2
-        },
-        "learner": {
-          "comprehensibility": 4,
-          "translation_accuracy": 4,
-          "translation_naturalness": 3,
-          "engagement": 3,
-          "explanation_helpfulness": 4
-        }
-      }
-    },
-    {
-      "episode_id": "en-A2-x08",
-      "theme": "cooking dinner for friends",
-      "status": "PASSED",
-      "a3_turns": 0,
-      "elapsed_s": 60.6,
-      "first_gate_failures": [],
-      "in_level_ratio": 1.0,
-      "script_usd": 0.0037,
-      "panel_usd": 0.0197,
+      "panel_usd": 0.0129,
       "decisions": {
         "examiner": "approve",
         "learner": "edit-and-approve"
@@ -352,7 +270,48 @@
         "learner": {
           "comprehensibility": 5,
           "translation_accuracy": 4,
-          "translation_naturalness": 3,
+          "translation_naturalness": 4,
+          "engagement": 3,
+          "explanation_helpfulness": 4
+        }
+      }
+    },
+    {
+      "episode_id": "en-A2-x08",
+      "theme": "cooking dinner for friends",
+      "status": "PASSED",
+      "a3_turns": 1,
+      "elapsed_s": 81.2,
+      "first_gate_failures": [
+        "duration"
+      ],
+      "in_level_ratio": 1.0,
+      "script_usd": 0.0065,
+      "panel_usd": 0.0198,
+      "decisions": {
+        "examiner": "edit-and-approve",
+        "learner": "edit-and-approve"
+      },
+      "level_fit": {
+        "examiner": "at",
+        "learner": "at"
+      },
+      "critical": {
+        "examiner": 0,
+        "learner": 0
+      },
+      "scores": {
+        "examiner": {
+          "grammar_accuracy": 4,
+          "naturalness": 3,
+          "level_fit": 5,
+          "grammar_point_teaching": 5,
+          "gloss_quality": 3
+        },
+        "learner": {
+          "comprehensibility": 4,
+          "translation_accuracy": 5,
+          "translation_naturalness": 4,
           "engagement": 3,
           "explanation_helpfulness": 4
         }
@@ -363,11 +322,11 @@
       "theme": "riding a motorbike to work every day",
       "status": "PASSED",
       "a3_turns": 0,
-      "elapsed_s": 61.1,
+      "elapsed_s": 63.1,
       "first_gate_failures": [],
       "in_level_ratio": 1.0,
-      "script_usd": 0.0033,
-      "panel_usd": 0.0138,
+      "script_usd": 0.0039,
+      "panel_usd": 0.0156,
       "decisions": {
         "examiner": "edit-and-approve",
         "learner": "edit-and-approve"
@@ -383,15 +342,15 @@
       "scores": {
         "examiner": {
           "grammar_accuracy": 5,
-          "naturalness": 4,
+          "naturalness": 5,
           "level_fit": 5,
-          "grammar_point_teaching": 4,
+          "grammar_point_teaching": 5,
           "gloss_quality": 3
         },
         "learner": {
           "comprehensibility": 5,
           "translation_accuracy": 5,
-          "translation_naturalness": 3,
+          "translation_naturalness": 4,
           "engagement": 3,
           "explanation_helpfulness": 4
         }
@@ -402,11 +361,11 @@
       "theme": "joining a gym and finding a new hobby",
       "status": "PASSED",
       "a3_turns": 0,
-      "elapsed_s": 40.4,
+      "elapsed_s": 80.5,
       "first_gate_failures": [],
       "in_level_ratio": 1.0,
-      "script_usd": 0.0022,
-      "panel_usd": 0.02,
+      "script_usd": 0.005,
+      "panel_usd": 0.018,
       "decisions": {
         "examiner": "edit-and-approve",
         "learner": "edit-and-approve"
@@ -421,18 +380,18 @@
       },
       "scores": {
         "examiner": {
-          "grammar_accuracy": 5,
+          "grammar_accuracy": 4,
           "naturalness": 4,
           "level_fit": 5,
           "grammar_point_teaching": 4,
-          "gloss_quality": 4
+          "gloss_quality": 5
         },
         "learner": {
           "comprehensibility": 4,
           "translation_accuracy": 4,
           "translation_naturalness": 3,
           "engagement": 3,
-          "explanation_helpfulness": 3
+          "explanation_helpfulness": 4
         }
       }
     }

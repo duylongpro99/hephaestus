@@ -7,50 +7,50 @@
     "reviewer": "learner",
     "issues": [
       {
+        "line_id": null,
+        "category": "engagement",
+        "severity": "minor",
+        "description": "The hook is empty, so when I see the episode in my podcast app, nothing tells me why I should press play.",
+        "suggested_fix": "Add a short hook such as: What were you doing when your friend called? / Bạn đang làm gì khi bạn của bạn gọi đến?"
+      },
+      {
         "line_id": "s1l2",
         "category": "translation_naturalness",
-        "severity": "major",
-        "description": "The Vietnamese line sounds too literal. 'Nó có phải cho bữa tiệc của bạn không?' is understandable, but a native speaker would usually name the cake and use 'dành cho' rather than 'cho'.",
-        "suggested_fix": "Bánh đó có phải dành cho bữa tiệc của bạn không?"
+        "severity": "minor",
+        "description": "Có phải cho bữa tiệc sinh nhật của mình không? is correct but sounds a little careful/formal for two friends.",
+        "suggested_fix": "Tuyệt! Cho bữa tiệc sinh nhật của mình à?"
       },
       {
         "line_id": null,
-        "category": "translation_naturalness",
+        "category": "explanation",
         "severity": "minor",
-        "description": "The pronouns 'tôi/bạn' are a little formal for a friendly dialogue about a birthday. If Anna and Ben are friends, 'mình/bạn' sounds warmer and more natural.",
-        "suggested_fix": "Use a friendly pronoun set, for example: 'Mình đang đi bộ về nhà thì thấy một chiếc bánh sinh nhật.' and 'Không, hôm nay là sinh nhật em gái mình.'"
-      },
-      {
-        "line_id": "s1l3",
-        "category": "comprehension",
-        "severity": "minor",
-        "description": "The answer gives a reason but does not directly say what the cake is for. An A2 listener may need one more clear link.",
-        "suggested_fix": "No, it is for my sister's birthday. / Không, nó dành cho sinh nhật của em gái tôi."
+        "description": "The grammar note uses the label past continuous. At A2 I may remember the pattern better if the form is shown simply.",
+        "suggested_fix": "Use was/were + verb-ing for the longer action, and when + past simple for the shorter action: I was making a cake when you called."
       },
       {
         "line_id": null,
         "category": "translation_accuracy",
         "severity": "minor",
-        "description": "The gloss for 'cake' as 'bánh ngọt' is not wrong, but in this birthday context 'bánh sinh nhật' or 'bánh kem' may match the picture and dialogue better.",
-        "suggested_fix": "Update the Vietnamese gloss to 'bánh ngọt (bánh sinh nhật/bánh kem)' or keep it simple: 'bánh sinh nhật / bánh kem'."
+        "description": "The gloss for cake is bánh ngọt, but in this birthday context the dialogue just says bánh. bánh ngọt can sound like a general pastry, not a birthday cake.",
+        "suggested_fix": "Change the Vietnamese gloss to bánh or bánh sinh nhật for this episode."
       },
       {
         "line_id": null,
         "category": "engagement",
         "severity": "minor",
-        "description": "The title and hook mention a surprise, but the dialogue only says Anna saw a cake. It is clear but not very engaging as a surprise.",
-        "suggested_fix": "Add a small surprise line if length allows, e.g. 'It is a surprise for my sister.' / 'Đó là món quà bất ngờ cho em gái mình.'"
+        "description": "The theme is a surprise birthday party, but the dialogue only says yes; there is no clear surprise moment.",
+        "suggested_fix": "Make the last line slightly more surprising, for example: Yes! Surprise! I have a big cake. / Ừ! Bất ngờ chưa! Mình có một cái bánh to."
       }
     ],
     "rubric_scores": {
-      "comprehensibility": 4,
+      "comprehensibility": 5,
       "translation_accuracy": 4,
-      "translation_naturalness": 3,
+      "translation_naturalness": 4,
       "engagement": 3,
       "explanation_helpfulness": 4
     },
     "hard_gate_failures": [],
-    "summary": "The episode is short, clear, and suitable for A2. The grammar point is visible in the first line, and the vocabulary is simple. The main edit is to make the Vietnamese translation of Ben's question more natural. Smaller edits to pronouns, clarity, and the 'surprise' idea would make it better."
+    "summary": "The micro-dialogue is short, clear, and suitable for A2. The target grammar is easy to notice, and the Vietnamese lines are mostly natural. Small edits would make it more engaging and more natural: add a hook, make the grammar note simpler, adjust the cake gloss, and add a clearer surprise feeling."
   },
   "gate_decision": {
     "schema_version": "1.0.0",
@@ -58,22 +58,22 @@
     "gate": 1,
     "user": "learner",
     "decision": "edit-and-approve",
-    "diff": "s1l2: Bánh đó có phải dành cho bữa tiệc của bạn không?\nepisode: Use a friendly pronoun set, for example: 'Mình đang đi bộ về nhà thì thấy một chiếc bánh sinh nhật.' and 'Không, hôm nay là sinh nhật em gái mình.'\ns1l3: No, it is for my sister's birthday. / Không, nó dành cho sinh nhật của em gái tôi.\nepisode: Update the Vietnamese gloss to 'bánh ngọt (bánh sinh nhật/bánh kem)' or keep it simple: 'bánh sinh nhật / bánh kem'.\nepisode: Add a small surprise line if length allows, e.g. 'It is a surprise for my sister.' / 'Đó là món quà bất ngờ cho em gái mình.'",
-    "notes": "The episode is short, clear, and suitable for A2. The grammar point is visible in the first line, and the vocabulary is simple. The main edit is to make the Vietnamese translation of Ben's question more natural. Smaller edits to pronouns, clarity, and the 'surprise' idea would make it better.",
-    "timestamp": "2026-10-12T04:20:32.295679Z"
+    "diff": "episode: Add a short hook such as: What were you doing when your friend called? / Bạn đang làm gì khi bạn của bạn gọi đến?\ns1l2: Tuyệt! Cho bữa tiệc sinh nhật của mình à?\nepisode: Use was/were + verb-ing for the longer action, and when + past simple for the shorter action: I was making a cake when you called.\nepisode: Change the Vietnamese gloss to bánh or bánh sinh nhật for this episode.\nepisode: Make the last line slightly more surprising, for example: Yes! Surprise! I have a big cake. / Ừ! Bất ngờ chưa! Mình có một cái bánh to.",
+    "notes": "The micro-dialogue is short, clear, and suitable for A2. The target grammar is easy to notice, and the Vietnamese lines are mostly natural. Small edits would make it more engaging and more natural: add a hook, make the grammar note simpler, adjust the cake gloss, and add a clearer surprise feeling.",
+    "timestamp": "2026-10-20T10:54:53.048046Z"
   },
   "costs": [
     {
       "station": "review_learner",
       "vendor": "gateway",
       "model": "qwen3.8-max-0902",
-      "input_tokens": 687,
-      "output_tokens": 6336,
+      "input_tokens": 684,
+      "output_tokens": 4424,
       "cache_creation_input_tokens": 0,
       "cache_read_input_tokens": 1024,
-      "usd": 0.007904,
+      "usd": 0.005608,
       "priced": true,
-      "timestamp": "2026-10-12T04:20:32.295319Z"
+      "timestamp": "2026-10-20T10:54:53.046673Z"
     }
   ]
 }

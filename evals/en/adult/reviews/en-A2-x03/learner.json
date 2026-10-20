@@ -7,45 +7,43 @@
     "reviewer": "learner",
     "issues": [
       {
-        "line_id": "s1l3",
-        "category": "comprehension",
-        "severity": "minor",
-        "description": "At A2, 'one' may be a little hard to link back to 'a job interview'. Saying the full phrase would be clearer for listeners.",
-        "suggested_fix": "Change the English line to 'I have a job interview tomorrow.' and the Vietnamese translation to 'Ngày mai mình có một buổi phỏng vấn xin việc.'"
+        "line_id": "s1l2",
+        "category": "engagement",
+        "severity": "major",
+        "description": "Ben's answer jumps to never working on weekends. It does not connect clearly to Anna's question about a job interview, so as an A2 listener I would feel confused about the situation.",
+        "suggested_fix": "Make the reply connected to the interview and the review words, for example: s1l2 text: 'No, I have never had a job interview, but I want to work.' vi: 'Chưa, mình chưa bao giờ đi phỏng vấn xin việc, nhưng mình muốn làm việc.' Then change s1l3 to 'What job do you want?' vi: 'Bạn muốn công việc nào?'"
       },
       {
-        "line_id": "s1l2",
+        "line_id": "s1l3",
         "category": "translation_naturalness",
         "severity": "minor",
-        "description": "'mình chưa từng có một buổi phỏng vấn nào' is understandable, but it sounds a little literal in Vietnamese.",
-        "suggested_fix": "Chưa, mình chưa từng đi phỏng vấn lần nào."
-      },
-      {
-        "line_id": "s1l4",
-        "category": "engagement",
-        "severity": "minor",
-        "description": "This line could naturally recycle the review word 'work' while keeping the dialogue simple and motivating.",
-        "suggested_fix": "Change the line to 'I really want this job. I want to work there.' with Vietnamese: 'Mình thực sự muốn công việc này. Mình muốn làm việc ở đó.'"
+        "description": "If this line stays, 'công việc của mình' is a little ambiguous because 'mình' can mean 'me' or 'you' depending on context. For 'your job', a clearer translation would be better.",
+        "suggested_fix": "Change vi to 'Bạn có thích công việc của bạn không?' or more naturally: 'Bạn có thích công việc hiện tại không?'"
       },
       {
         "line_id": null,
         "category": "explanation",
         "severity": "minor",
-        "description": "'the third form of the verb' may confuse A2 learners. The grammar note would be more helpful with an example and clearer wording.",
-        "suggested_fix": "Use have/has + past participle (verb form 3). Example: 'Have you ever had a job interview?' / 'I have never had a job interview.' 'Ever' means at any time before now. 'Never' means not ever."
+        "description": "The grammar note uses the term 'past participle'. At A2, this may be too technical. I would understand better with a simpler form and an example.",
+        "suggested_fix": "Change the note to: 'Use have/has + ever + V3/-ed to ask about life experiences. Use have/has + never + V3/-ed to say you have not done something. Example: Have you ever had a job interview? I have never worked on weekends.'"
+      },
+      {
+        "line_id": null,
+        "category": "engagement",
+        "severity": "minor",
+        "description": "The hook is clear but very plain. It does not make me curious to listen.",
+        "suggested_fix": "Change the hook to: 'A short chat: Have you ever had a job interview?'"
       }
     ],
     "rubric_scores": {
       "comprehensibility": 4,
-      "translation_accuracy": 5,
+      "translation_accuracy": 4,
       "translation_naturalness": 4,
-      "engagement": 4,
+      "engagement": 3,
       "explanation_helpfulness": 3
     },
-    "hard_gate_failures": [
-      "The review word 'work' from the spec is not present in the dialogue or vocabulary."
-    ],
-    "summary": "The micro-dialogue is short, clear, and mostly natural for A2 learners. The Vietnamese translation is mostly accurate, but a few lines could sound more natural, and s1l3 would be easier if 'one' is replaced by the full phrase. The episode also needs to include the review word 'work'. The grammar note should be clearer and include an example."
+    "hard_gate_failures": [],
+    "summary": "The episode is close to A2 and the vocabulary is clear, but the middle reply is not connected to the interview question, which would confuse me. A small rewrite and clearer Vietnamese phrasing would make it easy and natural to follow."
   },
   "gate_decision": {
     "schema_version": "1.0.0",
@@ -53,22 +51,22 @@
     "gate": 1,
     "user": "learner",
     "decision": "edit-and-approve",
-    "diff": "s1l3: Change the English line to 'I have a job interview tomorrow.' and the Vietnamese translation to 'Ngày mai mình có một buổi phỏng vấn xin việc.'\ns1l2: Chưa, mình chưa từng đi phỏng vấn lần nào.\ns1l4: Change the line to 'I really want this job. I want to work there.' with Vietnamese: 'Mình thực sự muốn công việc này. Mình muốn làm việc ở đó.'\nepisode: Use have/has + past participle (verb form 3). Example: 'Have you ever had a job interview?' / 'I have never had a job interview.' 'Ever' means at any time before now. 'Never' means not ever.",
-    "notes": "The micro-dialogue is short, clear, and mostly natural for A2 learners. The Vietnamese translation is mostly accurate, but a few lines could sound more natural, and s1l3 would be easier if 'one' is replaced by the full phrase. The episode also needs to include the review word 'work'. The grammar note should be clearer and include an example.",
-    "timestamp": "2026-10-12T04:16:23.409540Z"
+    "diff": "s1l2: Make the reply connected to the interview and the review words, for example: s1l2 text: 'No, I have never had a job interview, but I want to work.' vi: 'Chưa, mình chưa bao giờ đi phỏng vấn xin việc, nhưng mình muốn làm việc.' Then change s1l3 to 'What job do you want?' vi: 'Bạn muốn công việc nào?'\ns1l3: Change vi to 'Bạn có thích công việc của bạn không?' or more naturally: 'Bạn có thích công việc hiện tại không?'\nepisode: Change the note to: 'Use have/has + ever + V3/-ed to ask about life experiences. Use have/has + never + V3/-ed to say you have not done something. Example: Have you ever had a job interview? I have never worked on weekends.'\nepisode: Change the hook to: 'A short chat: Have you ever had a job interview?'",
+    "notes": "The episode is close to A2 and the vocabulary is clear, but the middle reply is not connected to the interview question, which would confuse me. A small rewrite and clearer Vietnamese phrasing would make it easy and natural to follow.",
+    "timestamp": "2026-10-20T10:53:00.741972Z"
   },
   "costs": [
     {
       "station": "review_learner",
       "vendor": "gateway",
       "model": "qwen3.8-max-0902",
-      "input_tokens": 710,
-      "output_tokens": 7056,
+      "input_tokens": 1728,
+      "output_tokens": 6175,
       "cache_creation_input_tokens": 0,
-      "cache_read_input_tokens": 1024,
-      "usd": 0.008777,
+      "cache_read_input_tokens": 0,
+      "usd": 0.008101,
       "priced": true,
-      "timestamp": "2026-10-12T04:16:23.408850Z"
+      "timestamp": "2026-10-20T10:53:00.741277Z"
     }
   ]
 }

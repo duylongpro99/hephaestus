@@ -108,7 +108,7 @@ def test_eval_specs_validate():
 
     pack = EnPack()
     paths = sorted((REPO_ROOT / "evals" / "en" / "adult" / "specs").glob("*.json"))
-    assert len(paths) == 13  # ten specs plus three copies drafted by the A/B writer
+    assert len(paths) == 10
     for path in paths:
         spec = EpisodeSpec.model_validate_json(path.read_text(encoding="utf-8"))
         assert len(spec.target_words) == 1 and spec.format == "micro_dialogue", path.name

@@ -7,45 +7,73 @@
     "reviewer": "examiner",
     "issues": [
       {
+        "line_id": "s1l3",
+        "category": "consistency",
+        "severity": "major",
+        "description": "Ben says he has rented a flat (s1l1), but then says 'The house has a big room.' A flat is not a house, and the switch may confuse learners and contradicts the on-screen story.",
+        "suggested_fix": "Change to: 'The rent is good. The flat has a big room.' (The review word 'house' still appears in the vocab list.)"
+      },
+      {
         "line_id": null,
-        "category": "spec",
+        "category": "gloss",
         "severity": "minor",
-        "description": "The spec's review words 'room' and 'house' are never used in the dialogue, so the recycling opportunity the spec calls for is missed. The target word 'rent' is well covered.",
-        "suggested_fix": "Work one review word into Ben's reply, e.g. 'Yes, I've just come from there. The rooms are big.' — this keeps the clip within the 10-15 second limit."
+        "description": "The gloss for target word 'rent' only covers the noun ('money you pay...'), but the dialogue's first use is the verb 'rented' ('I've just rented a flat'). A learner checking the gloss at that point cannot map it to the sentence.",
+        "suggested_fix": "Gloss both uses simply: 'to pay money every month to live in a flat or house; also, the money you pay'."
+      },
+      {
+        "line_id": null,
+        "category": "gloss",
+        "severity": "minor",
+        "description": "The gloss for 'house' ('a place where people live') is too broad: a flat, a hotel or a tent are also places where people live.",
+        "suggested_fix": "Change to: 'a building where one person or a family lives'."
+      },
+      {
+        "line_id": null,
+        "category": "gloss",
+        "severity": "minor",
+        "description": "The gloss for 'room' ('a part of a house with walls') is vague and excludes flats; almost every part of a house 'has walls'.",
+        "suggested_fix": "Change to: 'a part of a house or flat with its own walls and door'."
+      },
+      {
+        "line_id": null,
+        "category": "collocation",
+        "severity": "minor",
+        "description": "'Have you ever just moved to a new home?' combines 'ever' (any time in your life) with 'just' (a moment ago), which native speakers would not say together.",
+        "suggested_fix": "Use 'Have you ever moved to a new home?' or 'Have you just moved to a new home?'."
       }
     ],
     "rubric_scores": {
       "grammar_accuracy": 5,
-      "naturalness": 5,
+      "naturalness": 4,
       "level_fit": 5,
       "grammar_point_teaching": 5,
-      "gloss_quality": 5
+      "gloss_quality": 3
     },
     "hard_gate_failures": [],
-    "summary": "A clean micro-dialogue at A2. All four lines are grammatically correct and natural British English ('I've just come from there' is idiomatic BrE for having just been somewhere). The grammar point — present perfect with 'just' and 'already' — is used correctly in both lines, and the two grammar notes state accurate, level-appropriate rules. The gloss for 'rent' is precise and written in simpler English than the target word. All vocabulary is A1-A2. The only gap is that neither review word ('room', 'house') appears; this is a minor spec-coverage point, not an error, so the script is approved as is."
+    "summary": "A clean, level-appropriate micro-dialogue: 'just' and 'already' with the present perfect are both modelled correctly and the grammar note is accurate. The one real problem is a consistency slip in s1l3, where the rented 'flat' becomes 'the house'. The glosses are serviceable but the target word 'rent' is only glossed as a noun although it first appears as a verb, and the 'house' and 'room' glosses are imprecise. Fixable with the suggested edits."
   },
   "gate_decision": {
     "schema_version": "1.0.0",
     "episode_id": "en-A2-x01",
     "gate": 1,
     "user": "examiner",
-    "decision": "approve",
-    "diff": "episode: Work one review word into Ben's reply, e.g. 'Yes, I've just come from there. The rooms are big.' — this keeps the clip within the 10-15 second limit.",
-    "notes": "A clean micro-dialogue at A2. All four lines are grammatically correct and natural British English ('I've just come from there' is idiomatic BrE for having just been somewhere). The grammar point — present perfect with 'just' and 'already' — is used correctly in both lines, and the two grammar notes state accurate, level-appropriate rules. The gloss for 'rent' is precise and written in simpler English than the target word. All vocabulary is A1-A2. The only gap is that neither review word ('room', 'house') appears; this is a minor spec-coverage point, not an error, so the script is approved as is.",
-    "timestamp": "2026-10-12T04:12:55.281345Z"
+    "decision": "edit-and-approve",
+    "diff": "s1l3: Change to: 'The rent is good. The flat has a big room.' (The review word 'house' still appears in the vocab list.)\nepisode: Gloss both uses simply: 'to pay money every month to live in a flat or house; also, the money you pay'.\nepisode: Change to: 'a building where one person or a family lives'.\nepisode: Change to: 'a part of a house or flat with its own walls and door'.\nepisode: Use 'Have you ever moved to a new home?' or 'Have you just moved to a new home?'.",
+    "notes": "A clean, level-appropriate micro-dialogue: 'just' and 'already' with the present perfect are both modelled correctly and the grammar note is accurate. The one real problem is a consistency slip in s1l3, where the rented 'flat' becomes 'the house'. The glosses are serviceable but the target word 'rent' is only glossed as a noun although it first appears as a verb, and the 'house' and 'room' glosses are imprecise. Fixable with the suggested edits.",
+    "timestamp": "2026-10-20T10:49:36.377590Z"
   },
   "costs": [
     {
       "station": "review_examiner",
       "vendor": "gateway",
       "model": "kimi/kimi-k3",
-      "input_tokens": 1722,
-      "output_tokens": 1809,
+      "input_tokens": 1801,
+      "output_tokens": 2555,
       "cache_creation_input_tokens": 0,
       "cache_read_input_tokens": 0,
-      "usd": 0.00646,
+      "usd": 0.008746,
       "priced": true,
-      "timestamp": "2026-10-12T04:12:55.281068Z"
+      "timestamp": "2026-10-20T10:49:36.377079Z"
     }
   ]
 }

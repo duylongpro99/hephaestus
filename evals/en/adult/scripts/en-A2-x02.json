@@ -2,53 +2,43 @@
   "schema_version": "1.0.0",
   "episode_id": "en-A2-x02",
   "title_working": "Night Market Noodles",
-  "hook": "Ben and Anna choose noodles at a night market.",
+  "hook": "",
   "segments": [
     {
       "id": "s1",
       "type": "dialogue",
       "speed": "natural",
-      "layout": "podcast_b",
+      "layout": "podcast_a",
       "lines": [
         {
           "id": "s1l1",
           "speaker": "anna",
-          "text": "Would you like a noodle soup?",
+          "text": "This night market has a lot of food.",
           "translation": {
-            "vi": "Bạn có muốn ăn một tô mì không?"
+            "vi": "Chợ đêm này có nhiều đồ ăn nhỉ."
           },
           "pause_after_ms": 500,
-          "visual_cue": "a bowl of noodle soup"
+          "visual_cue": "a busy night market with food stalls"
         },
         {
           "id": "s1l2",
           "speaker": "ben",
-          "text": "Yes, please. I would like noodles too.",
+          "text": "I'd like some noodles, please.",
           "translation": {
-            "vi": "Dạ, làm ơn. Tôi cũng muốn ăn mì."
+            "vi": "Mình muốn một bát mì, làm ơn."
           },
           "pause_after_ms": 500,
-          "visual_cue": "a man smiling and ordering"
+          "visual_cue": "a steaming bowl of noodles"
         },
         {
           "id": "s1l3",
           "speaker": "anna",
-          "text": "Good. The food here is great.",
+          "text": "Let's eat here.",
           "translation": {
-            "vi": "Tốt. Đồ ăn ở đây rất ngon."
+            "vi": "Ăn ở đây nhé."
           },
           "pause_after_ms": 500,
           "visual_cue": null
-        },
-        {
-          "id": "s1l4",
-          "speaker": "ben",
-          "text": "We can eat here.",
-          "translation": {
-            "vi": "Chúng ta có thể ăn ở đây."
-          },
-          "pause_after_ms": 500,
-          "visual_cue": "two people at a street food stall"
         }
       ],
       "items": []
@@ -58,16 +48,16 @@
     {
       "word": "noodle",
       "gloss": {
-        "en": "a long, white food you eat in soup",
-        "vi": "mì, bún, phở (món ăn sợi)"
+        "en": "a long, thin piece of food made from flour and water; you cook it in hot water",
+        "vi": "mì, sợi mì dài làm từ bột, nấu trong nước sôi"
       },
       "is_target": true
     }
   ],
   "grammar_notes": [
-    "Use 'would like' for polite requests. Say 'I would like a noodle soup' to ask politely."
+    "Use would like + noun or to + verb to make a polite request. 'I'd like some noodles, please.' is more polite than 'I want noodles.'"
   ],
   "interaction_prompts": [
-    "What food would you like at a night market?"
+    "What would you like to eat at a night market?"
   ]
 }

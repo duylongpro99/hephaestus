@@ -30,12 +30,6 @@ roles:
     model: ds/deepseek-v4-pro
     max_tokens: 64000   # reasoning tokens share the output budget with the ~15K-token script
     params: {}
-  # A/B writer for comparing Vietnamese quality: factory script --writer a2_scriptwriter_qwen
-  a2_scriptwriter_qwen:
-    provider: gateway
-    model: qwen3.8-max-0902
-    max_tokens: 64000
-    params: {}
   a3_level_editor:
     provider: gateway
     model: ds/deepseek-v4-pro

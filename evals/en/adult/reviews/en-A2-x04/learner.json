@@ -8,35 +8,35 @@
     "issues": [
       {
         "line_id": "s1l3",
-        "category": "translation_naturalness",
-        "severity": "minor",
-        "description": "The Vietnamese is understandable, but it sounds a little literal. In natural conversation between friends, I would expect a response with “nghe” because the English says “sounds”.",
-        "suggested_fix": "Change the vi translation to: “Nghe tuyệt đấy!” or “Nghe hay đấy!”"
+        "category": "engagement",
+        "severity": "major",
+        "description": "Ben says 'Yes', but Anna did not ask a yes/no question before this line. In a very short clip, this makes the dialogue feel broken and confusing.",
+        "suggested_fix": "Change the line to: 'I am going to rest on the trip.' and keep the Vietnamese: 'Mình sẽ nghỉ ngơi trong chuyến đi.'"
       },
       {
-        "line_id": "s1l3",
-        "category": "comprehension",
+        "line_id": "s1l2",
+        "category": "translation_accuracy",
         "severity": "minor",
-        "description": "“That sounds great to me!” is clear, but “to me” feels unnecessary at A2 and makes the line slightly less simple.",
-        "suggested_fix": "Simplify the English line to: “That sounds great!”"
+        "description": "The English line includes the target word 'trip', but the Vietnamese translation only says 'đi xe buýt đến vùng núi' and does not show 'chuyến đi'.",
+        "suggested_fix": "Change vi to: 'Mình sẽ đi một chuyến xe buýt đến vùng núi.'"
       },
       {
         "line_id": null,
         "category": "explanation",
         "severity": "minor",
-        "description": "The grammar note is clear, but at A2 I need the full pattern with am/is/are. Without that, I might say “I going to take”.",
-        "suggested_fix": "Change the note to: “Use 'am/is/are going to' + verb to talk about plans. Example: 'I'm going to take a trip.'”"
+        "description": "The gloss for 'bus' calls a bus a 'big car'. This may confuse learners because a bus is not a car.",
+        "suggested_fix": "Change the gloss to: en: 'a big vehicle that many people use to travel', vi: 'xe buýt'."
       }
     ],
     "rubric_scores": {
-      "comprehensibility": 5,
-      "translation_accuracy": 5,
+      "comprehensibility": 4,
+      "translation_accuracy": 4,
       "translation_naturalness": 4,
-      "engagement": 4,
+      "engagement": 3,
       "explanation_helpfulness": 4
     },
     "hard_gate_failures": [],
-    "summary": "This micro-dialogue is short, clear, and suitable for A2 learners. It uses the target word “trip” and review words “weekend” and “bus” naturally. The translations are mostly accurate, but the final line could sound more natural in Vietnamese and be slightly simpler in English. The grammar note is helpful but should include the full “am/is/are going to” pattern."
+    "summary": "The episode is short and mostly suitable for A2, with clear target grammar and useful Vietnamese glosses. The main problem is the unexplained 'Yes' in the final line, and the translation of the target line could show 'chuyến đi' more clearly. After small edits, I would listen and learn."
   },
   "gate_decision": {
     "schema_version": "1.0.0",
@@ -44,22 +44,22 @@
     "gate": 1,
     "user": "learner",
     "decision": "edit-and-approve",
-    "diff": "s1l3: Change the vi translation to: “Nghe tuyệt đấy!” or “Nghe hay đấy!”\ns1l3: Simplify the English line to: “That sounds great!”\nepisode: Change the note to: “Use 'am/is/are going to' + verb to talk about plans. Example: 'I'm going to take a trip.'”",
-    "notes": "This micro-dialogue is short, clear, and suitable for A2 learners. It uses the target word “trip” and review words “weekend” and “bus” naturally. The translations are mostly accurate, but the final line could sound more natural in Vietnamese and be slightly simpler in English. The grammar note is helpful but should include the full “am/is/are going to” pattern.",
-    "timestamp": "2026-10-12T04:14:52.798139Z"
+    "diff": "s1l3: Change the line to: 'I am going to rest on the trip.' and keep the Vietnamese: 'Mình sẽ nghỉ ngơi trong chuyến đi.'\ns1l2: Change vi to: 'Mình sẽ đi một chuyến xe buýt đến vùng núi.'\nepisode: Change the gloss to: en: 'a big vehicle that many people use to travel', vi: 'xe buýt'.",
+    "notes": "The episode is short and mostly suitable for A2, with clear target grammar and useful Vietnamese glosses. The main problem is the unexplained 'Yes' in the final line, and the translation of the target line could show 'chuyến đi' more clearly. After small edits, I would listen and learn.",
+    "timestamp": "2026-10-20T10:52:52.728050Z"
   },
   "costs": [
     {
       "station": "review_learner",
       "vendor": "gateway",
       "model": "qwen3.8-max-0902",
-      "input_tokens": 632,
-      "output_tokens": 4380,
+      "input_tokens": 1707,
+      "output_tokens": 6630,
       "cache_creation_input_tokens": 0,
-      "cache_read_input_tokens": 1024,
-      "usd": 0.005534,
+      "cache_read_input_tokens": 0,
+      "usd": 0.008639,
       "priced": true,
-      "timestamp": "2026-10-12T04:14:52.794288Z"
+      "timestamp": "2026-10-20T10:52:52.727397Z"
     }
   ]
 }

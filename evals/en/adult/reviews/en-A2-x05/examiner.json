@@ -8,58 +8,51 @@
     "issues": [
       {
         "line_id": null,
-        "category": "grammar_point",
-        "severity": "minor",
-        "description": "The dialogue models 'should' (statement and question) but never 'shouldn't', and the grammar note mentions 'shouldn't' without giving an example. Learners see only half of the stated grammar point in use.",
-        "suggested_fix": "Add a short example to the grammar note, e.g. \"You shouldn't go to work today.\", or, if time allows, add a line such as Anna: 'You shouldn't work today.'"
-      },
-      {
-        "line_id": null,
         "category": "gloss",
-        "severity": "minor",
-        "description": "The gloss for 'headache' ('a bad feeling in your head') is vague; a 'bad feeling' could mean sadness or worry. 'Pain' is an A2-level word and is clearer.",
-        "suggested_fix": "Change the gloss to 'a pain in your head'."
+        "severity": "major",
+        "description": "The gloss for the target word 'headache' — 'when your head feels sick' — is inaccurate and teaches a wrong collocation. Native speakers do not say a head 'feels sick'; a headache is a pain in the head. A learner could wrongly conclude that 'sick' can describe a hurting body part (e.g. 'my head is sick').",
+        "suggested_fix": "Change the gloss to 'a pain in your head' (or 'when your head hurts'). Both use A2-level words and are accurate."
       },
       {
         "line_id": null,
         "category": "consistency",
         "severity": "minor",
-        "description": "The spec theme is 'feeling sick and visiting the pharmacy', but the episode only covers feeling sick; there is no pharmacy element. Acceptable within the 10-15 second micro_dialogue limit, but the theme is only partially realised.",
-        "suggested_fix": "Optional: change Ben's last line to 'Should I go to the pharmacy?' or accept the narrower scope and adjust the theme wording."
+        "description": "The theme in the spec is 'feeling sick and visiting the pharmacy', but the dialogue only covers feeling sick and advice to see a doctor; the pharmacy never appears. Understandable given the 10-15 second micro-dialogue limit, but the theme is only half delivered.",
+        "suggested_fix": "Either adjust the theme to 'feeling sick and getting advice', or change line s1l3 to mention the pharmacy, e.g. 'You should go to the pharmacy. You shouldn't work today.'"
       }
     ],
     "rubric_scores": {
       "grammar_accuracy": 5,
       "naturalness": 5,
       "level_fit": 5,
-      "grammar_point_teaching": 4,
-      "gloss_quality": 4
+      "grammar_point_teaching": 5,
+      "gloss_quality": 3
     },
     "hard_gate_failures": [],
-    "summary": "A clean, accurate A2 micro_dialogue. All four lines are grammatical and natural, every word is at or below level, the target word 'headache' and review words 'doctor' and 'sick' are all used, and 'should' for advice is modelled correctly in both a statement and a question. Three minor points: 'shouldn't' is named in the grammar note but never exemplified, the 'headache' gloss ('a bad feeling in your head') is vaguer than necessary, and the pharmacy half of the theme is not represented. No critical or major issues."
+    "summary": "A clean, level-appropriate micro-dialogue: all three lines are grammatically correct and natural, 'should/shouldn't' for advice is modelled twice and explained correctly, and every word is at or below A2 apart from the intended target 'headache'. One real problem: the English gloss for 'headache' ('when your head feels sick') is inaccurate and models a collocation native speakers do not use — it should read 'a pain in your head' or 'when your head hurts'. Minor note: the spec's theme mentions visiting the pharmacy, which never occurs in the clip. Fix the gloss and this is ready to record."
   },
   "gate_decision": {
     "schema_version": "1.0.0",
     "episode_id": "en-A2-x05",
     "gate": 1,
     "user": "examiner",
-    "decision": "approve",
-    "diff": "episode: Add a short example to the grammar note, e.g. \"You shouldn't go to work today.\", or, if time allows, add a line such as Anna: 'You shouldn't work today.'\nepisode: Change the gloss to 'a pain in your head'.\nepisode: Optional: change Ben's last line to 'Should I go to the pharmacy?' or accept the narrower scope and adjust the theme wording.",
-    "notes": "A clean, accurate A2 micro_dialogue. All four lines are grammatical and natural, every word is at or below level, the target word 'headache' and review words 'doctor' and 'sick' are all used, and 'should' for advice is modelled correctly in both a statement and a question. Three minor points: 'shouldn't' is named in the grammar note but never exemplified, the 'headache' gloss ('a bad feeling in your head') is vaguer than necessary, and the pharmacy half of the theme is not represented. No critical or major issues.",
-    "timestamp": "2026-10-12T04:13:02.135430Z"
+    "decision": "edit-and-approve",
+    "diff": "episode: Change the gloss to 'a pain in your head' (or 'when your head hurts'). Both use A2-level words and are accurate.\nepisode: Either adjust the theme to 'feeling sick and getting advice', or change line s1l3 to mention the pharmacy, e.g. 'You should go to the pharmacy. You shouldn't work today.'",
+    "notes": "A clean, level-appropriate micro-dialogue: all three lines are grammatically correct and natural, 'should/shouldn't' for advice is modelled twice and explained correctly, and every word is at or below A2 apart from the intended target 'headache'. One real problem: the English gloss for 'headache' ('when your head feels sick') is inaccurate and models a collocation native speakers do not use — it should read 'a pain in your head' or 'when your head hurts'. Minor note: the spec's theme mentions visiting the pharmacy, which never occurs in the clip. Fix the gloss and this is ready to record.",
+    "timestamp": "2026-10-20T10:49:41.124056Z"
   },
   "costs": [
     {
       "station": "review_examiner",
       "vendor": "gateway",
       "model": "kimi/kimi-k3",
-      "input_tokens": 1775,
-      "output_tokens": 1953,
+      "input_tokens": 1745,
+      "output_tokens": 2575,
       "cache_creation_input_tokens": 0,
       "cache_read_input_tokens": 0,
-      "usd": 0.006924,
+      "usd": 0.008772,
       "priced": true,
-      "timestamp": "2026-10-12T04:13:02.135186Z"
+      "timestamp": "2026-10-20T10:49:41.123781Z"
     }
   ]
 }

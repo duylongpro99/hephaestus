@@ -10,40 +10,19 @@
         "line_id": null,
         "category": "gloss",
         "severity": "major",
-        "description": "The gloss for the target word 'jeans' ('long clothes for your legs, often blue') describes any trousers, leggings or tights, not jeans specifically, and 'clothes' (plural, general) may lead learners to think 'jeans' refers to several items rather than one garment.",
-        "suggested_fix": "Change the gloss to: 'trousers made of strong cloth, usually blue'."
-      },
-      {
-        "line_id": null,
-        "category": "grammar_point",
-        "severity": "major",
-        "description": "The grammar note 'Use \"more\" + adjective to compare two things' is stated as a general rule. A2 learners also need short adjectives with -er, and as written a learner may overgeneralise and say 'more big' or 'more cheap'.",
-        "suggested_fix": "Rewrite as: 'Use \"more\" + a long adjective + \"than\" to compare two things, like \"more useful than\". With short adjectives, add -er, like \"cheaper than\".'"
-      },
-      {
-        "line_id": null,
-        "category": "grammar_point",
-        "severity": "major",
-        "description": "The superlative note 'Use \"the most\" + adjective to say something is number one in a group' has the same problem: it omits that short adjectives take 'the -est', inviting errors like 'the most cheap'.",
-        "suggested_fix": "Rewrite as: 'Use \"the most\" + a long adjective to say something is number one in a group, like \"the most useful jeans\". With short adjectives, use \"the\" + -est, like \"the cheapest\".'"
-      },
-      {
-        "line_id": "s1l1",
-        "category": "collocation",
-        "severity": "minor",
-        "description": "'Useful' is grammatical and at level, but native speakers rarely rank jeans by usefulness; 'comfortable' or 'warm' would sound more natural in a winter-clothes shop and still model 'more ... than'.",
-        "suggested_fix": "Optionally change to: 'The blue jeans are more comfortable than the black jeans.' (and 'the most comfortable jeans' in s1l2)."
+        "description": "The gloss for the target word 'jeans' — 'clothes for your legs, usually blue' — is too loose: it describes trousers (or any legwear) as much as jeans, and 'clothes' is plural while jeans is a single garment. In a micro_dialogue the gloss is the only teaching of the target word, so it must pin the meaning down.",
+        "suggested_fix": "Change the gloss to 'a kind of trousers, usually blue' or 'trousers made of strong cloth, usually blue' so a learner can tell jeans from trousers in general."
       }
     ],
     "rubric_scores": {
       "grammar_accuracy": 5,
-      "naturalness": 4,
+      "naturalness": 5,
       "level_fit": 5,
-      "grammar_point_teaching": 3,
+      "grammar_point_teaching": 5,
       "gloss_quality": 3
     },
     "hard_gate_failures": [],
-    "summary": "The three dialogue lines are grammatically correct, natural enough, and squarely at A2; review words 'shop' and 'buy' and target word 'jeans' are all used, and both 'more ... than' and 'the most ...' are correctly modelled. Two fixes are needed before recording: the target-word gloss is too vague (it fits any trousers, not jeans), and both grammar notes state 'more/most + adjective' as a general rule without limiting it to long adjectives or mentioning -er/-est, which risks teaching overgeneralised forms. The minor naturalness tweak (comfortable/warm instead of useful) is optional. Fixable line by line, so edit-and-approve."
+    "summary": "The dialogue itself is clean: all four lines are grammatical, natural, and squarely at A2. The grammar point is well covered — a superlative ('the warmest') and a comparative ('cheaper than') both appear and the grammar note states the -er/than and the/-est rules correctly. Target word 'jeans' and review words 'shop' and 'buy' are all present, and the plural pronoun 'them' in line s1l4 correctly refers back to 'jeans'. The only real problem is the English gloss for 'jeans', which is imprecise enough to mislead (it fits any trousers); since the gloss is the sole teaching vehicle in this format, it needs the suggested fix before approval."
   },
   "gate_decision": {
     "schema_version": "1.0.0",
@@ -51,22 +30,22 @@
     "gate": 1,
     "user": "examiner",
     "decision": "edit-and-approve",
-    "diff": "episode: Change the gloss to: 'trousers made of strong cloth, usually blue'.\nepisode: Rewrite as: 'Use \"more\" + a long adjective + \"than\" to compare two things, like \"more useful than\". With short adjectives, add -er, like \"cheaper than\".'\nepisode: Rewrite as: 'Use \"the most\" + a long adjective to say something is number one in a group, like \"the most useful jeans\". With short adjectives, use \"the\" + -est, like \"the cheapest\".'\ns1l1: Optionally change to: 'The blue jeans are more comfortable than the black jeans.' (and 'the most comfortable jeans' in s1l2).",
-    "notes": "The three dialogue lines are grammatically correct, natural enough, and squarely at A2; review words 'shop' and 'buy' and target word 'jeans' are all used, and both 'more ... than' and 'the most ...' are correctly modelled. Two fixes are needed before recording: the target-word gloss is too vague (it fits any trousers, not jeans), and both grammar notes state 'more/most + adjective' as a general rule without limiting it to long adjectives or mentioning -er/-est, which risks teaching overgeneralised forms. The minor naturalness tweak (comfortable/warm instead of useful) is optional. Fixable line by line, so edit-and-approve.",
-    "timestamp": "2026-10-12T04:16:04.423532Z"
+    "diff": "episode: Change the gloss to 'a kind of trousers, usually blue' or 'trousers made of strong cloth, usually blue' so a learner can tell jeans from trousers in general.",
+    "notes": "The dialogue itself is clean: all four lines are grammatical, natural, and squarely at A2. The grammar point is well covered — a superlative ('the warmest') and a comparative ('cheaper than') both appear and the grammar note states the -er/than and the/-est rules correctly. Target word 'jeans' and review words 'shop' and 'buy' are all present, and the plural pronoun 'them' in line s1l4 correctly refers back to 'jeans'. The only real problem is the English gloss for 'jeans', which is imprecise enough to mislead (it fits any trousers); since the gloss is the sole teaching vehicle in this format, it needs the suggested fix before approval.",
+    "timestamp": "2026-10-20T10:52:31.314386Z"
   },
   "costs": [
     {
       "station": "review_examiner",
       "vendor": "gateway",
       "model": "kimi/kimi-k3",
-      "input_tokens": 690,
-      "output_tokens": 3072,
+      "input_tokens": 732,
+      "output_tokens": 2625,
       "cache_creation_input_tokens": 0,
       "cache_read_input_tokens": 1024,
-      "usd": 0.009691,
+      "usd": 0.008376,
       "priced": true,
-      "timestamp": "2026-10-12T04:16:04.423297Z"
+      "timestamp": "2026-10-20T10:52:31.314129Z"
     }
   ]
 }

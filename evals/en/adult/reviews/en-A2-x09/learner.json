@@ -7,50 +7,50 @@
     "reviewer": "learner",
     "issues": [
       {
-        "line_id": "s1l2",
-        "category": "translation_naturalness",
+        "line_id": null,
+        "category": "engagement",
         "severity": "minor",
-        "description": "The Vietnamese line is correct, but 'Tôi' feels a bit formal and stiff for a casual podcast dialogue. Since Anna asks with 'Bạn', Ben could answer more naturally with 'Mình'. Adding 'đi làm' also makes the answer clearer.",
-        "suggested_fix": "Mình thường đi làm bằng xe máy."
+        "description": "The episode has no hook, so as a listener I start the clip without a reason to care. The dialogue is short and clear, but a tiny setup would make it more engaging.",
+        "suggested_fix": "Add a very short hook before the dialogue, for example: 'Every morning, Anna sees Ben on his motorbike.' or use a 1-2 second motorbike sound/visual as the hook."
       },
       {
         "line_id": "s1l3",
         "category": "translation_naturalness",
         "severity": "minor",
-        "description": "The translation is understandable, but the word order feels a little like a direct translation from English. A more natural Vietnamese phrasing would put 'buổi sáng' closer to 'đường phố'.",
-        "suggested_fix": "Đường phố buổi sáng yên tĩnh."
+        "description": "For riding a motorbike, Vietnamese usually says 'chạy nhanh' rather than 'đi nhanh'. 'Đi nhanh' can sound like walking fast or a literal translation of 'go fast'.",
+        "suggested_fix": "Change to: 'Đôi khi Ben chạy nhanh lắm!' or 'Đôi khi Ben chạy xe nhanh lắm!'"
       },
       {
-        "line_id": "s1l4",
+        "line_id": "s1l2",
         "category": "translation_naturalness",
         "severity": "minor",
-        "description": "'Thật tuyệt' is stronger than 'That is nice' and sounds a little translated. A shorter, more natural spoken response would fit better.",
-        "suggested_fix": "Thích nhỉ."
+        "description": "'Đường phố buổi sáng yên tĩnh.' is understandable but a little clipped. Adding a preposition or comma makes it sound more natural in spoken Vietnamese.",
+        "suggested_fix": "Use: 'Đường phố vào buổi sáng yên tĩnh.' or 'Buổi sáng, đường phố yên tĩnh.'"
       },
       {
         "line_id": null,
         "category": "explanation",
         "severity": "minor",
-        "description": "The English gloss for 'motorbike' is a little unclear for A2 learners. 'A machine with two round parts that turn' may be hard to picture and does not clearly show the meaning.",
-        "suggested_fix": "Use gloss.en: \"a vehicle with two wheels and a motor\". Keep gloss.vi: \"xe máy\"."
+        "description": "The English gloss for 'motorbike' ('a bike that goes by itself, not by your legs') is a bit strange. It could confuse learners, because a motorbike is not really a normal bike and does not move completely by itself.",
+        "suggested_fix": "Change the gloss to: 'a vehicle with two wheels and an engine; people ride it' or simply 'a motorcycle'."
       },
       {
         "line_id": null,
-        "category": "engagement",
+        "category": "explanation",
         "severity": "minor",
-        "description": "The hook is clear but very flat. It does not make me especially want to listen. A hook that mentions the motorbike or the morning ride would fit the theme better.",
-        "suggested_fix": "Ben rides a motorbike to work in the morning."
+        "description": "The grammar note says adverbs of frequency go before the main verb, but the dialogue also uses 'Yes, usually' with no verb. An A2 learner may need a small extra note.",
+        "suggested_fix": "Expand the note: 'We use adverbs of frequency like usually, always, and sometimes before the main verb: I always see you. Usually can also be used alone: Yes, usually.'"
       }
     ],
     "rubric_scores": {
       "comprehensibility": 5,
       "translation_accuracy": 5,
-      "translation_naturalness": 3,
+      "translation_naturalness": 4,
       "engagement": 3,
       "explanation_helpfulness": 4
     },
     "hard_gate_failures": [],
-    "summary": "This is a good short A2 micro-dialogue. The target word 'motorbike' and review words 'street' and 'morning' are included naturally, and the grammar point with 'usually' is clear. The main issues are small Vietnamese naturalness points and a clearer English gloss for 'motorbike'. After these small edits, I would listen and learn."
+    "summary": "This is a clear and suitable A2 micro-dialogue. The story is easy to follow, the target and review words appear naturally, and the adverbs of frequency are clear. I have a few small issues: the episode needs a small hook, some Vietnamese lines sound a little literal, and the motorbike gloss/grammar note could be slightly clearer. After these minor edits, I would listen and learn."
   },
   "gate_decision": {
     "schema_version": "1.0.0",
@@ -58,22 +58,22 @@
     "gate": 1,
     "user": "learner",
     "decision": "edit-and-approve",
-    "diff": "s1l2: Mình thường đi làm bằng xe máy.\ns1l3: Đường phố buổi sáng yên tĩnh.\ns1l4: Thích nhỉ.\nepisode: Use gloss.en: \"a vehicle with two wheels and a motor\". Keep gloss.vi: \"xe máy\".\nepisode: Ben rides a motorbike to work in the morning.",
-    "notes": "This is a good short A2 micro-dialogue. The target word 'motorbike' and review words 'street' and 'morning' are included naturally, and the grammar point with 'usually' is clear. The main issues are small Vietnamese naturalness points and a clearer English gloss for 'motorbike'. After these small edits, I would listen and learn.",
-    "timestamp": "2026-10-12T04:19:16.509047Z"
+    "diff": "episode: Add a very short hook before the dialogue, for example: 'Every morning, Anna sees Ben on his motorbike.' or use a 1-2 second motorbike sound/visual as the hook.\ns1l3: Change to: 'Đôi khi Ben chạy nhanh lắm!' or 'Đôi khi Ben chạy xe nhanh lắm!'\ns1l2: Use: 'Đường phố vào buổi sáng yên tĩnh.' or 'Buổi sáng, đường phố yên tĩnh.'\nepisode: Change the gloss to: 'a vehicle with two wheels and an engine; people ride it' or simply 'a motorcycle'.\nepisode: Expand the note: 'We use adverbs of frequency like usually, always, and sometimes before the main verb: I always see you. Usually can also be used alone: Yes, usually.'",
+    "notes": "This is a clear and suitable A2 micro-dialogue. The story is easy to follow, the target and review words appear naturally, and the adverbs of frequency are clear. I have a few small issues: the episode needs a small hook, some Vietnamese lines sound a little literal, and the motorbike gloss/grammar note could be slightly clearer. After these minor edits, I would listen and learn.",
+    "timestamp": "2026-10-20T10:56:37.510339Z"
   },
   "costs": [
     {
       "station": "review_learner",
       "vendor": "gateway",
       "model": "qwen3.8-max-0902",
-      "input_tokens": 680,
-      "output_tokens": 4117,
+      "input_tokens": 701,
+      "output_tokens": 5890,
       "cache_creation_input_tokens": 0,
       "cache_read_input_tokens": 1024,
-      "usd": 0.005238,
+      "usd": 0.007374,
       "priced": true,
-      "timestamp": "2026-10-12T04:19:16.508696Z"
+      "timestamp": "2026-10-20T10:56:37.509626Z"
     }
   ]
 }

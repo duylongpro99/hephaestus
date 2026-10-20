@@ -7,46 +7,46 @@
     "reviewer": "learner",
     "issues": [
       {
-        "line_id": null,
-        "category": "explanation",
-        "severity": "major",
-        "description": "The spec lists 'week' as a review word, but it never appears in the dialogue, vocab, or glosses. I would not get to review 'week'.",
-        "suggested_fix": "Add 'week' naturally, e.g. change s1l1 to: 'I go to the gym twice a week after work.' with Vietnamese: 'Mình đi tập gym hai lần mỗi tuần sau giờ làm.'"
-      },
-      {
-        "line_id": "s1l3",
+        "line_id": "s1l2",
         "category": "translation_naturalness",
         "severity": "major",
-        "description": "'Sau khi đi, cơ thể tôi cảm thấy rất khỏe' sounds machine-translated. Vietnamese speakers would say the person feels healthy/strong, and 'sau khi đi' needs 'đi tập' to be clear.",
-        "suggested_fix": "Change the line to: 'Sau khi đi tập, mình thấy cơ thể rất khỏe khoắn.'"
+        "description": "The Vietnamese line 'cơ thể mình thấy khỏe mỗi tuần' sounds machine-translated. In natural Vietnamese, the speaker usually says that they feel healthier, not that their body 'feels' healthy, and 'tuần nào ... cũng' is more natural than 'mỗi tuần' at the end.",
+        "suggested_fix": "English: 'I sat a lot. After I joined the gym, my body feels better every week.' Vietnamese: 'Mình ngồi nhiều. Sau khi bắt đầu đi gym, tuần nào mình cũng thấy cơ thể khỏe hơn.'"
       },
       {
-        "line_id": null,
+        "line_id": "s1l1",
         "category": "translation_naturalness",
         "severity": "minor",
-        "description": "Anna and Ben sound like peers, but the Vietnamese uses 'tôi' everywhere, which feels formal for a casual podcast.",
-        "suggested_fix": "Use 'mình' for the speakers: 'Mình đi tập gym sau giờ làm.', 'Trước khi đi tập, mình uống nước.', 'Sau khi đi tập, mình thấy cơ thể rất khỏe khoắn.'"
+        "description": "The Vietnamese translation 'bạn làm gì?' does not clearly show the past meaning of 'what did you do?'. Adding 'đã' makes the before-time meaning clearer for A2 learners.",
+        "suggested_fix": "Trước khi bạn bắt đầu đi gym, bạn đã làm gì?"
+      },
+      {
+        "line_id": "s1l2",
+        "category": "comprehension",
+        "severity": "minor",
+        "description": "'I sat a lot' is very short and a little unclear as an answer about life before the gym. It is understandable, but a small addition would make the meaning easier to picture.",
+        "suggested_fix": "I sat at home a lot. / I didn't exercise much."
+      },
+      {
+        "line_id": null,
+        "category": "translation_accuracy",
+        "severity": "minor",
+        "description": "The Vietnamese gloss for 'week' is 'bảy ngày', which is a definition. A2 learners would benefit from the direct Vietnamese word 'tuần' as well.",
+        "suggested_fix": "vi: 'tuần (bảy ngày)'"
       },
       {
         "line_id": null,
         "category": "explanation",
         "severity": "minor",
-        "description": "The grammar note mentions 'after' but only gives a 'before' example. At A2, an 'after' example would help me.",
-        "suggested_fix": "Add an after example, e.g. 'After work, I go to the gym.' or 'After I go, my body feels great.'"
-      },
-      {
-        "line_id": null,
-        "category": "explanation",
-        "severity": "minor",
-        "description": "The gloss for 'body' says 'your arms, legs, and head', which leaves out the rest of the body and could be a little misleading.",
-        "suggested_fix": "Use a simpler gloss: 'your whole body: arms, legs, head, etc.' Keep Vietnamese as 'cơ thể'."
+        "description": "The grammar note gives only a 'before' example, but the grammar point is 'before and after clauses'. Adding an 'after' example would help learners see both patterns.",
+        "suggested_fix": "Use 'before' or 'after' + subject + verb to say when something happens. Examples: 'Before I joined the gym, I sat a lot.' 'After I joined the gym, my body feels better every week.'"
       },
       {
         "line_id": null,
         "category": "engagement",
         "severity": "minor",
-        "description": "The hook is a plain summary and does not make me curious.",
-        "suggested_fix": "Try a hook like: 'What should you do before and after the gym?'"
+        "description": "The hook is clear but quite flat. It could make me more curious about the change between before and after the gym.",
+        "suggested_fix": "Hook: 'Ben goes to the gym now. What was his life like before?'"
       }
     ],
     "rubric_scores": {
@@ -54,12 +54,10 @@
       "translation_accuracy": 4,
       "translation_naturalness": 3,
       "engagement": 3,
-      "explanation_helpfulness": 3
+      "explanation_helpfulness": 4
     },
-    "hard_gate_failures": [
-      "Review word 'week' from the spec is missing."
-    ],
-    "summary": "The episode is short, simple, and the before/after grammar is clear for A2. But the Vietnamese line s1l3 is unnatural, the pronoun register is formal, and the required review word 'week' is missing. With small edits, it would work well for me."
+    "hard_gate_failures": [],
+    "summary": "The episode is short, clear, and suitable for A2 adult learners. The target word 'gym', review words 'week' and 'body', and the before/after grammar point are all present. The main problem is the Vietnamese translation of Ben's second line, which sounds unnatural. With small fixes to the Vietnamese, the English wording, the 'week' gloss, and the grammar note, this should be easy and useful for A2 listeners."
   },
   "gate_decision": {
     "schema_version": "1.0.0",
@@ -67,22 +65,22 @@
     "gate": 1,
     "user": "learner",
     "decision": "edit-and-approve",
-    "diff": "episode: Add 'week' naturally, e.g. change s1l1 to: 'I go to the gym twice a week after work.' with Vietnamese: 'Mình đi tập gym hai lần mỗi tuần sau giờ làm.'\ns1l3: Change the line to: 'Sau khi đi tập, mình thấy cơ thể rất khỏe khoắn.'\nepisode: Use 'mình' for the speakers: 'Mình đi tập gym sau giờ làm.', 'Trước khi đi tập, mình uống nước.', 'Sau khi đi tập, mình thấy cơ thể rất khỏe khoắn.'\nepisode: Add an after example, e.g. 'After work, I go to the gym.' or 'After I go, my body feels great.'\nepisode: Use a simpler gloss: 'your whole body: arms, legs, head, etc.' Keep Vietnamese as 'cơ thể'.\nepisode: Try a hook like: 'What should you do before and after the gym?'",
-    "notes": "The episode is short, simple, and the before/after grammar is clear for A2. But the Vietnamese line s1l3 is unnatural, the pronoun register is formal, and the required review word 'week' is missing. With small edits, it would work well for me.",
-    "timestamp": "2026-10-12T04:23:23.758826Z"
+    "diff": "s1l2: English: 'I sat a lot. After I joined the gym, my body feels better every week.' Vietnamese: 'Mình ngồi nhiều. Sau khi bắt đầu đi gym, tuần nào mình cũng thấy cơ thể khỏe hơn.'\ns1l1: Trước khi bạn bắt đầu đi gym, bạn đã làm gì?\ns1l2: I sat at home a lot. / I didn't exercise much.\nepisode: vi: 'tuần (bảy ngày)'\nepisode: Use 'before' or 'after' + subject + verb to say when something happens. Examples: 'Before I joined the gym, I sat a lot.' 'After I joined the gym, my body feels better every week.'\nepisode: Hook: 'Ben goes to the gym now. What was his life like before?'",
+    "notes": "The episode is short, clear, and suitable for A2 adult learners. The target word 'gym', review words 'week' and 'body', and the before/after grammar point are all present. The main problem is the Vietnamese translation of Ben's second line, which sounds unnatural. With small fixes to the Vietnamese, the English wording, the 'week' gloss, and the grammar note, this should be easy and useful for A2 listeners.",
+    "timestamp": "2026-10-20T10:57:33.566696Z"
   },
   "costs": [
     {
       "station": "review_learner",
       "vendor": "gateway",
       "model": "qwen3.8-max-0902",
-      "input_tokens": 659,
-      "output_tokens": 10422,
+      "input_tokens": 682,
+      "output_tokens": 6605,
       "cache_creation_input_tokens": 0,
       "cache_read_input_tokens": 1024,
-      "usd": 0.012796,
+      "usd": 0.008224,
       "priced": true,
-      "timestamp": "2026-10-12T04:23:23.757414Z"
+      "timestamp": "2026-10-20T10:57:33.565695Z"
     }
   ]
 }

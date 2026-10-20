@@ -1,54 +1,44 @@
 {
   "schema_version": "1.0.0",
   "episode_id": "en-A2-x05",
-  "title_working": "A Headache at Work",
-  "hook": "Anna sees Ben is not well. Let's listen.",
+  "title_working": "Feeling Sick",
+  "hook": "Ben has a headache and Anna gives advice.",
   "segments": [
     {
       "id": "s1",
       "type": "dialogue",
       "speed": "natural",
-      "layout": "vocab_grid",
+      "layout": null,
       "lines": [
         {
           "id": "s1l1",
-          "speaker": "Anna",
+          "speaker": "anna",
           "text": "You look sick, Ben.",
           "translation": {
-            "vi": "Trông bạn có vẻ ốm, Ben."
+            "vi": "Ben, trông bạn ốm quá."
           },
-          "pause_after_ms": 500,
+          "pause_after_ms": 600,
           "visual_cue": "Ben looking unwell"
         },
         {
           "id": "s1l2",
-          "speaker": "Ben",
+          "speaker": "ben",
           "text": "I have a headache.",
           "translation": {
-            "vi": "Tôi bị đau đầu."
+            "vi": "Mình bị đau đầu."
           },
-          "pause_after_ms": 500,
-          "visual_cue": "Ben rubbing his forehead"
+          "pause_after_ms": 600,
+          "visual_cue": "Ben holding his head"
         },
         {
           "id": "s1l3",
-          "speaker": "Anna",
-          "text": "You should drink water and rest.",
+          "speaker": "anna",
+          "text": "You should see a doctor. You shouldn't work today.",
           "translation": {
-            "vi": "Bạn nên uống nước và nghỉ ngơi."
+            "vi": "Bạn nên đi khám bác sĩ. Hôm nay bạn không nên đi làm."
           },
-          "pause_after_ms": 500,
-          "visual_cue": "glass of water"
-        },
-        {
-          "id": "s1l4",
-          "speaker": "Ben",
-          "text": "Should I see a doctor?",
-          "translation": {
-            "vi": "Tôi có nên đi khám bác sĩ không?"
-          },
-          "pause_after_ms": 500,
-          "visual_cue": "doctor's office"
+          "pause_after_ms": 600,
+          "visual_cue": "Anna giving advice"
         }
       ],
       "items": []
@@ -58,18 +48,10 @@
     {
       "word": "headache",
       "gloss": {
-        "en": "a bad feeling in your head",
-        "vi": "đau đầu"
+        "en": "when your head feels sick",
+        "vi": "cảm giác đau ở đầu"
       },
       "is_target": true
-    },
-    {
-      "word": "sick",
-      "gloss": {
-        "en": "not well",
-        "vi": "ốm"
-      },
-      "is_target": false
     },
     {
       "word": "doctor",
@@ -78,12 +60,20 @@
         "vi": "bác sĩ"
       },
       "is_target": false
+    },
+    {
+      "word": "sick",
+      "gloss": {
+        "en": "not well; feeling bad in your body",
+        "vi": "bị ốm, cảm thấy không khỏe"
+      },
+      "is_target": false
     }
   ],
   "grammar_notes": [
-    "Use 'should' to give advice: You should drink water. Use 'shouldn't' to say what is not a good idea."
+    "Use should + verb for advice. Use shouldn't + verb to say something is not a good idea."
   ],
   "interaction_prompts": [
-    "What do you do when you have a headache?"
+    "What should you do when you have a headache?"
   ]
 }

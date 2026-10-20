@@ -8,51 +8,58 @@
     "issues": [
       {
         "line_id": "s1l2",
+        "category": "naturalness",
+        "severity": "major",
+        "description": "Ben's reply is a non sequitur: he answers the interview question with 'Yes, I have,' then adds 'I have never worked on weekends,' which has no connection to the question. No native speaker would respond this way, and in a three-line dialogue it makes the exchange feel incoherent. It also models the target 'never' structure in a context where it does not belong semantically.",
+        "suggested_fix": "Replace the second sentence with a 'never' sentence tied to the interview theme, e.g. 'Yes, I have. I have never had an interview in English.' (All words stay at A2; 'never + past participle' is still modelled.)"
+      },
+      {
+        "line_id": "s1l2",
         "category": "collocation",
         "severity": "minor",
-        "description": "In natural spoken English a native speaker would contract here: 'No, I've never had one.' The full form 'I have never had one' is grammatical and arguably useful for highlighting the structure, but the script is marked 'natural' speed and the uncontracted form sounds slightly stiff in casual dialogue.",
-        "suggested_fix": "Change to: \"No, I've never had one.\""
+        "description": "'worked on weekends' is American English; a British speaker would say 'worked at weekends' or 'worked at the weekend'. Moot if the suggested rewrite above is adopted.",
+        "suggested_fix": "If the sentence is kept, use 'I have never worked at weekends.' (BrE)"
       },
       {
         "line_id": null,
-        "category": "consistency",
+        "category": "gloss",
         "severity": "minor",
-        "description": "The spec lists review words ['work','job'], but 'work' never appears in the dialogue; only 'job' is recycled (s1l1, s1l4). The target word 'interview' and review word 'job' are covered.",
-        "suggested_fix": "Change s1l4 to \"I really want to work there.\" so 'work' is also reviewed; 'job' is still recycled in s1l1 ('a job interview')."
+        "description": "The target gloss for 'interview' ('a formal meeting to talk about a job') misses the defining idea: being asked questions so someone can decide whether to give you the job. As written it could describe any meeting about a job, and 'formal' is itself around B1, harder than ideal for an A2 gloss.",
+        "suggested_fix": "Use: 'a meeting where people ask you questions before they give you a job'."
       }
     ],
     "rubric_scores": {
       "grammar_accuracy": 5,
-      "naturalness": 4,
+      "naturalness": 3,
       "level_fit": 5,
-      "grammar_point_teaching": 5,
-      "gloss_quality": 5
+      "grammar_point_teaching": 4,
+      "gloss_quality": 4
     },
     "hard_gate_failures": [],
-    "summary": "A clean, level-appropriate micro-dialogue. Present perfect with 'ever' and 'never' is modelled correctly in both the question and the answer, and the grammar note ('have/has + third form', 'ever = at any time', 'never = not at any time') is accurate and simple. All vocabulary is A2 or below apart from the intended target 'interview'. Both glosses are accurate and simpler than the words they explain. Two minor points only: the uncontracted 'I have never had one' is slightly formal for natural-speed speech ('I've never had one' is what a native would say), and the spec's review word 'work' is not recycled. Neither blocks approval; the four lines fit the 10-15 second format."
+    "summary": "All English lines are grammatically correct and comfortably A2, and both 'ever' and 'never' structures are present with an accurate grammar note. The main flaw is discourse-level: Ben's 'I have never worked on weekends' does not follow from the interview question, making the short dialogue incoherent and modelling 'never' in an odd context — easily fixed by swapping in a 'never' sentence about interviews. The target gloss for 'interview' should mention being asked questions to get the job, and BrE 'at weekends' is preferred if the sentence stays. No critical issues; fixable by line edits."
   },
   "gate_decision": {
     "schema_version": "1.0.0",
     "episode_id": "en-A2-x03",
     "gate": 1,
     "user": "examiner",
-    "decision": "approve",
-    "diff": "s1l2: Change to: \"No, I've never had one.\"\nepisode: Change s1l4 to \"I really want to work there.\" so 'work' is also reviewed; 'job' is still recycled in s1l1 ('a job interview').",
-    "notes": "A clean, level-appropriate micro-dialogue. Present perfect with 'ever' and 'never' is modelled correctly in both the question and the answer, and the grammar note ('have/has + third form', 'ever = at any time', 'never = not at any time') is accurate and simple. All vocabulary is A2 or below apart from the intended target 'interview'. Both glosses are accurate and simpler than the words they explain. Two minor points only: the uncontracted 'I have never had one' is slightly formal for natural-speed speech ('I've never had one' is what a native would say), and the spec's review word 'work' is not recycled. Neither blocks approval; the four lines fit the 10-15 second format.",
-    "timestamp": "2026-10-12T04:13:24.093306Z"
+    "decision": "edit-and-approve",
+    "diff": "s1l2: Replace the second sentence with a 'never' sentence tied to the interview theme, e.g. 'Yes, I have. I have never had an interview in English.' (All words stay at A2; 'never + past participle' is still modelled.)\ns1l2: If the sentence is kept, use 'I have never worked at weekends.' (BrE)\nepisode: Use: 'a meeting where people ask you questions before they give you a job'.",
+    "notes": "All English lines are grammatically correct and comfortably A2, and both 'ever' and 'never' structures are present with an accurate grammar note. The main flaw is discourse-level: Ben's 'I have never worked on weekends' does not follow from the interview question, making the short dialogue incoherent and modelling 'never' in an odd context — easily fixed by swapping in a 'never' sentence about interviews. The target gloss for 'interview' should mention being asked questions to get the job, and BrE 'at weekends' is preferred if the sentence stays. No critical issues; fixable by line edits.",
+    "timestamp": "2026-10-20T10:50:18.875969Z"
   },
   "costs": [
     {
       "station": "review_examiner",
       "vendor": "gateway",
       "model": "kimi/kimi-k3",
-      "input_tokens": 1794,
-      "output_tokens": 2790,
+      "input_tokens": 1784,
+      "output_tokens": 4041,
       "cache_creation_input_tokens": 0,
       "cache_read_input_tokens": 0,
-      "usd": 0.009446,
+      "usd": 0.013193,
       "priced": true,
-      "timestamp": "2026-10-12T04:13:24.092967Z"
+      "timestamp": "2026-10-20T10:50:18.875375Z"
     }
   ]
 }

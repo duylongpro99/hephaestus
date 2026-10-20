@@ -1,8 +1,9 @@
 # What a good clip does
 
 - It is one tiny everyday moment the learner can picture, heard in 10-15 seconds.
+- It shows the spec's theme: a clip about a surprise party has a surprise or a party in it.
 - It uses the spec's target word naturally, at least `target_repetition_min` times, and the
-  grammar point once if it fits. Review words are welcome where they fit.
+  grammar point once if it fits. It uses every review word at least once.
 - It has no hook, explanation, replay, quiz or outro. The vocabulary gloss on screen does the
   teaching.
 

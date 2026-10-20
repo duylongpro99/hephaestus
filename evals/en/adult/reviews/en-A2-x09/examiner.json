@@ -10,33 +10,19 @@
         "line_id": null,
         "category": "gloss",
         "severity": "major",
-        "description": "The gloss for the target word 'motorbike' ('a machine with two round parts that turn, for one or two people') never mentions an engine or motor, so it describes a bicycle just as well as a motorbike. It also avoids the simple A2 word 'wheels' with the awkward circumlocution 'two round parts that turn'. A learner could wrongly conclude a bicycle is a motorbike.",
-        "suggested_fix": "Rewrite as: 'a vehicle with two wheels and a motor; you ride it like a bicycle' (or 'like a bicycle, but with a motor')."
-      },
-      {
-        "line_id": "s1l4",
-        "category": "collocation",
-        "severity": "minor",
-        "description": "At natural speed, the uncontracted 'That is nice' sounds stiff; native speakers say 'That's nice' in casual speech.",
-        "suggested_fix": "Change to \"That's nice.\""
-      },
-      {
-        "line_id": null,
-        "category": "grammar_point",
-        "severity": "minor",
-        "description": "The grammar note says 'usually' 'goes before the action word', which is true for this dialogue but wrong as a general rule when the verb is 'be' ('She is usually late'). A learner may overgeneralise.",
-        "suggested_fix": "Extend the note: \"It goes before the action word, but after 'be' ('I am usually early').\""
+        "description": "The gloss for the target word 'motorbike' — 'a bike that goes by itself, not by your legs' — is misleading. A motorbike does not go 'by itself'; it has an engine and needs a rider. 'By itself' suggests the vehicle moves on its own, which is not the defining feature. The intended contrast (engine power vs pedalling) should be stated directly.",
+        "suggested_fix": "Change the gloss to: 'a bicycle with an engine — you do not use your legs to make it go'."
       }
     ],
     "rubric_scores": {
       "grammar_accuracy": 5,
-      "naturalness": 4,
+      "naturalness": 5,
       "level_fit": 5,
-      "grammar_point_teaching": 4,
+      "grammar_point_teaching": 5,
       "gloss_quality": 3
     },
     "hard_gate_failures": [],
-    "summary": "A clean, level-appropriate micro-dialogue: all four lines are grammatical and use A2-or-below language, 'usually' is placed correctly, and the review words 'streets' and 'morning' appear naturally. The one real problem is the gloss for the target word 'motorbike', which omits any mention of a motor/engine and thus fits a bicycle equally well; it also uses an odd circumlocution instead of the A2 word 'wheels'. Fix that gloss, contract 'That is nice' to 'That's nice' for natural speech, and optionally qualify the position rule for 'be'."
+    "summary": "All three dialogue lines are grammatically correct, natural and firmly A2, and they model the grammar point well: 'usually', 'always' and 'sometimes' all appear before the main verb, matching the (accurate) grammar note. Review words 'street' and 'morning' are recycled naturally, and the quiz-free micro-dialogue format is respected with a plausible 10-15 second length. The one real problem is the gloss for the target word 'motorbike': 'a bike that goes by itself' is misleading, since a motorbike has an engine and a rider — it does not move by itself. Fix that gloss and the episode is ready to record."
   },
   "gate_decision": {
     "schema_version": "1.0.0",
@@ -44,22 +30,22 @@
     "gate": 1,
     "user": "examiner",
     "decision": "edit-and-approve",
-    "diff": "episode: Rewrite as: 'a vehicle with two wheels and a motor; you ride it like a bicycle' (or 'like a bicycle, but with a motor').\ns1l4: Change to \"That's nice.\"\nepisode: Extend the note: \"It goes before the action word, but after 'be' ('I am usually early').\"",
-    "notes": "A clean, level-appropriate micro-dialogue: all four lines are grammatical and use A2-or-below language, 'usually' is placed correctly, and the review words 'streets' and 'morning' appear naturally. The one real problem is the gloss for the target word 'motorbike', which omits any mention of a motor/engine and thus fits a bicycle equally well; it also uses an odd circumlocution instead of the A2 word 'wheels'. Fix that gloss, contract 'That is nice' to 'That's nice' for natural speech, and optionally qualify the position rule for 'be'.",
-    "timestamp": "2026-10-12T04:17:28.935048Z"
+    "diff": "episode: Change the gloss to: 'a bicycle with an engine — you do not use your legs to make it go'.",
+    "notes": "All three dialogue lines are grammatically correct, natural and firmly A2, and they model the grammar point well: 'usually', 'always' and 'sometimes' all appear before the main verb, matching the (accurate) grammar note. Review words 'street' and 'morning' are recycled naturally, and the quiz-free micro-dialogue format is respected with a plausible 10-15 second length. The one real problem is the gloss for the target word 'motorbike': 'a bike that goes by itself' is misleading, since a motorbike has an engine and a rider — it does not move by itself. Fix that gloss and the episode is ready to record.",
+    "timestamp": "2026-10-20T10:54:11.151259Z"
   },
   "costs": [
     {
       "station": "review_examiner",
       "vendor": "gateway",
       "model": "kimi/kimi-k3",
-      "input_tokens": 714,
-      "output_tokens": 2685,
+      "input_tokens": 746,
+      "output_tokens": 2560,
       "cache_creation_input_tokens": 0,
       "cache_read_input_tokens": 1024,
-      "usd": 0.008545,
+      "usd": 0.008189,
       "priced": true,
-      "timestamp": "2026-10-12T04:17:28.934394Z"
+      "timestamp": "2026-10-20T10:54:11.150766Z"
     }
   ]
 }

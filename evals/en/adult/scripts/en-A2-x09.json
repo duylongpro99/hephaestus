@@ -2,53 +2,43 @@
   "schema_version": "1.0.0",
   "episode_id": "en-A2-x09",
   "title_working": "Motorbike to Work",
-  "hook": "Ben talks about going to work.",
+  "hook": "",
   "segments": [
     {
       "id": "s1",
       "type": "dialogue",
       "speed": "natural",
-      "layout": "podcast_a",
+      "layout": null,
       "lines": [
         {
           "id": "s1l1",
           "speaker": "anna",
-          "text": "How do you go to work?",
+          "text": "Do you go to work by motorbike?",
           "translation": {
-            "vi": "Bạn đi làm bằng gì?"
-          },
-          "pause_after_ms": 500,
-          "visual_cue": null
-        },
-        {
-          "id": "s1l2",
-          "speaker": "ben",
-          "text": "I usually go by motorbike.",
-          "translation": {
-            "vi": "Tôi thường đi bằng xe máy."
+            "vi": "Ben đi làm bằng xe máy à?"
           },
           "pause_after_ms": 500,
           "visual_cue": "a motorbike"
         },
         {
-          "id": "s1l3",
+          "id": "s1l2",
           "speaker": "ben",
-          "text": "The streets are quiet in the morning.",
+          "text": "Yes, usually. The streets are quiet in the morning.",
           "translation": {
-            "vi": "Đường phố yên tĩnh vào buổi sáng."
+            "vi": "Ừ, thường thì vậy. Đường phố buổi sáng yên tĩnh."
           },
           "pause_after_ms": 500,
-          "visual_cue": "quiet morning street"
+          "visual_cue": "a quiet street in the morning"
         },
         {
-          "id": "s1l4",
+          "id": "s1l3",
           "speaker": "anna",
-          "text": "That is nice.",
+          "text": "I always see you. You sometimes go fast!",
           "translation": {
-            "vi": "Thật tuyệt."
+            "vi": "Mình luôn thấy Ben. Đôi khi Ben đi nhanh lắm!"
           },
           "pause_after_ms": 500,
-          "visual_cue": null
+          "visual_cue": "a motorbike going fast"
         }
       ],
       "items": []
@@ -58,24 +48,32 @@
     {
       "word": "motorbike",
       "gloss": {
-        "en": "a machine with two round parts that turn, for one or two people",
+        "en": "a bike that goes by itself, not by your legs",
         "vi": "xe máy"
       },
       "is_target": true
     },
     {
-      "word": "usually",
+      "word": "street",
       "gloss": {
-        "en": "most of the time",
-        "vi": "thường"
+        "en": "a road in a town or city",
+        "vi": "đường phố"
+      },
+      "is_target": false
+    },
+    {
+      "word": "morning",
+      "gloss": {
+        "en": "the time after night and before afternoon",
+        "vi": "buổi sáng"
       },
       "is_target": false
     }
   ],
   "grammar_notes": [
-    "We use 'usually' to say how often something happens. It goes before the action word."
+    "We use adverbs of frequency like 'usually', 'always', and 'sometimes' before the main verb to say how often something happens."
   ],
   "interaction_prompts": [
-    "How do you usually go to work?"
+    "How do you usually go to work or school?"
   ]
 }

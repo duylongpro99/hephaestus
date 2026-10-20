@@ -7,66 +7,59 @@
     "reviewer": "examiner",
     "issues": [
       {
-        "line_id": "s1l1",
-        "category": "collocation",
-        "severity": "minor",
-        "description": "'We have to cook for friends' is grammatical, but a native speaker would more naturally say 'cook dinner for friends' (or 'for our friends'), and the theme is explicitly 'cooking dinner for friends'. Adding 'dinner' makes it more natural and on-theme.",
-        "suggested_fix": "We have to cook dinner for friends."
-      },
-      {
         "line_id": "s1l3",
+        "category": "collocation",
+        "severity": "major",
+        "description": "\"Is there a vegetable in the kitchen?\" is grammatical but not what a native speaker would say; 'vegetable' is countable and a general enquiry would use the plural with 'any'. The singular with 'a' sounds odd unless pointing at one specific item.",
+        "suggested_fix": "Change to: \"Are there any vegetables in the kitchen?\""
+      },
+      {
+        "line_id": "s1l4",
         "category": "consistency",
-        "severity": "minor",
-        "description": "Ben asks 'Do we have to cook vegetables?' but Anna answers with a different verb: 'Yes, we have to use vegetables.' The switch from 'cook' to 'use' is slightly unnatural in a short answer; native speakers typically repeat the verb or use a short answer.",
-        "suggested_fix": "Yes, we have to cook vegetables. (or: Yes, we do.)"
+        "severity": "major",
+        "description": "Ben's answer does not answer Anna's question (she asks about a vegetable; he replies about food being ready). It also contradicts s1l1–s1l2, where the dinner still has to be cooked, so the food cannot already be ready. A learner would hear an incoherent exchange.",
+        "suggested_fix": "Change to: \"Yes, there are. Let's cook the food together.\" (answers the question, keeps the review word 'food', and matches the not-yet-cooked context)."
       },
       {
         "line_id": null,
-        "category": "level",
-        "severity": "minor",
-        "description": "The grammar note uses 'necessary' ('things that are necessary / not necessary'), which is generally a B1 word and may be unknown to A2 learners. The explanation is otherwise correct and clear.",
-        "suggested_fix": "We use 'have to' for things we must do. We use 'don't have to' for things we don't need to do."
-      },
-      {
-        "line_id": null,
-        "category": "consistency",
-        "severity": "minor",
-        "description": "The review words 'kitchen' and 'food' do not appear in the dialogue itself, so they are not actually recycled in context; they only appear in the gloss list. This is not an error in a micro_dialogue, but weaving one of them into a line would deliver the intended review.",
-        "suggested_fix": "Optional: change s1l4 to e.g. 'We don't have to buy meat. The food in our kitchen is enough.' or leave as is."
+        "category": "gloss",
+        "severity": "major",
+        "description": "The gloss for the target word 'vegetable' — \"a thing that grows in the ground and you can eat\" — is misleading: many common vegetables (tomatoes, beans, lettuce, cabbage) grow above ground, so learners would form a wrong category. The clause \"and you can eat\" also sits awkwardly inside the relative clause.",
+        "suggested_fix": "Replace with: \"a plant, or part of a plant, that people eat — for example, carrots or potatoes\"."
       }
     ],
     "rubric_scores": {
-      "grammar_accuracy": 5,
-      "naturalness": 4,
+      "grammar_accuracy": 4,
+      "naturalness": 3,
       "level_fit": 5,
       "grammar_point_teaching": 5,
-      "gloss_quality": 5
+      "gloss_quality": 3
     },
     "hard_gate_failures": [],
-    "summary": "A clean A2 micro_dialogue. All four lines are grammatical and level-appropriate; 'have to' appears in affirmative, question, and negative ('don't have to') forms, all used correctly, and the grammar note explains the rule accurately. Glosses for 'vegetable', 'kitchen' and 'food' are accurate and simpler than the words explained. Only minor polish is suggested: 'cook dinner for friends' would be more natural and on-theme, Anna's answer switches verbs from 'cook' to 'use', the grammar note's 'necessary' is slightly above A2, and the review words never appear in the dialogue itself. None of these would teach anything wrong, so the script can be approved."
+    "summary": "Level-appropriate micro_dialogue that correctly presents 'have to' / 'don't have to' with an accurate grammar note, and all three spec words appear. However, the dialogue is incoherent as written: Ben's final line does not answer Anna's question and contradicts the opening (dinner still to be cooked), Anna's singular 'a vegetable' is unnatural, and the gloss for the target word 'vegetable' is misleading. All three issues are fixable line by line with the suggested edits."
   },
   "gate_decision": {
     "schema_version": "1.0.0",
     "episode_id": "en-A2-x08",
     "gate": 1,
     "user": "examiner",
-    "decision": "approve",
-    "diff": "s1l1: We have to cook dinner for friends.\ns1l3: Yes, we have to cook vegetables. (or: Yes, we do.)\nepisode: We use 'have to' for things we must do. We use 'don't have to' for things we don't need to do.\nepisode: Optional: change s1l4 to e.g. 'We don't have to buy meat. The food in our kitchen is enough.' or leave as is.",
-    "notes": "A clean A2 micro_dialogue. All four lines are grammatical and level-appropriate; 'have to' appears in affirmative, question, and negative ('don't have to') forms, all used correctly, and the grammar note explains the rule accurately. Glosses for 'vegetable', 'kitchen' and 'food' are accurate and simpler than the words explained. Only minor polish is suggested: 'cook dinner for friends' would be more natural and on-theme, Anna's answer switches verbs from 'cook' to 'use', the grammar note's 'necessary' is slightly above A2, and the review words never appear in the dialogue itself. None of these would teach anything wrong, so the script can be approved.",
-    "timestamp": "2026-10-12T04:17:13.222986Z"
+    "decision": "edit-and-approve",
+    "diff": "s1l3: Change to: \"Are there any vegetables in the kitchen?\"\ns1l4: Change to: \"Yes, there are. Let's cook the food together.\" (answers the question, keeps the review word 'food', and matches the not-yet-cooked context).\nepisode: Replace with: \"a plant, or part of a plant, that people eat — for example, carrots or potatoes\".",
+    "notes": "Level-appropriate micro_dialogue that correctly presents 'have to' / 'don't have to' with an accurate grammar note, and all three spec words appear. However, the dialogue is incoherent as written: Ben's final line does not answer Anna's question and contradicts the opening (dinner still to be cooked), Anna's singular 'a vegetable' is unnatural, and the gloss for the target word 'vegetable' is misleading. All three issues are fixable line by line with the suggested edits.",
+    "timestamp": "2026-10-20T10:54:37.813142Z"
   },
   "costs": [
     {
       "station": "review_examiner",
       "vendor": "gateway",
       "model": "kimi/kimi-k3",
-      "input_tokens": 751,
-      "output_tokens": 2425,
+      "input_tokens": 792,
+      "output_tokens": 3867,
       "cache_creation_input_tokens": 0,
       "cache_read_input_tokens": 1024,
-      "usd": 0.007787,
+      "usd": 0.012138,
       "priced": true,
-      "timestamp": "2026-10-12T04:17:13.222756Z"
+      "timestamp": "2026-10-20T10:54:37.812544Z"
     }
   ]
 }

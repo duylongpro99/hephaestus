@@ -7,66 +7,52 @@
     "reviewer": "examiner",
     "issues": [
       {
-        "line_id": "s1l1",
-        "category": "collocation",
-        "severity": "major",
-        "description": "\"A noodle soup\" is not how a native speaker would offer this. When offering or ordering, \"noodle soup\" is normally uncountable (\"some noodle soup\") or quantified as \"a bowl of noodle soup\" — the latter also matches the visual cue. As the opening model line at A2, this phrasing would be learned and copied.",
-        "suggested_fix": "Would you like a bowl of noodle soup?"
-      },
-      {
-        "line_id": "s1l2",
-        "category": "consistency",
-        "severity": "minor",
-        "description": "Ben has just accepted the noodle soup, so \"I would like noodles too\" is redundant: the soup already is noodles, and \"too\" has no clear referent. The line reads as if he is adding something extra when he is not.",
-        "suggested_fix": "Yes, please. I would like some noodles."
-      },
-      {
-        "line_id": null,
-        "category": "grammar_point",
-        "severity": "minor",
-        "description": "The grammar note repeats the unnatural \"a noodle soup\" as its model, and it frames \"I would like...\" as \"asking politely\" — that sentence states an order/request, it does not ask. The note should show both the offer form (\"Would you like...?\") and the ordering form (\"I would like..., please\").",
-        "suggested_fix": "Use 'would like' for polite requests. Ask 'Would you like some noodle soup?' to offer, and say 'I would like some noodles, please.' to order."
-      },
-      {
         "line_id": null,
         "category": "gloss",
         "severity": "minor",
-        "description": "The gloss \"a long, white food you eat in soup\" is too narrow: noodles are not always white (egg noodles are yellow, rice and wheat noodles differ) and they are often eaten fried or in other dishes, not only in soup.",
-        "suggested_fix": "long, thin pieces of food made from flour or rice; people often eat them in soup"
+        "description": "The gloss defines the singular 'noodle', but the dialogue uses the natural plural 'noodles'. Learners may not connect the two forms without a hint.",
+        "suggested_fix": "Add a short note to the gloss, e.g.: '...you cook it in hot water. People usually say \"noodles\" (plural).'"
+      },
+      {
+        "line_id": "s1l1",
+        "category": "collocation",
+        "severity": "minor",
+        "description": "'This night market has a lot of food' is grammatical and natural enough, but 'There is a lot of food at this night market' is the more idiomatic way to introduce a scene in English.",
+        "suggested_fix": "Optional: change to 'There is a lot of food at this night market.' Keep the current line if simplicity is preferred."
       }
     ],
     "rubric_scores": {
       "grammar_accuracy": 5,
-      "naturalness": 3,
+      "naturalness": 5,
       "level_fit": 5,
-      "grammar_point_teaching": 4,
-      "gloss_quality": 3
+      "grammar_point_teaching": 5,
+      "gloss_quality": 4
     },
     "hard_gate_failures": [],
-    "summary": "A short, level-appropriate clip that correctly deploys 'would like' in both offer and statement forms, and all vocabulary sits comfortably at A2 with 'noodle' as the only new item. However, the opening line teaches the unnatural phrase 'a noodle soup' (should be 'some noodle soup' or 'a bowl of noodle soup'), and that phrase is repeated as the model in the grammar note, which also mislabels 'I would like...' as 'asking'. Ben's 'noodles too' is redundant after accepting noodle soup, and the gloss for 'noodle' is inaccurately restricted to white food eaten in soup. All fixes are small and line-level, so this is edit-and-approve once the suggested wording is adopted."
+    "summary": "A clean A2 micro_dialogue. All three lines are grammatically correct and natural; the target word 'noodle(s)', the review words 'food' and 'eat', and the grammar point 'would like' for polite requests are all present and used correctly. The grammar note accurately states 'would like + noun / to + verb' and contrasts it with the less polite 'I want noodles'. Only two minor polish points: the gloss could flag the usual plural 'noodles', and line 1 could use the more idiomatic 'There is a lot of food...' pattern. No critical or major issues; approve."
   },
   "gate_decision": {
     "schema_version": "1.0.0",
     "episode_id": "en-A2-x02",
     "gate": 1,
     "user": "examiner",
-    "decision": "edit-and-approve",
-    "diff": "s1l1: Would you like a bowl of noodle soup?\ns1l2: Yes, please. I would like some noodles.\nepisode: Use 'would like' for polite requests. Ask 'Would you like some noodle soup?' to offer, and say 'I would like some noodles, please.' to order.\nepisode: long, thin pieces of food made from flour or rice; people often eat them in soup",
-    "notes": "A short, level-appropriate clip that correctly deploys 'would like' in both offer and statement forms, and all vocabulary sits comfortably at A2 with 'noodle' as the only new item. However, the opening line teaches the unnatural phrase 'a noodle soup' (should be 'some noodle soup' or 'a bowl of noodle soup'), and that phrase is repeated as the model in the grammar note, which also mislabels 'I would like...' as 'asking'. Ben's 'noodles too' is redundant after accepting noodle soup, and the gloss for 'noodle' is inaccurately restricted to white food eaten in soup. All fixes are small and line-level, so this is edit-and-approve once the suggested wording is adopted.",
-    "timestamp": "2026-10-12T04:13:59.936280Z"
+    "decision": "approve",
+    "diff": "episode: Add a short note to the gloss, e.g.: '...you cook it in hot water. People usually say \"noodles\" (plural).'\ns1l1: Optional: change to 'There is a lot of food at this night market.' Keep the current line if simplicity is preferred.",
+    "notes": "A clean A2 micro_dialogue. All three lines are grammatically correct and natural; the target word 'noodle(s)', the review words 'food' and 'eat', and the grammar point 'would like' for polite requests are all present and used correctly. The grammar note accurately states 'would like + noun / to + verb' and contrasts it with the less polite 'I want noodles'. Only two minor polish points: the gloss could flag the usual plural 'noodles', and line 1 could use the more idiomatic 'There is a lot of food...' pattern. No critical or major issues; approve.",
+    "timestamp": "2026-10-20T10:49:13.574990Z"
   },
   "costs": [
     {
       "station": "review_examiner",
       "vendor": "gateway",
       "model": "kimi/kimi-k3",
-      "input_tokens": 1759,
-      "output_tokens": 4599,
+      "input_tokens": 1708,
+      "output_tokens": 1400,
       "cache_creation_input_tokens": 0,
       "cache_read_input_tokens": 0,
-      "usd": 0.014852,
+      "usd": 0.005225,
       "priced": true,
-      "timestamp": "2026-10-12T04:13:59.935946Z"
+      "timestamp": "2026-10-20T10:49:13.574728Z"
     }
   ]
 }

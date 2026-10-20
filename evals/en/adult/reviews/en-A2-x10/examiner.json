@@ -7,36 +7,29 @@
     "reviewer": "examiner",
     "issues": [
       {
-        "line_id": "s1l3",
-        "category": "collocation",
+        "line_id": "s1l2",
+        "category": "grammar",
         "severity": "major",
-        "description": "\"After I go, my body feels great\" uses bare \"go\" to mean \"go to the gym\". Out of context \"after I go\" means \"after I leave\", and the ellipsis is a poor model for A2 learners. It also weakens the after-clause demonstration.",
-        "suggested_fix": "Change to \"After I exercise, my body feels great.\" (keeps the after clause, uses A2-level \"exercise\") or \"After I go to the gym, my body feels great.\""
+        "description": "Tense mismatch in the model sentence: the past-time clause 'After I joined the gym' is paired with a present-simple main clause 'my body feels good every week'. A native speaker would notice this wobble (natural options are 'Since I joined..., my body has felt...' or a past+past frame). It also clashes with the grammar note's past+past model ('Before I joined the gym, I sat a lot'), so as the lesson's only 'after' example it teaches a shaky pattern.",
+        "suggested_fix": "Change to: 'I sat a lot. After I joined the gym, my body started to feel good every week.' (keeps the after-clause, the meaning, and the review words 'body' and 'week')."
       },
       {
         "line_id": null,
-        "category": "gloss",
+        "category": "collocation",
         "severity": "minor",
-        "description": "The gloss for \"body\" (\"your arms, legs, and head\") omits the torso and could mislead a learner into thinking \"body\" means only the limbs and head.",
-        "suggested_fix": "Change the gloss to \"all of you: your head, arms, legs and the rest\" or \"the whole physical person\"."
-      },
-      {
-        "line_id": null,
-        "category": "consistency",
-        "severity": "minor",
-        "description": "The spec lists \"week\" as a review word, but it never appears in the script. \"body\" is recycled; \"week\" is not.",
-        "suggested_fix": "If the format allows, add a natural use of \"week\" (e.g. Anna: \"I go to the gym three times a week, after work.\"), or accept the omission given the 10-15 second limit."
+        "description": "The hook 'Anna asks him about before and after' is elliptical and unnatural; a native speaker would not say 'asks him about before and after' without a noun.",
+        "suggested_fix": "Change the hook to: 'Ben goes to the gym now. Anna asks him about his life before and after the gym.'"
       }
     ],
     "rubric_scores": {
-      "grammar_accuracy": 5,
+      "grammar_accuracy": 4,
       "naturalness": 4,
       "level_fit": 5,
       "grammar_point_teaching": 4,
-      "gloss_quality": 4
+      "gloss_quality": 5
     },
     "hard_gate_failures": [],
-    "summary": "A clean, on-level micro dialogue: grammar is correct throughout and the before/after clauses are taught and modelled accurately (\"after work\" as a prepositional phrase alongside two genuine clauses is acceptable). One major collocation issue: \"After I go, my body feels great\" uses bare \"go\" where a native would say \"after I exercise\" or \"after I go to the gym\", and it muddies the grammar model. Minor issues: the \"body\" gloss is incomplete (omits the torso), and the review word \"week\" is not recycled. Fix the line s1l3 wording and the gloss, and this is ready to record."
+    "summary": "A clean, level-appropriate micro-dialogue: both lines are simple A2 English, the target word 'gym' and review words 'week' and 'body' all appear, the glosses are accurate and simpler than the words they explain, and the 'before' clause is modelled well. One fix is needed: Ben's 'after' sentence mixes a past-time clause with a present-simple main clause, which is a noticeable tense wobble and undermines the grammar point it is meant to model; aligning it to a past+past frame fixes it. The hook's 'asks him about before and after' is a minor unnatural ellipsis worth tidying. Approve once the s1l2 edit is made."
   },
   "gate_decision": {
     "schema_version": "1.0.0",
@@ -44,22 +37,22 @@
     "gate": 1,
     "user": "examiner",
     "decision": "edit-and-approve",
-    "diff": "s1l3: Change to \"After I exercise, my body feels great.\" (keeps the after clause, uses A2-level \"exercise\") or \"After I go to the gym, my body feels great.\"\nepisode: Change the gloss to \"all of you: your head, arms, legs and the rest\" or \"the whole physical person\".\nepisode: If the format allows, add a natural use of \"week\" (e.g. Anna: \"I go to the gym three times a week, after work.\"), or accept the omission given the 10-15 second limit.",
-    "notes": "A clean, on-level micro dialogue: grammar is correct throughout and the before/after clauses are taught and modelled accurately (\"after work\" as a prepositional phrase alongside two genuine clauses is acceptable). One major collocation issue: \"After I go, my body feels great\" uses bare \"go\" where a native would say \"after I exercise\" or \"after I go to the gym\", and it muddies the grammar model. Minor issues: the \"body\" gloss is incomplete (omits the torso), and the review word \"week\" is not recycled. Fix the line s1l3 wording and the gloss, and this is ready to record.",
-    "timestamp": "2026-10-12T04:18:57.755173Z"
+    "diff": "s1l2: Change to: 'I sat a lot. After I joined the gym, my body started to feel good every week.' (keeps the after-clause, the meaning, and the review words 'body' and 'week').\nepisode: Change the hook to: 'Ben goes to the gym now. Anna asks him about his life before and after the gym.'",
+    "notes": "A clean, level-appropriate micro-dialogue: both lines are simple A2 English, the target word 'gym' and review words 'week' and 'body' all appear, the glosses are accurate and simpler than the words they explain, and the 'before' clause is modelled well. One fix is needed: Ben's 'after' sentence mixes a past-time clause with a present-simple main clause, which is a noticeable tense wobble and undermines the grammar point it is meant to model; aligning it to a past+past frame fixes it. The hook's 'asks him about before and after' is a minor unnatural ellipsis worth tidying. Approve once the s1l2 edit is made.",
+    "timestamp": "2026-10-20T10:54:51.101856Z"
   },
   "costs": [
     {
       "station": "review_examiner",
       "vendor": "gateway",
       "model": "kimi/kimi-k3",
-      "input_tokens": 694,
-      "output_tokens": 2237,
+      "input_tokens": 726,
+      "output_tokens": 3101,
       "cache_creation_input_tokens": 0,
       "cache_read_input_tokens": 1024,
-      "usd": 0.007189,
+      "usd": 0.0098,
       "priced": true,
-      "timestamp": "2026-10-12T04:18:57.754894Z"
+      "timestamp": "2026-10-20T10:54:51.101296Z"
     }
   ]
 }

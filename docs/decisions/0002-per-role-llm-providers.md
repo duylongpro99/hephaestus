@@ -59,7 +59,8 @@ Three model families mean neither reviewer judges its own family's output, the m
   JSON mode and tool calls through it were verified for all four roles on 2026-10-12.
 - The spike uses one provider with no failover. Automatic swapping to another provider when a
   model is unavailable is deferred to production.
-- `factory script --writer <role>` drafts with another `roles` entry; `a2_scriptwriter_qwen`
-  compares Qwen's Vietnamese with DeepSeek's on a few specs.
+- `factory script --writer <role>` drafts with another `roles` entry. A Qwen writer
+  (`qwen3.8-max-0902`) was tried on 2026-10-12 and dropped: in JSON-object mode it returned
+  structurally broken scripts on every attempt, while it works as the learner reviewer.
 - A provider's URL can come from the environment (`base_url_env`) as well as its key, so a
   private endpoint's address is not committed either.

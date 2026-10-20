@@ -8,61 +8,51 @@
     "issues": [
       {
         "line_id": null,
-        "category": "gloss",
-        "severity": "critical",
-        "description": "The gloss for the target word 'birthday' ('the day every year when a person has a party and cake') defines the word by its celebration, not its meaning. A birthday is the yearly date of one's birth and exists with or without a party; a learner given this gloss would not understand 'My birthday is in March' or 'Happy birthday' said without any party. 'Has a party and cake' is also awkward (count noun + mass noun).",
-        "suggested_fix": "Replace with: 'the day of the year when you were born; people often have a party or cake on this day'."
-      },
-      {
-        "line_id": "s1l3",
         "category": "consistency",
-        "severity": "major",
-        "description": "The spec theme is 'a surprise birthday party' and the title/hook promise a 'surprise', but the dialogue contains no surprise and no party: Anna simply sees a cake in a shop window and says it is her sister's birthday. The content does not deliver what the spec, title and hook set up.",
-        "suggested_fix": "Add the surprise element in s1l3, e.g.: 'No, it's a surprise for my sister — today is her birthday!' (keeps 'sister' and 'birthday', adds 'surprise')."
+        "severity": "minor",
+        "description": "The spec theme is 'a surprise birthday party', but nothing in the dialogue is a surprise: Ben already knows about his party and Anna openly confirms the cake. The theme is only half delivered (birthday party, yes; surprise, no).",
+        "suggested_fix": "Make the surprise element explicit with A2-level wording, e.g. change s1l2 to 'Great! Is it a surprise for my birthday party?' and s1l3 to 'Yes! A big cake - don't look!'}, or reframe the party as a surprise for someone else ('Is it for Mum's surprise birthday party?')."
       },
       {
         "line_id": null,
-        "category": "gloss",
+        "category": "collocation",
         "severity": "minor",
-        "description": "The gloss for 'party' ('a fun time with friends, food and music') is understandable but 'a fun time' is a loose definition of the noun; 'a fun event' is more accurate for A2 learners building word-class awareness.",
-        "suggested_fix": "Change to: 'a fun event with friends, food and music'."
+        "description": "Interaction prompt 'What were you doing when a friend called you last time?' is understandable but not how a native speaker would phrase it; 'last time' dangles awkwardly at the end of the when-clause.",
+        "suggested_fix": "Rephrase as 'What were you doing the last time a friend called you?'"
       }
     ],
     "rubric_scores": {
       "grammar_accuracy": 5,
-      "naturalness": 5,
+      "naturalness": 4,
       "level_fit": 5,
       "grammar_point_teaching": 5,
-      "gloss_quality": 2
+      "gloss_quality": 5
     },
-    "hard_gate_failures": [
-      "Critical gloss error: the target word 'birthday' is glossed as a day when one 'has a party and cake', which teaches the wrong meaning.",
-      "Spec theme mismatch: 'a surprise birthday party' is not realised anywhere in the dialogue (no surprise, no party), contradicting the title and hook."
-    ],
-    "summary": "The dialogue itself is excellent for A2: 'I was walking home when I saw a birthday cake' models past continuous with when perfectly, all three lines are grammatical, natural and level-appropriate, and the review words 'party' and 'cake' plus target 'birthday' all appear. However, the gloss for the target word 'birthday' wrongly defines it as a day of parties and cake rather than the anniversary of one's birth — a critical error, since learners would learn the wrong meaning for the word the episode exists to teach. Additionally, the spec theme 'a surprise birthday party' is not delivered: nothing in the dialogue is a surprise, contradicting the title and hook. Both are easily fixed (correct the gloss; make the cake a surprise for the sister in s1l3), but the critical gloss error forces rejection under the rubric."
+    "hard_gate_failures": [],
+    "summary": "A clean A2 micro-dialogue. Line 1 models past continuous with 'when' accurately and the grammar note explains it correctly with a matching example. All vocabulary is at or below A2; target word 'birthday' and review words 'party' and 'cake' all appear naturally, and the three glosses are accurate and simpler than the words they explain. Two minor points: the 'surprise' element of the theme is not realised in the dialogue, and the interaction prompt is slightly unidiomatic ('when a friend called you last time' -> 'the last time a friend called you'). Neither blocks approval."
   },
   "gate_decision": {
     "schema_version": "1.0.0",
     "episode_id": "en-A2-x07",
     "gate": 1,
     "user": "examiner",
-    "decision": "reject",
-    "diff": "episode: Replace with: 'the day of the year when you were born; people often have a party or cake on this day'.\ns1l3: Add the surprise element in s1l3, e.g.: 'No, it's a surprise for my sister — today is her birthday!' (keeps 'sister' and 'birthday', adds 'surprise').\nepisode: Change to: 'a fun event with friends, food and music'.",
-    "notes": "The dialogue itself is excellent for A2: 'I was walking home when I saw a birthday cake' models past continuous with when perfectly, all three lines are grammatical, natural and level-appropriate, and the review words 'party' and 'cake' plus target 'birthday' all appear. However, the gloss for the target word 'birthday' wrongly defines it as a day of parties and cake rather than the anniversary of one's birth — a critical error, since learners would learn the wrong meaning for the word the episode exists to teach. Additionally, the spec theme 'a surprise birthday party' is not delivered: nothing in the dialogue is a surprise, contradicting the title and hook. Both are easily fixed (correct the gloss; make the cake a surprise for the sister in s1l3), but the critical gloss error forces rejection under the rubric.",
-    "timestamp": "2026-10-12T04:17:52.195197Z"
+    "decision": "approve",
+    "diff": "episode: Make the surprise element explicit with A2-level wording, e.g. change s1l2 to 'Great! Is it a surprise for my birthday party?' and s1l3 to 'Yes! A big cake - don't look!'}, or reframe the party as a surprise for someone else ('Is it for Mum's surprise birthday party?').\nepisode: Rephrase as 'What were you doing the last time a friend called you?'",
+    "notes": "A clean A2 micro-dialogue. Line 1 models past continuous with 'when' accurately and the grammar note explains it correctly with a matching example. All vocabulary is at or below A2; target word 'birthday' and review words 'party' and 'cake' all appear naturally, and the three glosses are accurate and simpler than the words they explain. Two minor points: the 'surprise' element of the theme is not realised in the dialogue, and the interaction prompt is slightly unidiomatic ('when a friend called you last time' -> 'the last time a friend called you'). Neither blocks approval.",
+    "timestamp": "2026-10-20T10:53:04.234591Z"
   },
   "costs": [
     {
       "station": "review_examiner",
       "vendor": "gateway",
       "model": "kimi/kimi-k3",
-      "input_tokens": 728,
-      "output_tokens": 4388,
+      "input_tokens": 716,
+      "output_tokens": 2273,
       "cache_creation_input_tokens": 0,
       "cache_read_input_tokens": 1024,
-      "usd": 0.013662,
+      "usd": 0.00731,
       "priced": true,
-      "timestamp": "2026-10-12T04:17:52.194280Z"
+      "timestamp": "2026-10-20T10:53:04.234282Z"
     }
   ]
 }

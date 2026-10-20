@@ -10,54 +10,33 @@
         "line_id": "s1l2",
         "category": "translation_naturalness",
         "severity": "major",
-        "description": "'Dạ, làm ơn' is a literal translation of 'Yes, please' and sounds unnatural in Vietnamese. 'Tôi' is also too formal for two friends. In addition, 'too' is unclear because nobody has said they want noodles yet.",
-        "suggested_fix": "English: Yes, please. I would like noodles. Vietnamese: Vâng, cho mình xin. Mình muốn ăn mì."
-      },
-      {
-        "line_id": "s1l3",
-        "category": "translation_naturalness",
-        "severity": "minor",
-        "description": "'Tốt' sounds stiff as a reaction to food. A natural spoken reaction would be 'Tuyệt' or 'Hay quá'.",
-        "suggested_fix": "Tuyệt. Đồ ăn ở đây rất ngon."
-      },
-      {
-        "line_id": "s1l4",
-        "category": "translation_naturalness",
-        "severity": "minor",
-        "description": "'Chúng ta' is correct but a bit formal for two friends. 'Chúng mình' sounds more natural.",
-        "suggested_fix": "Chúng mình có thể ăn ở đây."
+        "description": "The Vietnamese translation sounds machine-translated. 'Mình muốn một bát mì, làm ơn.' is understandable, but putting 'làm ơn' at the end is unnatural in Vietnamese, especially for street-food ordering. Also, in Ho Chi Minh City, 'tô mì' sounds more natural than 'bát mì'.",
+        "suggested_fix": "Replace with: Cho mình một tô mì nhé. If the speaker is ordering from a vendor, use: Cho em một tô mì ạ."
       },
       {
         "line_id": null,
         "category": "explanation",
         "severity": "minor",
-        "description": "The English gloss 'a long, white food' may teach that noodles are always white. The key idea is long, thin strands, often in soup.",
-        "suggested_fix": "Change the gloss to: en: a long, thin food, often eaten in soup; vi: mì, bún, phở (món ăn sợi)."
-      },
-      {
-        "line_id": null,
-        "category": "explanation",
-        "severity": "minor",
-        "description": "The grammar note only mentions polite requests, but the first line uses 'Would you like...?' as an offer. This may confuse A2 learners.",
-        "suggested_fix": "Use 'would like' for polite requests and offers. Say 'I would like a noodle soup' to order politely. 'Would you like...?' asks what someone wants."
+        "description": "The dialogue uses the contraction 'I'd like', but the grammar note says 'would like' without explaining the contraction. An A2 listener may not connect 'I'd' with 'I would' immediately.",
+        "suggested_fix": "Add to the grammar note: I'd = I would."
       },
       {
         "line_id": null,
         "category": "engagement",
         "severity": "minor",
-        "description": "The scene is clear but a little flat. A tiny sensory detail in the hook would make the night market feel more real.",
-        "suggested_fix": "Change the hook to: Ben and Anna smell hot noodle soup at a night market and decide to eat."
+        "description": "The episode has no hook, so it starts directly with the dialogue. For a micro dialogue this is acceptable, but a very short context line would help the listener enter the situation more easily.",
+        "suggested_fix": "Add a simple hook such as: At the night market, Anna and Ben want to eat."
       }
     ],
     "rubric_scores": {
-      "comprehensibility": 4,
-      "translation_accuracy": 3,
-      "translation_naturalness": 2,
-      "engagement": 3,
-      "explanation_helpfulness": 3
+      "comprehensibility": 5,
+      "translation_accuracy": 4,
+      "translation_naturalness": 3,
+      "engagement": 4,
+      "explanation_helpfulness": 4
     },
     "hard_gate_failures": [],
-    "summary": "The micro-dialogue is simple and fits A2, with target and review words present. The main problem is unnatural Vietnamese, especially 'Dạ, làm ơn' and the formal pronouns. A few small clarity fixes to 'too', the gloss, and the grammar note would make it much better."
+    "summary": "The episode is short, clear, and suitable for A2 learners. The target language is useful and the grammar point is relevant. The main issue is the unnatural Vietnamese translation of the polite request in s1l2; fixing this would make the clip feel natural and trustworthy."
   },
   "gate_decision": {
     "schema_version": "1.0.0",
@@ -65,22 +44,22 @@
     "gate": 1,
     "user": "learner",
     "decision": "edit-and-approve",
-    "diff": "s1l2: English: Yes, please. I would like noodles. Vietnamese: Vâng, cho mình xin. Mình muốn ăn mì.\ns1l3: Tuyệt. Đồ ăn ở đây rất ngon.\ns1l4: Chúng mình có thể ăn ở đây.\nepisode: Change the gloss to: en: a long, thin food, often eaten in soup; vi: mì, bún, phở (món ăn sợi).\nepisode: Use 'would like' for polite requests and offers. Say 'I would like a noodle soup' to order politely. 'Would you like...?' asks what someone wants.\nepisode: Change the hook to: Ben and Anna smell hot noodle soup at a night market and decide to eat.",
-    "notes": "The micro-dialogue is simple and fits A2, with target and review words present. The main problem is unnatural Vietnamese, especially 'Dạ, làm ơn' and the formal pronouns. A few small clarity fixes to 'too', the gloss, and the grammar note would make it much better.",
-    "timestamp": "2026-10-12T04:17:59.191527Z"
+    "diff": "s1l2: Replace with: Cho mình một tô mì nhé. If the speaker is ordering from a vendor, use: Cho em một tô mì ạ.\nepisode: Add to the grammar note: I'd = I would.\nepisode: Add a simple hook such as: At the night market, Anna and Ben want to eat.",
+    "notes": "The episode is short, clear, and suitable for A2 learners. The target language is useful and the grammar point is relevant. The main issue is the unnatural Vietnamese translation of the polite request in s1l2; fixing this would make the clip feel natural and trustworthy.",
+    "timestamp": "2026-10-20T10:51:28.606669Z"
   },
   "costs": [
     {
       "station": "review_learner",
       "vendor": "gateway",
       "model": "qwen3.8-max-0902",
-      "input_tokens": 698,
-      "output_tokens": 9424,
+      "input_tokens": 1674,
+      "output_tokens": 4912,
       "cache_creation_input_tokens": 0,
-      "cache_read_input_tokens": 1024,
-      "usd": 0.011614,
+      "cache_read_input_tokens": 0,
+      "usd": 0.006564,
       "priced": true,
-      "timestamp": "2026-10-12T04:17:59.191170Z"
+      "timestamp": "2026-10-20T10:51:28.606274Z"
     }
   ]
 }

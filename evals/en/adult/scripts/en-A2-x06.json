@@ -1,8 +1,8 @@
 {
   "schema_version": "1.0.0",
   "episode_id": "en-A2-x06",
-  "title_working": "Useful Jeans",
-  "hook": "Anna and Ben look at jeans in a shop.",
+  "title_working": "Shopping for Winter Clothes",
+  "hook": "Anna and Ben are looking for winter clothes.",
   "segments": [
     {
       "id": "s1",
@@ -13,32 +13,42 @@
         {
           "id": "s1l1",
           "speaker": "anna",
-          "text": "The blue jeans are more useful than the black jeans.",
+          "text": "This shop has the warmest coats.",
           "translation": {
-            "vi": "Chiếc quần jeans màu xanh hữu ích hơn chiếc quần jeans màu đen."
+            "vi": "Cửa hàng này có áo khoác ấm nhất đấy."
           },
-          "pause_after_ms": 500,
-          "visual_cue": "blue and black jeans"
+          "pause_after_ms": 400,
+          "visual_cue": "warm winter coats in a shop"
         },
         {
           "id": "s1l2",
           "speaker": "ben",
-          "text": "Yes, and this shop has the most useful jeans.",
+          "text": "But I need new jeans, not a coat.",
           "translation": {
-            "vi": "Đúng vậy, và cửa hàng này có quần jeans hữu ích nhất."
+            "vi": "Nhưng mình cần quần jeans mới, không phải áo khoác."
           },
-          "pause_after_ms": 500,
-          "visual_cue": "a shop with jeans"
+          "pause_after_ms": 400,
+          "visual_cue": "pair of blue jeans"
         },
         {
           "id": "s1l3",
           "speaker": "anna",
-          "text": "Let's buy them.",
+          "text": "These jeans are cheaper than those.",
           "translation": {
-            "vi": "Mua chúng đi."
+            "vi": "Quần jeans này rẻ hơn mấy cái kia đấy."
           },
-          "pause_after_ms": 500,
-          "visual_cue": null
+          "pause_after_ms": 400,
+          "visual_cue": "price tag on jeans"
+        },
+        {
+          "id": "s1l4",
+          "speaker": "ben",
+          "text": "Great, I'll buy them.",
+          "translation": {
+            "vi": "Tuyệt, mình sẽ mua nó."
+          },
+          "pause_after_ms": 400,
+          "visual_cue": "Ben holding jeans"
         }
       ],
       "items": []
@@ -48,17 +58,16 @@
     {
       "word": "jeans",
       "gloss": {
-        "en": "long clothes for your legs, often blue",
+        "en": "clothes for your legs, usually blue",
         "vi": "quần jeans"
       },
       "is_target": true
     }
   ],
   "grammar_notes": [
-    "Use 'more' + adjective to compare two things, like 'more useful than'.",
-    "Use 'the most' + adjective to say something is number one in a group, like 'the most useful jeans'."
+    "Use -er + than to compare two things, and the + -est to say one thing is top in a group."
   ],
   "interaction_prompts": [
-    "Which jeans do you like more: blue or black?"
+    "What winter clothes do you like to buy?"
   ]
 }

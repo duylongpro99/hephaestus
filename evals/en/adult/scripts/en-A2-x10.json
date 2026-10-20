@@ -1,43 +1,33 @@
 {
   "schema_version": "1.0.0",
   "episode_id": "en-A2-x10",
-  "title_working": "After Work Gym",
-  "hook": "Anna and Ben talk about going to the gym.",
+  "title_working": "Ben's New Gym Hobby",
+  "hook": "Ben goes to the gym now. Anna asks him about before and after.",
   "segments": [
     {
       "id": "s1",
       "type": "dialogue",
       "speed": "natural",
-      "layout": "vocab_grid",
+      "layout": "podcast_a",
       "lines": [
         {
           "id": "s1l1",
           "speaker": "anna",
-          "text": "I go to the gym after work.",
+          "text": "Before you joined the gym, what did you do?",
           "translation": {
-            "vi": "Tôi đi tập gym sau giờ làm."
+            "vi": "Trước khi bạn bắt đầu đi gym, bạn làm gì?"
           },
           "pause_after_ms": 500,
-          "visual_cue": "gym"
+          "visual_cue": null
         },
         {
           "id": "s1l2",
           "speaker": "ben",
-          "text": "Before I go, I drink water.",
+          "text": "I sat a lot. After I joined the gym, my body feels good every week.",
           "translation": {
-            "vi": "Trước khi đi, tôi uống nước."
+            "vi": "Mình ngồi nhiều. Sau khi mình bắt đầu đi gym, cơ thể mình thấy khỏe mỗi tuần."
           },
-          "pause_after_ms": 500,
-          "visual_cue": "glass of water"
-        },
-        {
-          "id": "s1l3",
-          "speaker": "anna",
-          "text": "After I go, my body feels great.",
-          "translation": {
-            "vi": "Sau khi đi, cơ thể tôi cảm thấy rất khỏe."
-          },
-          "pause_after_ms": 500,
+          "pause_after_ms": 600,
           "visual_cue": null
         }
       ],
@@ -48,24 +38,32 @@
     {
       "word": "gym",
       "gloss": {
-        "en": "a place with machines for exercise",
+        "en": "a place where you go to exercise",
         "vi": "phòng tập thể dục"
       },
       "is_target": true
     },
     {
+      "word": "week",
+      "gloss": {
+        "en": "seven days",
+        "vi": "bảy ngày"
+      },
+      "is_target": false
+    },
+    {
       "word": "body",
       "gloss": {
-        "en": "your arms, legs, and head",
+        "en": "the part of you that has arms, legs, and a head",
         "vi": "cơ thể"
       },
       "is_target": false
     }
   ],
   "grammar_notes": [
-    "Use 'before' or 'after' with a subject and verb to say when something happens: 'Before I go, I drink water.'"
+    "Use 'before' or 'after' + subject + verb to say when something happens. Example: 'Before I joined the gym, I sat a lot.'"
   ],
   "interaction_prompts": [
-    "What do you do before or after you exercise?"
+    "Do you have a new hobby? What do you do before or after it?"
   ]
 }

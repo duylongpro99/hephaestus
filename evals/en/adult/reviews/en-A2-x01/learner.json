@@ -7,57 +7,57 @@
     "reviewer": "learner",
     "issues": [
       {
-        "line_id": "s1l2",
-        "category": "translation_naturalness",
-        "severity": "major",
-        "description": "Anna and Ben sound like friends talking about a flat, but the Vietnamese uses 'Vâng, tôi', which feels too formal and stiff. I understand it, but it does not sound like natural casual speech.",
-        "suggested_fix": "Change the Vietnamese line to: \"Ừ, mình vừa mới từ đó về.\""
-      },
-      {
-        "line_id": "s1l2",
+        "line_id": "s1l3",
         "category": "comprehension",
-        "severity": "minor",
-        "description": "As an A2 listener, 'I've just come from there' is mostly clear, but 'come back from there' would make the meaning easier and match the Vietnamese 'về' better.",
-        "suggested_fix": "Change the English line to: \"Yes, I've just come back from there.\" Keep the Vietnamese as: \"Ừ, mình vừa mới từ đó về.\""
-      },
-      {
-        "line_id": "s1l1",
-        "category": "translation_naturalness",
-        "severity": "minor",
-        "description": "'Bạn đã xem căn hộ mới chưa?' is correct, but for visiting or viewing a flat, 'đi xem' sounds more natural in Vietnamese.",
-        "suggested_fix": "Change the line to: \"Bạn đã đi xem căn hộ mới chưa?\""
+        "severity": "major",
+        "description": "Ben says he rented a flat in s1l1, but s1l3 says 'The house has a big room.' As an A2 listener, this makes me wonder whether he is talking about a flat or a house. The Vietnamese 'Căn nhà' reinforces the wrong idea.",
+        "suggested_fix": "Change the line to match the flat, e.g. 'The flat has a big room.' with Vietnamese 'Căn hộ có một phòng rộng.' If the review word 'house' must stay, rewrite the situation clearly, e.g. 'I've just rented a room in a house. The room is big.'"
       },
       {
         "line_id": null,
-        "category": "engagement",
+        "category": "translation_accuracy",
+        "severity": "major",
+        "description": "The target word 'rent' is glossed only as a noun ('money you pay...'), but the first line uses the verb 'rented'. A learner may not connect 'rented' with the gloss.",
+        "suggested_fix": "Change the gloss to cover both uses: en 'to pay money to live in a place; the money you pay' and vi 'thuê (nhà); tiền thuê nhà'."
+      },
+      {
+        "line_id": "s1l3",
+        "category": "translation_naturalness",
         "severity": "minor",
-        "description": "The hook is clear but quite flat. It does not make me very curious to listen.",
-        "suggested_fix": "Change the hook to something more concrete, for example: \"Anna asks Ben about the rent in the new flat.\" or \"Is the rent okay in the new flat?\""
+        "description": "'Tiền thuê cũng ổn' is understandable, but in Vietnamese I would say the rental price or rent for a house/flat. It sounds a little bare.",
+        "suggested_fix": "Use 'Giá thuê nhà cũng ổn. Căn hộ có một phòng rộng.' if keeping the flat meaning."
       },
       {
         "line_id": null,
         "category": "explanation",
         "severity": "minor",
-        "description": "The grammar notes explain the meaning of 'just' and 'already', but an A2 learner would also benefit from seeing the word order.",
-        "suggested_fix": "Add a short note such as: \"In these examples, 'just' and 'already' usually come after have/has: Have you already seen...? / I've just come...\""
+        "description": "The grammar note is clear, but the term 'present perfect' and the phrase 'sooner than expected' may be a little hard for A2 without an example.",
+        "suggested_fix": "Add examples from the dialogue: 'just: I've just rented a flat. already: You've already found a place.' Keep the rule simple: 'just = a very short time ago; already = before now.'"
       },
       {
         "line_id": null,
-        "category": "comprehension",
+        "category": "engagement",
         "severity": "minor",
-        "description": "The interaction prompt uses 'moved into', which may be a little difficult for some A2 listeners.",
-        "suggested_fix": "Simplify the prompt to: \"Have you already moved to a new flat? Tell us about the rent.\""
+        "description": "The hook is clear but quite flat. It does not make me feel like I need to listen while riding my motorbike.",
+        "suggested_fix": "Make it more personal, e.g. 'Just moved into a new home? Listen to Anna and Ben talk about a new flat.'"
+      },
+      {
+        "line_id": null,
+        "category": "explanation",
+        "severity": "minor",
+        "description": "The interaction prompt 'Have you ever just moved...' sounds odd and may confuse the target use of 'just' and 'ever'.",
+        "suggested_fix": "Use either 'Have you just moved to a new home? What do you like about it?' or 'Have you ever moved to a new home? What did you like about it?'"
       }
     ],
     "rubric_scores": {
       "comprehensibility": 4,
-      "translation_accuracy": 5,
-      "translation_naturalness": 3,
+      "translation_accuracy": 3,
+      "translation_naturalness": 4,
       "engagement": 3,
       "explanation_helpfulness": 4
     },
     "hard_gate_failures": [],
-    "summary": "The episode is short, clear, and suitable for A2 learners. The target word 'rent' is easy to understand, and the grammar point is relevant. The main problem is the Vietnamese translation in s1l2, which uses a formal pronoun and sounds unnatural between friends. A few small changes to the hook, prompt, and grammar note would make it more helpful and natural."
+    "summary": "The episode is short, simple, and mostly suitable for A2. The target grammar is clear, and the Vietnamese translations are mostly understandable. However, the flat/house inconsistency and the noun-only gloss for 'rent' could confuse learners. With small edits, it will work well."
   },
   "gate_decision": {
     "schema_version": "1.0.0",
@@ -65,22 +65,22 @@
     "gate": 1,
     "user": "learner",
     "decision": "edit-and-approve",
-    "diff": "s1l2: Change the Vietnamese line to: \"Ừ, mình vừa mới từ đó về.\"\ns1l2: Change the English line to: \"Yes, I've just come back from there.\" Keep the Vietnamese as: \"Ừ, mình vừa mới từ đó về.\"\ns1l1: Change the line to: \"Bạn đã đi xem căn hộ mới chưa?\"\nepisode: Change the hook to something more concrete, for example: \"Anna asks Ben about the rent in the new flat.\" or \"Is the rent okay in the new flat?\"\nepisode: Add a short note such as: \"In these examples, 'just' and 'already' usually come after have/has: Have you already seen...? / I've just come...\"\nepisode: Simplify the prompt to: \"Have you already moved to a new flat? Tell us about the rent.\"",
-    "notes": "The episode is short, clear, and suitable for A2 learners. The target word 'rent' is easy to understand, and the grammar point is relevant. The main problem is the Vietnamese translation in s1l2, which uses a formal pronoun and sounds unnatural between friends. A few small changes to the hook, prompt, and grammar note would make it more helpful and natural.",
-    "timestamp": "2026-10-12T04:16:02.856651Z"
+    "diff": "s1l3: Change the line to match the flat, e.g. 'The flat has a big room.' with Vietnamese 'Căn hộ có một phòng rộng.' If the review word 'house' must stay, rewrite the situation clearly, e.g. 'I've just rented a room in a house. The room is big.'\nepisode: Change the gloss to cover both uses: en 'to pay money to live in a place; the money you pay' and vi 'thuê (nhà); tiền thuê nhà'.\ns1l3: Use 'Giá thuê nhà cũng ổn. Căn hộ có một phòng rộng.' if keeping the flat meaning.\nepisode: Add examples from the dialogue: 'just: I've just rented a flat. already: You've already found a place.' Keep the rule simple: 'just = a very short time ago; already = before now.'\nepisode: Make it more personal, e.g. 'Just moved into a new home? Listen to Anna and Ben talk about a new flat.'\nepisode: Use either 'Have you just moved to a new home? What do you like about it?' or 'Have you ever moved to a new home? What did you like about it?'",
+    "notes": "The episode is short, simple, and mostly suitable for A2. The target grammar is clear, and the Vietnamese translations are mostly understandable. However, the flat/house inconsistency and the noun-only gloss for 'rent' could confuse learners. With small edits, it will work well.",
+    "timestamp": "2026-10-20T10:52:05.130904Z"
   },
   "costs": [
     {
       "station": "review_learner",
       "vendor": "gateway",
       "model": "qwen3.8-max-0902",
-      "input_tokens": 1695,
-      "output_tokens": 7175,
+      "input_tokens": 1764,
+      "output_tokens": 6129,
       "cache_creation_input_tokens": 0,
       "cache_read_input_tokens": 0,
-      "usd": 0.009288,
+      "usd": 0.00806,
       "priced": true,
-      "timestamp": "2026-10-12T04:16:02.856327Z"
+      "timestamp": "2026-10-20T10:52:05.130395Z"
     }
   ]
 }

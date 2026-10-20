@@ -1,8 +1,8 @@
 {
   "schema_version": "1.0.0",
   "episode_id": "en-A2-x03",
-  "title_working": "A Job Interview",
-  "hook": "Anna asks Ben about a job interview.",
+  "title_working": "Job Interview Question",
+  "hook": "A short chat about job interviews.",
   "segments": [
     {
       "id": "s1",
@@ -13,9 +13,9 @@
         {
           "id": "s1l1",
           "speaker": "anna",
-          "text": "Have you ever had a job interview, Ben?",
+          "text": "Have you ever had a job interview?",
           "translation": {
-            "vi": "Ben này, bạn đã từng đi phỏng vấn xin việc chưa?"
+            "vi": "Bạn đã bao giờ đi phỏng vấn xin việc chưa?"
           },
           "pause_after_ms": 500,
           "visual_cue": null
@@ -23,9 +23,9 @@
         {
           "id": "s1l2",
           "speaker": "ben",
-          "text": "No, I have never had one.",
+          "text": "Yes, I have. I have never worked on weekends.",
           "translation": {
-            "vi": "Chưa, mình chưa từng có một buổi phỏng vấn nào."
+            "vi": "Rồi, mình từng đi rồi. Mình chưa bao giờ làm việc vào cuối tuần."
           },
           "pause_after_ms": 500,
           "visual_cue": null
@@ -33,19 +33,9 @@
         {
           "id": "s1l3",
           "speaker": "anna",
-          "text": "I have one tomorrow.",
+          "text": "Do you like your job?",
           "translation": {
-            "vi": "Mình có một buổi phỏng vấn vào ngày mai."
-          },
-          "pause_after_ms": 500,
-          "visual_cue": null
-        },
-        {
-          "id": "s1l4",
-          "speaker": "anna",
-          "text": "I really want this job.",
-          "translation": {
-            "vi": "Mình thực sự muốn công việc này."
+            "vi": "Bạn có thích công việc của mình không?"
           },
           "pause_after_ms": 500,
           "visual_cue": null
@@ -58,24 +48,32 @@
     {
       "word": "interview",
       "gloss": {
-        "en": "a meeting when people ask you questions to see if you can do a job",
-        "vi": "buổi phỏng vấn"
+        "en": "a formal meeting to talk about a job",
+        "vi": "buổi phỏng vấn xin việc"
       },
       "is_target": true
     },
     {
       "word": "job",
       "gloss": {
-        "en": "work you do to earn money",
+        "en": "regular paid work",
         "vi": "công việc"
+      },
+      "is_target": false
+    },
+    {
+      "word": "work",
+      "gloss": {
+        "en": "to do a job or task; effort to do something",
+        "vi": "làm việc"
       },
       "is_target": false
     }
   ],
   "grammar_notes": [
-    "Use have or has and the third form of the verb. Ever means at any time. Never means not at any time."
+    "Use 'have/has + ever + past participle' to ask about life experiences. Use 'have/has + never + past participle' to say you have not done something."
   ],
   "interaction_prompts": [
-    "Have you ever had a job interview? How was it?"
+    "Have you ever had a job interview? Tell us about it!"
   ]
 }

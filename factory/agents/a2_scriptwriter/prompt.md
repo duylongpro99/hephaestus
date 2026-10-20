@@ -40,9 +40,15 @@ concrete, otherwise null.
 
 - For each line, write a full, natural translation into every `translation_*` language. It
   should sound like a native speaker of that language, not a word-for-word copy.
+- Match the register to the speakers' relationship. Friends use the casual pronouns and
+  particles friends use in that language; for Vietnamese that means `mình`/`bạn` or names,
+  not `tôi`, `vâng` or `chúng ta`.
 - For each vocabulary item, write a gloss in every `gloss_*` language. When the gloss
   language is the target language itself, write a simple definition using only words from
   the level wordlist, not a synonym that is harder than the word.
+- A gloss defines what the word itself means and tells it apart from its neighbours: a
+  `birthday` is the day you were born, not a party; a `motorbike` has an engine, unlike a
+  bicycle. A gloss that also fits a different word is wrong.
 - List every target word in `vocab` with `is_target: true`, using the word exactly as it
   appears in the spec. You may add a few other useful words with `is_target: false`.
 
