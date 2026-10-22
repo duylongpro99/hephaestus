@@ -7,50 +7,50 @@
     "reviewer": "learner",
     "issues": [
       {
-        "line_id": null,
-        "category": "engagement",
+        "line_id": "s1l1",
+        "category": "translation_naturalness",
         "severity": "minor",
-        "description": "The hook is empty, so when I see the episode in my podcast app, nothing tells me why I should press play.",
-        "suggested_fix": "Add a short hook such as: What were you doing when your friend called? / Bạn đang làm gì khi bạn của bạn gọi đến?"
+        "description": "The Vietnamese is understandable, but it sounds a little literal and does not clearly mark the past situation in a natural spoken way.",
+        "suggested_fix": "Change to: \"Lúc mình gọi, bạn đang làm gì vậy?\""
       },
       {
         "line_id": "s1l2",
         "category": "translation_naturalness",
         "severity": "minor",
-        "description": "Có phải cho bữa tiệc sinh nhật của mình không? is correct but sounds a little careful/formal for two friends.",
-        "suggested_fix": "Tuyệt! Cho bữa tiệc sinh nhật của mình à?"
+        "description": "The reply needs a small time marker to sound like a past event, and \"một cái\" feels a bit literal here.",
+        "suggested_fix": "Change to: \"Lúc đó mình đang nướng bánh sinh nhật cho bữa tiệc.\""
       },
       {
         "line_id": null,
         "category": "explanation",
         "severity": "minor",
-        "description": "The grammar note uses the label past continuous. At A2 I may remember the pattern better if the form is shown simply.",
-        "suggested_fix": "Use was/were + verb-ing for the longer action, and when + past simple for the shorter action: I was making a cake when you called."
+        "description": "The grammar note explains the idea, but it does not show the form clearly enough for A2 learners.",
+        "suggested_fix": "Use: \"We use was/were + verb-ing with when + past simple to say what was happening when another action happened. Example: I was baking when you called.\""
       },
       {
         "line_id": null,
         "category": "translation_accuracy",
         "severity": "minor",
-        "description": "The gloss for cake is bánh ngọt, but in this birthday context the dialogue just says bánh. bánh ngọt can sound like a general pastry, not a birthday cake.",
-        "suggested_fix": "Change the Vietnamese gloss to bánh or bánh sinh nhật for this episode."
+        "description": "The gloss for \"cake\" is not wrong, but in this episode the cake is specifically a birthday cake, so the Vietnamese could match the context better.",
+        "suggested_fix": "Change the Vietnamese gloss to: \"bánh (bánh sinh nhật)\"."
       },
       {
-        "line_id": null,
+        "line_id": "s1l3",
         "category": "engagement",
         "severity": "minor",
-        "description": "The theme is a surprise birthday party, but the dialogue only says yes; there is no clear surprise moment.",
-        "suggested_fix": "Make the last line slightly more surprising, for example: Yes! Surprise! I have a big cake. / Ừ! Bất ngờ chưa! Mình có một cái bánh to."
+        "description": "The theme is a surprise birthday party, but Anna's reaction is only \"that's nice\", so the surprise feeling is weak.",
+        "suggested_fix": "Change to: \"Oh, a surprise cake! That's nice!\" with Vietnamese: \"Ồ, bánh sinh nhật bất ngờ! Tuyệt quá!\""
       }
     ],
     "rubric_scores": {
-      "comprehensibility": 5,
+      "comprehensibility": 4,
       "translation_accuracy": 4,
-      "translation_naturalness": 4,
-      "engagement": 3,
-      "explanation_helpfulness": 4
+      "translation_naturalness": 3,
+      "engagement": 4,
+      "explanation_helpfulness": 3
     },
     "hard_gate_failures": [],
-    "summary": "The micro-dialogue is short, clear, and suitable for A2. The target grammar is easy to notice, and the Vietnamese lines are mostly natural. Small edits would make it more engaging and more natural: add a hook, make the grammar note simpler, adjust the cake gloss, and add a clearer surprise feeling."
+    "summary": "The micro-dialogue is clear and fits A2. The target word and review words are present, and the story is easy to follow. Small edits to make the Vietnamese sound more natural, clarify the past meaning, and show the grammar form would make it better."
   },
   "gate_decision": {
     "schema_version": "1.0.0",
@@ -58,22 +58,22 @@
     "gate": 1,
     "user": "learner",
     "decision": "edit-and-approve",
-    "diff": "episode: Add a short hook such as: What were you doing when your friend called? / Bạn đang làm gì khi bạn của bạn gọi đến?\ns1l2: Tuyệt! Cho bữa tiệc sinh nhật của mình à?\nepisode: Use was/were + verb-ing for the longer action, and when + past simple for the shorter action: I was making a cake when you called.\nepisode: Change the Vietnamese gloss to bánh or bánh sinh nhật for this episode.\nepisode: Make the last line slightly more surprising, for example: Yes! Surprise! I have a big cake. / Ừ! Bất ngờ chưa! Mình có một cái bánh to.",
-    "notes": "The micro-dialogue is short, clear, and suitable for A2. The target grammar is easy to notice, and the Vietnamese lines are mostly natural. Small edits would make it more engaging and more natural: add a hook, make the grammar note simpler, adjust the cake gloss, and add a clearer surprise feeling.",
-    "timestamp": "2026-10-20T10:54:53.048046Z"
+    "diff": "s1l1: Change to: \"Lúc mình gọi, bạn đang làm gì vậy?\"\ns1l2: Change to: \"Lúc đó mình đang nướng bánh sinh nhật cho bữa tiệc.\"\nepisode: Use: \"We use was/were + verb-ing with when + past simple to say what was happening when another action happened. Example: I was baking when you called.\"\nepisode: Change the Vietnamese gloss to: \"bánh (bánh sinh nhật)\".\ns1l3: Change to: \"Oh, a surprise cake! That's nice!\" with Vietnamese: \"Ồ, bánh sinh nhật bất ngờ! Tuyệt quá!\"",
+    "notes": "The micro-dialogue is clear and fits A2. The target word and review words are present, and the story is easy to follow. Small edits to make the Vietnamese sound more natural, clarify the past meaning, and show the grammar form would make it better.",
+    "timestamp": "2026-10-22T07:14:13.790473Z"
   },
   "costs": [
     {
       "station": "review_learner",
       "vendor": "gateway",
       "model": "qwen3.8-max-0902",
-      "input_tokens": 684,
-      "output_tokens": 4424,
+      "input_tokens": 678,
+      "output_tokens": 5249,
       "cache_creation_input_tokens": 0,
       "cache_read_input_tokens": 1024,
-      "usd": 0.005608,
+      "usd": 0.006596,
       "priced": true,
-      "timestamp": "2026-10-20T10:54:53.046673Z"
+      "timestamp": "2026-10-22T07:14:13.788912Z"
     }
   ]
 }

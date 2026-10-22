@@ -7,43 +7,29 @@
     "reviewer": "examiner",
     "issues": [
       {
-        "line_id": "s1l3",
-        "category": "consistency",
+        "line_id": null,
+        "category": "gloss",
         "severity": "major",
-        "description": "Ben begins his second line with 'Yes', but Anna never asks a yes/no question — her only line is the fragment 'This weekend?', which Ben has already answered in s1l2. The 'Yes' has nothing to answer and learners may imitate this mismatched pattern.",
-        "suggested_fix": "Either remove 'Yes, ' so the line reads 'I am going to rest on the trip.', or change Anna's line to a yes/no question (e.g. 'Are you going away this weekend?') so the 'Yes' has something to answer."
+        "description": "The gloss for the review word 'bus' says 'a big car that carries many people on the road'. A bus is not a car; calling it one is inaccurate and could make A2 learners confuse 'bus' and 'car'.",
+        "suggested_fix": "Change the gloss to 'a large road vehicle that carries many people'."
       },
       {
         "line_id": null,
         "category": "gloss",
-        "severity": "major",
-        "description": "The gloss for 'bus' — 'a big car that many people use to travel' — is inaccurate: a bus is not a car. This misleads learners about the meaning of a review word.",
-        "suggested_fix": "Change the gloss to 'a large vehicle that carries many people'."
-      },
-      {
-        "line_id": "s1l3",
-        "category": "collocation",
         "severity": "minor",
-        "description": "'I am going to rest on the trip' is grammatical but not what a native speaker would say; 'rest' pairs awkwardly with 'on the trip'.",
-        "suggested_fix": "Use 'I am going to relax on the trip.' or 'I am going to rest during the trip.' ('relax' and 'during' are both A2-friendly)."
-      },
-      {
-        "line_id": "s1l1",
-        "category": "naturalness",
-        "severity": "minor",
-        "description": "Opening the clip with the bare fragment 'This weekend?' is abrupt with no prior context; listeners hear Anna asking about nothing.",
-        "suggested_fix": "Change Anna's line to a full A2 question such as 'What are you doing this weekend?', which naturally sets up Ben's 'going to' answer."
+        "description": "The gloss for the target word 'trip' ('when you go to a place and come back') is accurate and simple, but it is phrased as a 'when...' clause rather than a noun-style definition, which is slightly less clear for a noun.",
+        "suggested_fix": "Rephrase as 'going to a place and coming back' or 'a journey to a place and back again'."
       }
     ],
     "rubric_scores": {
       "grammar_accuracy": 5,
-      "naturalness": 3,
+      "naturalness": 5,
       "level_fit": 5,
       "grammar_point_teaching": 5,
       "gloss_quality": 3
     },
     "hard_gate_failures": [],
-    "summary": "All English lines are grammatical and squarely A2, and 'going to' for plans is used correctly twice with an accurate, level-appropriate grammar note. The target word 'trip' and review words 'weekend' and 'bus' all appear with simple glosses. Two fixes are needed before recording: (1) Ben's 'Yes' in s1l3 answers a question Anna never asks — drop it or give Anna a yes/no question; (2) the gloss for 'bus' wrongly calls it 'a big car'. Minor improvements: 'rest on the trip' is an unnatural collocation ('relax on the trip'), and the opening fragment 'This weekend?' would work better as a full question. No critical errors; fixable with the suggested edits."
+    "summary": "Both dialogue lines are grammatically correct, natural and solidly A2, and the grammar point 'be going to for plans' is modelled in each line ('Are you going to take...', 'is going to be...') with a correct grammar note and a suitable interaction prompt. Target word 'trip' and review words 'weekend' and 'bus' all appear, and the two-line clip fits the micro_dialogue length. One real problem: the gloss for 'bus' calls it 'a big car', which is inaccurate and misleading (major). The 'trip' gloss is accurate but could be phrased more like a noun definition (minor). Fix the bus gloss and this is ready to record."
   },
   "gate_decision": {
     "schema_version": "1.0.0",
@@ -51,22 +37,22 @@
     "gate": 1,
     "user": "examiner",
     "decision": "edit-and-approve",
-    "diff": "s1l3: Either remove 'Yes, ' so the line reads 'I am going to rest on the trip.', or change Anna's line to a yes/no question (e.g. 'Are you going away this weekend?') so the 'Yes' has something to answer.\nepisode: Change the gloss to 'a large vehicle that carries many people'.\ns1l3: Use 'I am going to relax on the trip.' or 'I am going to rest during the trip.' ('relax' and 'during' are both A2-friendly).\ns1l1: Change Anna's line to a full A2 question such as 'What are you doing this weekend?', which naturally sets up Ben's 'going to' answer.",
-    "notes": "All English lines are grammatical and squarely A2, and 'going to' for plans is used correctly twice with an accurate, level-appropriate grammar note. The target word 'trip' and review words 'weekend' and 'bus' all appear with simple glosses. Two fixes are needed before recording: (1) Ben's 'Yes' in s1l3 answers a question Anna never asks — drop it or give Anna a yes/no question; (2) the gloss for 'bus' wrongly calls it 'a big car'. Minor improvements: 'rest on the trip' is an unnatural collocation ('relax on the trip'), and the opening fragment 'This weekend?' would work better as a full question. No critical errors; fixable with the suggested edits.",
-    "timestamp": "2026-10-20T10:50:09.081883Z"
+    "diff": "episode: Change the gloss to 'a large road vehicle that carries many people'.\nepisode: Rephrase as 'going to a place and coming back' or 'a journey to a place and back again'.",
+    "notes": "Both dialogue lines are grammatically correct, natural and solidly A2, and the grammar point 'be going to for plans' is modelled in each line ('Are you going to take...', 'is going to be...') with a correct grammar note and a suitable interaction prompt. Target word 'trip' and review words 'weekend' and 'bus' all appear, and the two-line clip fits the micro_dialogue length. One real problem: the gloss for 'bus' calls it 'a big car', which is inaccurate and misleading (major). The 'trip' gloss is accurate but could be phrased more like a noun definition (minor). Fix the bus gloss and this is ready to record.",
+    "timestamp": "2026-10-22T07:09:18.514119Z"
   },
   "costs": [
     {
       "station": "review_examiner",
       "vendor": "gateway",
       "model": "kimi/kimi-k3",
-      "input_tokens": 1739,
-      "output_tokens": 3690,
+      "input_tokens": 1750,
+      "output_tokens": 2150,
       "cache_creation_input_tokens": 0,
       "cache_read_input_tokens": 0,
-      "usd": 0.012113,
+      "usd": 0.0075,
       "priced": true,
-      "timestamp": "2026-10-20T10:50:09.080939Z"
+      "timestamp": "2026-10-22T07:09:18.513923Z"
     }
   ]
 }

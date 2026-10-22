@@ -7,36 +7,36 @@
     "reviewer": "learner",
     "issues": [
       {
-        "line_id": "s1l4",
+        "line_id": "s1l1",
         "category": "comprehension",
-        "severity": "major",
-        "description": "Ben's answer does not match Anna's question. Anna asks whether there is a vegetable in the kitchen, but Ben says the food is ready. I would be confused about what he is answering.",
-        "suggested_fix": "Change the English line to 'Yes, there is. The food is ready.' and the Vietnamese translation to 'Có, thức ăn đã sẵn sàng rồi.'"
+        "severity": "minor",
+        "description": "The phrase 'for the food' is vague, and the Vietnamese 'bữa ăn' makes it sound like 'meal' rather than 'food'. I can follow, but the English line feels unfinished.",
+        "suggested_fix": "Change the line to: 'I have to buy a vegetable for the food we will make.' Vietnamese: 'Mình phải mua một loại rau cho món ăn mình sẽ làm.'"
       },
       {
-        "line_id": "s1l1",
+        "line_id": "s1l2",
         "category": "translation_naturalness",
         "severity": "minor",
-        "description": "'cho bạn bè' is correct, but it sounds a little general. If Anna means some friends coming to dinner, a more natural spoken phrase is possible.",
-        "suggested_fix": "Mình phải nấu bữa tối cho mấy người bạn."
+        "description": "'Bạn không cần phải đâu' sounds a little direct and incomplete in Vietnamese. It would feel more natural if the omitted action was clear.",
+        "suggested_fix": "Change English to: 'You don't have to buy any. I have vegetables in the kitchen.' Vietnamese: 'Bạn không cần phải mua đâu. Mình có rau trong bếp rồi.'"
       },
       {
         "line_id": null,
         "category": "explanation",
         "severity": "minor",
-        "description": "The grammar note is clear, but a short Vietnamese equivalent would help A2 learners connect the form to meaning faster.",
-        "suggested_fix": "Add: 'have to' = phải; 'don't have to' = không cần phải."
+        "description": "The grammar note is clear but very short. For A2, adding the verb pattern and one example would help me use it.",
+        "suggested_fix": "Use: 'Use have to + verb to say something is necessary. Use don't have to + verb to say something is not necessary. Example: I have to buy vegetables. You don't have to buy vegetables.'"
       }
     ],
     "rubric_scores": {
       "comprehensibility": 4,
-      "translation_accuracy": 5,
-      "translation_naturalness": 4,
+      "translation_accuracy": 4,
+      "translation_naturalness": 3,
       "engagement": 3,
       "explanation_helpfulness": 4
     },
     "hard_gate_failures": [],
-    "summary": "The episode is simple and fits A2. The target and review words are clear, and the grammar is easy. The main problem is that s1l4 does not answer the question in s1l3, so the tiny story feels confusing. After that small fix, I would listen and learn."
+    "summary": "The clip is short and clear enough for me as an A2 listener, and it uses the target word, review words, and grammar point. The main small problems are the vague 'for the food' line and the slightly machine-like Vietnamese reply. With the suggested edits, it would feel more natural and easier to learn from."
   },
   "gate_decision": {
     "schema_version": "1.0.0",
@@ -44,22 +44,22 @@
     "gate": 1,
     "user": "learner",
     "decision": "edit-and-approve",
-    "diff": "s1l4: Change the English line to 'Yes, there is. The food is ready.' and the Vietnamese translation to 'Có, thức ăn đã sẵn sàng rồi.'\ns1l1: Mình phải nấu bữa tối cho mấy người bạn.\nepisode: Add: 'have to' = phải; 'don't have to' = không cần phải.",
-    "notes": "The episode is simple and fits A2. The target and review words are clear, and the grammar is easy. The main problem is that s1l4 does not answer the question in s1l3, so the tiny story feels confusing. After that small fix, I would listen and learn.",
-    "timestamp": "2026-10-20T10:57:14.562508Z"
+    "diff": "s1l1: Change the line to: 'I have to buy a vegetable for the food we will make.' Vietnamese: 'Mình phải mua một loại rau cho món ăn mình sẽ làm.'\ns1l2: Change English to: 'You don't have to buy any. I have vegetables in the kitchen.' Vietnamese: 'Bạn không cần phải mua đâu. Mình có rau trong bếp rồi.'\nepisode: Use: 'Use have to + verb to say something is necessary. Use don't have to + verb to say something is not necessary. Example: I have to buy vegetables. You don't have to buy vegetables.'",
+    "notes": "The clip is short and clear enough for me as an A2 listener, and it uses the target word, review words, and grammar point. The main small problems are the vague 'for the food' line and the slightly machine-like Vietnamese reply. With the suggested edits, it would feel more natural and easier to learn from.",
+    "timestamp": "2026-10-22T07:20:12.870887Z"
   },
   "costs": [
     {
       "station": "review_learner",
       "vendor": "gateway",
       "model": "qwen3.8-max-0902",
-      "input_tokens": 752,
-      "output_tokens": 6116,
+      "input_tokens": 654,
+      "output_tokens": 13454,
       "cache_creation_input_tokens": 0,
       "cache_read_input_tokens": 1024,
-      "usd": 0.007666,
+      "usd": 0.016432,
       "priced": true,
-      "timestamp": "2026-10-20T10:57:14.560991Z"
+      "timestamp": "2026-10-22T07:20:12.869559Z"
     }
   ]
 }

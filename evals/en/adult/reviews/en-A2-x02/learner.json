@@ -7,25 +7,39 @@
     "reviewer": "learner",
     "issues": [
       {
+        "line_id": "s1l1",
+        "category": "translation_naturalness",
+        "severity": "minor",
+        "description": "The Vietnamese question is understandable, but it sounds a little bare for a polite offer. Adding 'có' makes the yes/no question sound more natural.",
+        "suggested_fix": "Change to: 'Bạn có muốn ăn mì không?'"
+      },
+      {
         "line_id": "s1l2",
+        "category": "translation_accuracy",
+        "severity": "minor",
+        "description": "'Ừ, mình muốn ăn lắm' feels stronger than 'Yes, I would like that' and adds 'lắm' (very). For A2 learners, a simpler acceptance matches the polite 'would like' structure better.",
+        "suggested_fix": "Change to: 'Ừ, mình muốn. Đồ ăn nhìn ngon quá.'"
+      },
+      {
+        "line_id": null,
         "category": "translation_naturalness",
         "severity": "major",
-        "description": "The Vietnamese translation sounds machine-translated. 'Mình muốn một bát mì, làm ơn.' is understandable, but putting 'làm ơn' at the end is unnatural in Vietnamese, especially for street-food ordering. Also, in Ho Chi Minh City, 'tô mì' sounds more natural than 'bát mì'.",
-        "suggested_fix": "Replace with: Cho mình một tô mì nhé. If the speaker is ordering from a vendor, use: Cho em một tô mì ạ."
+        "description": "The Vietnamese gloss for 'noodle' says 'loại thức ăn dài', which sounds literal and unnatural. A Vietnamese learner would expect 'món ăn dạng sợi' rather than 'loại thức ăn dài'.",
+        "suggested_fix": "Change the Vietnamese gloss to: 'mì, bún, phở - món ăn dạng sợi, làm từ bột, thường ăn với nước dùng.'"
       },
       {
         "line_id": null,
         "category": "explanation",
         "severity": "minor",
-        "description": "The dialogue uses the contraction 'I'd like', but the grammar note says 'would like' without explaining the contraction. An A2 listener may not connect 'I'd' with 'I would' immediately.",
-        "suggested_fix": "Add to the grammar note: I'd = I would."
+        "description": "The grammar note explains 'would like' clearly, but it does not show the most common short answers. At A2, learners may need simple responses for polite offers.",
+        "suggested_fix": "Add to the grammar note: 'Common answers: Yes, please. / No, thank you.'"
       },
       {
         "line_id": null,
         "category": "engagement",
         "severity": "minor",
-        "description": "The episode has no hook, so it starts directly with the dialogue. For a micro dialogue this is acceptable, but a very short context line would help the listener enter the situation more easily.",
-        "suggested_fix": "Add a simple hook such as: At the night market, Anna and Ben want to eat."
+        "description": "The dialogue is clear but quite plain. A night market scene could feel more alive with one small sensory detail.",
+        "suggested_fix": "Make the hook slightly more vivid, for example: 'Anna and Ben smell hot noodle soup at a busy night market.'"
       }
     ],
     "rubric_scores": {
@@ -36,7 +50,7 @@
       "explanation_helpfulness": 4
     },
     "hard_gate_failures": [],
-    "summary": "The episode is short, clear, and suitable for A2 learners. The target language is useful and the grammar point is relevant. The main issue is the unnatural Vietnamese translation of the polite request in s1l2; fixing this would make the clip feel natural and trustworthy."
+    "summary": "The micro-dialogue is short, clear, and suitable for A2 learners. The target word 'noodle' and review words 'food' and 'eat' appear naturally, and the grammar point 'would like' is used in a useful way. The main issue is the Vietnamese gloss for 'noodle', which sounds unnatural. A few small translation and explanation changes would make the episode much better."
   },
   "gate_decision": {
     "schema_version": "1.0.0",
@@ -44,22 +58,22 @@
     "gate": 1,
     "user": "learner",
     "decision": "edit-and-approve",
-    "diff": "s1l2: Replace with: Cho mình một tô mì nhé. If the speaker is ordering from a vendor, use: Cho em một tô mì ạ.\nepisode: Add to the grammar note: I'd = I would.\nepisode: Add a simple hook such as: At the night market, Anna and Ben want to eat.",
-    "notes": "The episode is short, clear, and suitable for A2 learners. The target language is useful and the grammar point is relevant. The main issue is the unnatural Vietnamese translation of the polite request in s1l2; fixing this would make the clip feel natural and trustworthy.",
-    "timestamp": "2026-10-20T10:51:28.606669Z"
+    "diff": "s1l1: Change to: 'Bạn có muốn ăn mì không?'\ns1l2: Change to: 'Ừ, mình muốn. Đồ ăn nhìn ngon quá.'\nepisode: Change the Vietnamese gloss to: 'mì, bún, phở - món ăn dạng sợi, làm từ bột, thường ăn với nước dùng.'\nepisode: Add to the grammar note: 'Common answers: Yes, please. / No, thank you.'\nepisode: Make the hook slightly more vivid, for example: 'Anna and Ben smell hot noodle soup at a busy night market.'",
+    "notes": "The micro-dialogue is short, clear, and suitable for A2 learners. The target word 'noodle' and review words 'food' and 'eat' appear naturally, and the grammar point 'would like' is used in a useful way. The main issue is the Vietnamese gloss for 'noodle', which sounds unnatural. A few small translation and explanation changes would make the episode much better.",
+    "timestamp": "2026-10-22T07:11:02.490415Z"
   },
   "costs": [
     {
       "station": "review_learner",
       "vendor": "gateway",
       "model": "qwen3.8-max-0902",
-      "input_tokens": 1674,
-      "output_tokens": 4912,
+      "input_tokens": 1777,
+      "output_tokens": 4658,
       "cache_creation_input_tokens": 0,
       "cache_read_input_tokens": 0,
-      "usd": 0.006564,
+      "usd": 0.0063,
       "priced": true,
-      "timestamp": "2026-10-20T10:51:28.606274Z"
+      "timestamp": "2026-10-22T07:11:02.488551Z"
     }
   ]
 }

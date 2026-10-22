@@ -7,36 +7,36 @@
     "reviewer": "examiner",
     "issues": [
       {
-        "line_id": "s1l3",
+        "line_id": "s1l1",
         "category": "collocation",
         "severity": "major",
-        "description": "\"Is there a vegetable in the kitchen?\" is grammatical but not what a native speaker would say; 'vegetable' is countable and a general enquiry would use the plural with 'any'. The singular with 'a' sounds odd unless pointing at one specific item.",
-        "suggested_fix": "Change to: \"Are there any vegetables in the kitchen?\""
+        "description": "\"buy a vegetable\" uses the singular countable noun where a native speaker would naturally say \"buy vegetables\" or \"buy some vegetables\" when talking about ingredients for dinner; the singular sounds like she needs one single vegetable.",
+        "suggested_fix": "Use the plural: \"I have to buy some vegetables ...\""
       },
       {
-        "line_id": "s1l4",
-        "category": "consistency",
+        "line_id": "s1l1",
+        "category": "collocation",
         "severity": "major",
-        "description": "Ben's answer does not answer Anna's question (she asks about a vegetable; he replies about food being ready). It also contradicts s1l1–s1l2, where the dinner still has to be cooked, so the food cannot already be ready. A learner would hear an incoherent exchange.",
-        "suggested_fix": "Change to: \"Yes, there are. Let's cook the food together.\" (answers the question, keeps the review word 'food', and matches the not-yet-cooked context)."
+        "description": "\"for the food\" is not natural English here; 'the food' has no clear referent and a native speaker would say \"for dinner\" (which also matches the theme).",
+        "suggested_fix": "Change s1l1 to \"I have to buy some vegetables for dinner.\" To keep the review word 'food' in the clip, adjust s1l2 to \"You don't have to buy food. I have vegetables in the kitchen.\""
       },
       {
         "line_id": null,
         "category": "gloss",
-        "severity": "major",
-        "description": "The gloss for the target word 'vegetable' — \"a thing that grows in the ground and you can eat\" — is misleading: many common vegetables (tomatoes, beans, lettuce, cabbage) grow above ground, so learners would form a wrong category. The clause \"and you can eat\" also sits awkwardly inside the relative clause.",
-        "suggested_fix": "Replace with: \"a plant, or part of a plant, that people eat — for example, carrots or potatoes\"."
+        "severity": "minor",
+        "description": "The gloss for the target word 'vegetable' (\"a food from a plant, not meat or fruit\") is accurate but abstract for A2; a concrete example would make the meaning unmistakable.",
+        "suggested_fix": "e.g. \"a plant that we eat, for example carrots or potatoes; not meat or fruit\"."
       }
     ],
     "rubric_scores": {
-      "grammar_accuracy": 4,
+      "grammar_accuracy": 5,
       "naturalness": 3,
       "level_fit": 5,
       "grammar_point_teaching": 5,
-      "gloss_quality": 3
+      "gloss_quality": 4
     },
     "hard_gate_failures": [],
-    "summary": "Level-appropriate micro_dialogue that correctly presents 'have to' / 'don't have to' with an accurate grammar note, and all three spec words appear. However, the dialogue is incoherent as written: Ben's final line does not answer Anna's question and contradicts the opening (dinner still to be cooked), Anna's singular 'a vegetable' is unnatural, and the gloss for the target word 'vegetable' is misleading. All three issues are fixable line by line with the suggested edits."
+    "summary": "Grammar is error-free and the grammar point is taught correctly: both 'have to' and 'don't have to' appear in the dialogue, the grammar note states the rule accurately, and the interaction prompt reinforces it. However, Anna's opening line contains two unnatural chunks — 'buy a vegetable' (singular) and 'for the food' — which learners would absorb; both are fixed by the suggested rewording, which also keeps the review words 'food' and 'kitchen' in the clip. Ben's line is natural, the glosses are simple and correct (an example would improve 'vegetable'), and all language sits comfortably at A2."
   },
   "gate_decision": {
     "schema_version": "1.0.0",
@@ -44,22 +44,22 @@
     "gate": 1,
     "user": "examiner",
     "decision": "edit-and-approve",
-    "diff": "s1l3: Change to: \"Are there any vegetables in the kitchen?\"\ns1l4: Change to: \"Yes, there are. Let's cook the food together.\" (answers the question, keeps the review word 'food', and matches the not-yet-cooked context).\nepisode: Replace with: \"a plant, or part of a plant, that people eat — for example, carrots or potatoes\".",
-    "notes": "Level-appropriate micro_dialogue that correctly presents 'have to' / 'don't have to' with an accurate grammar note, and all three spec words appear. However, the dialogue is incoherent as written: Ben's final line does not answer Anna's question and contradicts the opening (dinner still to be cooked), Anna's singular 'a vegetable' is unnatural, and the gloss for the target word 'vegetable' is misleading. All three issues are fixable line by line with the suggested edits.",
-    "timestamp": "2026-10-20T10:54:37.813142Z"
+    "diff": "s1l1: Use the plural: \"I have to buy some vegetables ...\"\ns1l1: Change s1l1 to \"I have to buy some vegetables for dinner.\" To keep the review word 'food' in the clip, adjust s1l2 to \"You don't have to buy food. I have vegetables in the kitchen.\"\nepisode: e.g. \"a plant that we eat, for example carrots or potatoes; not meat or fruit\".",
+    "notes": "Grammar is error-free and the grammar point is taught correctly: both 'have to' and 'don't have to' appear in the dialogue, the grammar note states the rule accurately, and the interaction prompt reinforces it. However, Anna's opening line contains two unnatural chunks — 'buy a vegetable' (singular) and 'for the food' — which learners would absorb; both are fixed by the suggested rewording, which also keeps the review words 'food' and 'kitchen' in the clip. Ben's line is natural, the glosses are simple and correct (an example would improve 'vegetable'), and all language sits comfortably at A2.",
+    "timestamp": "2026-10-22T07:14:34.526283Z"
   },
   "costs": [
     {
       "station": "review_examiner",
       "vendor": "gateway",
       "model": "kimi/kimi-k3",
-      "input_tokens": 792,
-      "output_tokens": 3867,
+      "input_tokens": 696,
+      "output_tokens": 5955,
       "cache_creation_input_tokens": 0,
       "cache_read_input_tokens": 1024,
-      "usd": 0.012138,
+      "usd": 0.018344,
       "priced": true,
-      "timestamp": "2026-10-20T10:54:37.812544Z"
+      "timestamp": "2026-10-22T07:14:34.525661Z"
     }
   ]
 }

@@ -227,6 +227,195 @@
         "total_usd": 0.019447
       },
       "finished_at": "2026-10-20T10:48:18.542890+00:00"
+    },
+    {
+      "episode_id": "en-A2-x09",
+      "status": "PASSED",
+      "error": null,
+      "a3_turns": 1,
+      "elapsed_s": 116.4,
+      "station_versions": {
+        "a2_scriptwriter": "gateway/ds/deepseek-v4-pro#44136fa3+b73f18add659",
+        "a3_level_editor": "gateway/ds/deepseek-v4-pro#44136fa3+34241d8f55dd"
+      },
+      "first_report": {
+        "schema_version": "1.1.0",
+        "episode_id": "en-A2-x09",
+        "level": "A2",
+        "config_hash": "sha256:1bb30abe00c08cc2ffbd9d9410aa5556752f20e68fa4c8ac5f6ca9d76185f60d",
+        "content_token_count": 19,
+        "in_level_ratio": 0.8947,
+        "new_word_ratio": 0.1111,
+        "off_level_tokens": [
+          {
+            "line_id": "s1l1",
+            "surface": "ride",
+            "lemma": "ride",
+            "level": "B1"
+          },
+          {
+            "line_id": "s1l2",
+            "surface": "ride",
+            "lemma": "ride",
+            "level": "B1"
+          }
+        ],
+        "target_word_counts": {
+          "motorbike": 1
+        },
+        "sentence_length": {
+          "mean": 7.0,
+          "min": 6,
+          "max": 9,
+          "band": [
+            8,
+            12
+          ],
+          "sentence_count": 3,
+          "long_lines": [],
+          "long_share": 0.0
+        },
+        "word_count": 21,
+        "estimated_duration_min": 0.22,
+        "gate_failures": [
+          {
+            "gate": "coverage",
+            "detail": "in-level ratio 89.5% < 95%; off-level: ride",
+            "line_ids": [
+              "s1l1",
+              "s1l2"
+            ]
+          },
+          {
+            "gate": "new_words",
+            "detail": "new-word ratio 11.1% > 10% (2 new of 18 distinct lemmas)",
+            "line_ids": []
+          }
+        ],
+        "passed": false
+      },
+      "final_report": {
+        "schema_version": "1.1.0",
+        "episode_id": "en-A2-x09",
+        "level": "A2",
+        "config_hash": "sha256:1bb30abe00c08cc2ffbd9d9410aa5556752f20e68fa4c8ac5f6ca9d76185f60d",
+        "content_token_count": 20,
+        "in_level_ratio": 1.0,
+        "new_word_ratio": 0.0588,
+        "off_level_tokens": [],
+        "target_word_counts": {
+          "motorbike": 2
+        },
+        "sentence_length": {
+          "mean": 7.33,
+          "min": 6,
+          "max": 9,
+          "band": [
+            8,
+            12
+          ],
+          "sentence_count": 3,
+          "long_lines": [],
+          "long_share": 0.0
+        },
+        "word_count": 22,
+        "estimated_duration_min": 0.23,
+        "gate_failures": [],
+        "passed": true
+      },
+      "cost_ledger": {
+        "schema_version": "1.1.0",
+        "episode_id": "en-A2-x09",
+        "budget_usd": 0.5,
+        "entries": [
+          {
+            "station": "a2_scriptwriter",
+            "vendor": "gateway",
+            "model": "deepseek-v4-pro",
+            "input_tokens": 479,
+            "output_tokens": 4955,
+            "cache_creation_input_tokens": 0,
+            "cache_read_input_tokens": 5376,
+            "usd": 0.003415,
+            "priced": true,
+            "timestamp": "2026-10-22T07:07:18.889313Z"
+          },
+          {
+            "station": "a3_level_editor",
+            "vendor": "gateway",
+            "model": "deepseek-v4-pro",
+            "input_tokens": 6247,
+            "output_tokens": 2528,
+            "cache_creation_input_tokens": 0,
+            "cache_read_input_tokens": 0,
+            "usd": 0.003043,
+            "priced": true,
+            "timestamp": "2026-10-22T07:07:55.684485Z"
+          },
+          {
+            "station": "a3_level_editor",
+            "vendor": "gateway",
+            "model": "deepseek-v4-pro",
+            "input_tokens": 123,
+            "output_tokens": 34,
+            "cache_creation_input_tokens": 0,
+            "cache_read_input_tokens": 8704,
+            "usd": 0.000113,
+            "priced": true,
+            "timestamp": "2026-10-22T07:07:58.797138Z"
+          },
+          {
+            "station": "a3_level_editor",
+            "vendor": "gateway",
+            "model": "deepseek-v4-pro",
+            "input_tokens": 145,
+            "output_tokens": 28,
+            "cache_creation_input_tokens": 0,
+            "cache_read_input_tokens": 8832,
+            "usd": 0.000115,
+            "priced": true,
+            "timestamp": "2026-10-22T07:08:00.694832Z"
+          },
+          {
+            "station": "review_examiner",
+            "vendor": "gateway",
+            "model": "kimi/kimi-k3",
+            "input_tokens": 716,
+            "output_tokens": 2860,
+            "cache_creation_input_tokens": 0,
+            "cache_read_input_tokens": 1024,
+            "usd": 0.009071,
+            "priced": true,
+            "timestamp": "2026-10-22T07:13:15.813835Z"
+          },
+          {
+            "station": "review_examiner",
+            "vendor": "gateway",
+            "model": "kimi/kimi-k3",
+            "input_tokens": 1740,
+            "output_tokens": 2223,
+            "cache_creation_input_tokens": 0,
+            "cache_read_input_tokens": 0,
+            "usd": 0.007713,
+            "priced": true,
+            "timestamp": "2026-10-22T07:21:46.695995Z"
+          },
+          {
+            "station": "review_learner",
+            "vendor": "gateway",
+            "model": "qwen3.8-max-0902",
+            "input_tokens": 686,
+            "output_tokens": 5531,
+            "cache_creation_input_tokens": 0,
+            "cache_read_input_tokens": 1024,
+            "usd": 0.006937,
+            "priced": true,
+            "timestamp": "2026-10-22T07:24:04.089086Z"
+          }
+        ],
+        "total_usd": 0.030407
+      },
+      "finished_at": "2026-10-22T07:08:00.744756+00:00"
     }
   ]
 }

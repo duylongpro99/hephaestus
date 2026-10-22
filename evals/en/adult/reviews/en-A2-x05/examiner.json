@@ -9,16 +9,9 @@
       {
         "line_id": null,
         "category": "gloss",
-        "severity": "major",
-        "description": "The gloss for the target word 'headache' — 'when your head feels sick' — is inaccurate and teaches a wrong collocation. Native speakers do not say a head 'feels sick'; a headache is a pain in the head. A learner could wrongly conclude that 'sick' can describe a hurting body part (e.g. 'my head is sick').",
-        "suggested_fix": "Change the gloss to 'a pain in your head' (or 'when your head hurts'). Both use A2-level words and are accurate."
-      },
-      {
-        "line_id": null,
-        "category": "consistency",
         "severity": "minor",
-        "description": "The theme in the spec is 'feeling sick and visiting the pharmacy', but the dialogue only covers feeling sick and advice to see a doctor; the pharmacy never appears. Understandable given the 10-15 second micro-dialogue limit, but the theme is only half delivered.",
-        "suggested_fix": "Either adjust the theme to 'feeling sick and getting advice', or change line s1l3 to mention the pharmacy, e.g. 'You should go to the pharmacy. You shouldn't work today.'"
+        "description": "The gloss for the target word 'headache' ('when your head feels bad') is vague: 'feels bad' could cover dizziness or other sensations rather than specifically pain. It is not wrong, but it is less precise than the standard learner-dictionary gloss, and this gloss is the sole teaching vehicle for the target word in a micro_dialogue.",
+        "suggested_fix": "Change the gloss to 'a pain in your head' (both words are A1, so it stays simple and is more accurate)."
       }
     ],
     "rubric_scores": {
@@ -26,33 +19,33 @@
       "naturalness": 5,
       "level_fit": 5,
       "grammar_point_teaching": 5,
-      "gloss_quality": 3
+      "gloss_quality": 4
     },
     "hard_gate_failures": [],
-    "summary": "A clean, level-appropriate micro-dialogue: all three lines are grammatically correct and natural, 'should/shouldn't' for advice is modelled twice and explained correctly, and every word is at or below A2 apart from the intended target 'headache'. One real problem: the English gloss for 'headache' ('when your head feels sick') is inaccurate and models a collocation native speakers do not use — it should read 'a pain in your head' or 'when your head hurts'. Minor note: the spec's theme mentions visiting the pharmacy, which never occurs in the clip. Fix the gloss and this is ready to record."
+    "summary": "A clean A2 micro_dialogue. All four lines are grammatically correct and natural ('You look sick, Ben. What's wrong?' / 'I have a headache.' / 'You should go to the pharmacy. You shouldn't work today.' / 'Should I see a doctor?'). The grammar point (should/shouldn't for advice) is used correctly in positive, negative and question forms, and the grammar note explains it accurately with examples taken from the dialogue. Target word 'headache' and review words 'sick' and 'doctor' all appear naturally; 'pharmacy' is theme-required and glossed with a simple, accurate definition. All vocabulary and structures sit at or below A2. The only issue is minor: the gloss for 'headache' ('when your head feels bad') is vaguer than ideal and should be 'a pain in your head'. No critical or major issues; approve."
   },
   "gate_decision": {
     "schema_version": "1.0.0",
     "episode_id": "en-A2-x05",
     "gate": 1,
     "user": "examiner",
-    "decision": "edit-and-approve",
-    "diff": "episode: Change the gloss to 'a pain in your head' (or 'when your head hurts'). Both use A2-level words and are accurate.\nepisode: Either adjust the theme to 'feeling sick and getting advice', or change line s1l3 to mention the pharmacy, e.g. 'You should go to the pharmacy. You shouldn't work today.'",
-    "notes": "A clean, level-appropriate micro-dialogue: all three lines are grammatically correct and natural, 'should/shouldn't' for advice is modelled twice and explained correctly, and every word is at or below A2 apart from the intended target 'headache'. One real problem: the English gloss for 'headache' ('when your head feels sick') is inaccurate and models a collocation native speakers do not use — it should read 'a pain in your head' or 'when your head hurts'. Minor note: the spec's theme mentions visiting the pharmacy, which never occurs in the clip. Fix the gloss and this is ready to record.",
-    "timestamp": "2026-10-20T10:49:41.124056Z"
+    "decision": "approve",
+    "diff": "episode: Change the gloss to 'a pain in your head' (both words are A1, so it stays simple and is more accurate).",
+    "notes": "A clean A2 micro_dialogue. All four lines are grammatically correct and natural ('You look sick, Ben. What's wrong?' / 'I have a headache.' / 'You should go to the pharmacy. You shouldn't work today.' / 'Should I see a doctor?'). The grammar point (should/shouldn't for advice) is used correctly in positive, negative and question forms, and the grammar note explains it accurately with examples taken from the dialogue. Target word 'headache' and review words 'sick' and 'doctor' all appear naturally; 'pharmacy' is theme-required and glossed with a simple, accurate definition. All vocabulary and structures sit at or below A2. The only issue is minor: the gloss for 'headache' ('when your head feels bad') is vaguer than ideal and should be 'a pain in your head'. No critical or major issues; approve.",
+    "timestamp": "2026-10-22T07:09:06.541732Z"
   },
   "costs": [
     {
       "station": "review_examiner",
       "vendor": "gateway",
       "model": "kimi/kimi-k3",
-      "input_tokens": 1745,
-      "output_tokens": 2575,
+      "input_tokens": 1847,
+      "output_tokens": 1955,
       "cache_creation_input_tokens": 0,
       "cache_read_input_tokens": 0,
-      "usd": 0.008772,
+      "usd": 0.006973,
       "priced": true,
-      "timestamp": "2026-10-20T10:49:41.123781Z"
+      "timestamp": "2026-10-22T07:09:06.541224Z"
     }
   ]
 }

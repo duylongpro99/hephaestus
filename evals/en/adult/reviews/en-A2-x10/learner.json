@@ -7,57 +7,36 @@
     "reviewer": "learner",
     "issues": [
       {
-        "line_id": "s1l2",
-        "category": "translation_naturalness",
-        "severity": "major",
-        "description": "The Vietnamese line 'cơ thể mình thấy khỏe mỗi tuần' sounds machine-translated. In natural Vietnamese, the speaker usually says that they feel healthier, not that their body 'feels' healthy, and 'tuần nào ... cũng' is more natural than 'mỗi tuần' at the end.",
-        "suggested_fix": "English: 'I sat a lot. After I joined the gym, my body feels better every week.' Vietnamese: 'Mình ngồi nhiều. Sau khi bắt đầu đi gym, tuần nào mình cũng thấy cơ thể khỏe hơn.'"
-      },
-      {
         "line_id": "s1l1",
         "category": "translation_naturalness",
         "severity": "minor",
-        "description": "The Vietnamese translation 'bạn làm gì?' does not clearly show the past meaning of 'what did you do?'. Adding 'đã' makes the before-time meaning clearer for A2 learners.",
-        "suggested_fix": "Trước khi bạn bắt đầu đi gym, bạn đã làm gì?"
+        "description": "The Vietnamese sounds a little literal. 'tham gia phòng gym' is not the most natural way to say 'joined the gym', and 'mình đã mệt' feels flat.",
+        "suggested_fix": "Trước khi đăng ký phòng gym, mình đã thấy mệt."
       },
       {
         "line_id": "s1l2",
-        "category": "comprehension",
+        "category": "translation_naturalness",
         "severity": "minor",
-        "description": "'I sat a lot' is very short and a little unclear as an answer about life before the gym. It is understandable, but a small addition would make the meaning easier to picture.",
-        "suggested_fix": "I sat at home a lot. / I didn't exercise much."
-      },
-      {
-        "line_id": null,
-        "category": "translation_accuracy",
-        "severity": "minor",
-        "description": "The Vietnamese gloss for 'week' is 'bảy ngày', which is a definition. A2 learners would benefit from the direct Vietnamese word 'tuần' as well.",
-        "suggested_fix": "vi: 'tuần (bảy ngày)'"
+        "description": "The meaning is clear, but the word order sounds a little translated. A native speaker would usually put 'một tuần' earlier.",
+        "suggested_fix": "Một tuần bạn đi bao nhiêu ngày?"
       },
       {
         "line_id": null,
         "category": "explanation",
         "severity": "minor",
-        "description": "The grammar note gives only a 'before' example, but the grammar point is 'before and after clauses'. Adding an 'after' example would help learners see both patterns.",
-        "suggested_fix": "Use 'before' or 'after' + subject + verb to say when something happens. Examples: 'Before I joined the gym, I sat a lot.' 'After I joined the gym, my body feels better every week.'"
-      },
-      {
-        "line_id": null,
-        "category": "engagement",
-        "severity": "minor",
-        "description": "The hook is clear but quite flat. It could make me more curious about the change between before and after the gym.",
-        "suggested_fix": "Hook: 'Ben goes to the gym now. What was his life like before?'"
+        "description": "The grammar point is 'before and after clauses', but the example only shows 'before'. An 'after' example would make the grammar point clearer for A2 learners.",
+        "suggested_fix": "Use 'before' or 'after' with a subject and verb to show time order. Example: 'Before I joined the gym, I was tired. After work, I go to the gym.'"
       }
     ],
     "rubric_scores": {
-      "comprehensibility": 4,
-      "translation_accuracy": 4,
-      "translation_naturalness": 3,
-      "engagement": 3,
+      "comprehensibility": 5,
+      "translation_accuracy": 5,
+      "translation_naturalness": 4,
+      "engagement": 4,
       "explanation_helpfulness": 4
     },
     "hard_gate_failures": [],
-    "summary": "The episode is short, clear, and suitable for A2 adult learners. The target word 'gym', review words 'week' and 'body', and the before/after grammar point are all present. The main problem is the Vietnamese translation of Ben's second line, which sounds unnatural. With small fixes to the Vietnamese, the English wording, the 'week' gloss, and the grammar note, this should be easy and useful for A2 listeners."
+    "summary": "This is a short, clear A2 micro-dialogue. The English is easy to follow, the target word 'gym' appears, and the review words 'week' and 'body' are included. The Vietnamese is mostly accurate, but two lines sound a little stiff. Adding an 'after' example to the grammar note would also help."
   },
   "gate_decision": {
     "schema_version": "1.0.0",
@@ -65,22 +44,22 @@
     "gate": 1,
     "user": "learner",
     "decision": "edit-and-approve",
-    "diff": "s1l2: English: 'I sat a lot. After I joined the gym, my body feels better every week.' Vietnamese: 'Mình ngồi nhiều. Sau khi bắt đầu đi gym, tuần nào mình cũng thấy cơ thể khỏe hơn.'\ns1l1: Trước khi bạn bắt đầu đi gym, bạn đã làm gì?\ns1l2: I sat at home a lot. / I didn't exercise much.\nepisode: vi: 'tuần (bảy ngày)'\nepisode: Use 'before' or 'after' + subject + verb to say when something happens. Examples: 'Before I joined the gym, I sat a lot.' 'After I joined the gym, my body feels better every week.'\nepisode: Hook: 'Ben goes to the gym now. What was his life like before?'",
-    "notes": "The episode is short, clear, and suitable for A2 adult learners. The target word 'gym', review words 'week' and 'body', and the before/after grammar point are all present. The main problem is the Vietnamese translation of Ben's second line, which sounds unnatural. With small fixes to the Vietnamese, the English wording, the 'week' gloss, and the grammar note, this should be easy and useful for A2 listeners.",
-    "timestamp": "2026-10-20T10:57:33.566696Z"
+    "diff": "s1l1: Trước khi đăng ký phòng gym, mình đã thấy mệt.\ns1l2: Một tuần bạn đi bao nhiêu ngày?\nepisode: Use 'before' or 'after' with a subject and verb to show time order. Example: 'Before I joined the gym, I was tired. After work, I go to the gym.'",
+    "notes": "This is a short, clear A2 micro-dialogue. The English is easy to follow, the target word 'gym' appears, and the review words 'week' and 'body' are included. The Vietnamese is mostly accurate, but two lines sound a little stiff. Adding an 'after' example to the grammar note would also help.",
+    "timestamp": "2026-10-22T07:15:42.765600Z"
   },
   "costs": [
     {
       "station": "review_learner",
       "vendor": "gateway",
       "model": "qwen3.8-max-0902",
-      "input_tokens": 682,
-      "output_tokens": 6605,
+      "input_tokens": 637,
+      "output_tokens": 5569,
       "cache_creation_input_tokens": 0,
       "cache_read_input_tokens": 1024,
-      "usd": 0.008224,
+      "usd": 0.006963,
       "priced": true,
-      "timestamp": "2026-10-20T10:57:33.565695Z"
+      "timestamp": "2026-10-22T07:15:42.763921Z"
     }
   ]
 }

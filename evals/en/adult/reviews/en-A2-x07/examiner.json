@@ -10,26 +10,33 @@
         "line_id": null,
         "category": "consistency",
         "severity": "minor",
-        "description": "The spec theme is 'a surprise birthday party', but nothing in the dialogue is a surprise: Ben already knows about his party and Anna openly confirms the cake. The theme is only half delivered (birthday party, yes; surprise, no).",
-        "suggested_fix": "Make the surprise element explicit with A2-level wording, e.g. change s1l2 to 'Great! Is it a surprise for my birthday party?' and s1l3 to 'Yes! A big cake - don't look!'}, or reframe the party as a surprise for someone else ('Is it for Mum's surprise birthday party?')."
+        "description": "Theme is 'a surprise birthday party', but nothing in the dialogue or glosses establishes a surprise; the title promises 'A Surprise Birthday Cake' while the clip only shows Ben baking a cake. The surprise is at best implied (Anna didn't know he was baking).",
+        "suggested_fix": "Add a small cue of surprise, e.g. Anna's line 3: 'Oh, that's nice! It's a surprise for Mum!' or adjust the visual cue/stage direction so the surprise element is explicit."
       },
       {
         "line_id": null,
-        "category": "collocation",
+        "category": "grammar_point",
         "severity": "minor",
-        "description": "Interaction prompt 'What were you doing when a friend called you last time?' is understandable but not how a native speaker would phrase it; 'last time' dangles awkwardly at the end of the when-clause.",
-        "suggested_fix": "Rephrase as 'What were you doing the last time a friend called you?'"
+        "description": "The grammar note is accurate but incomplete: it does not state that the 'when' clause takes the past simple (the shorter interrupting action), which is the pattern the dialogue itself models ('when I called').",
+        "suggested_fix": "Extend the note: '...another action in the past. We use the past simple after \"when\" for the shorter action: I was baking when you called.'"
+      },
+      {
+        "line_id": null,
+        "category": "level",
+        "severity": "minor",
+        "description": "Estimated clip length is about 8-9 seconds (three short lines plus 1.4s of pauses), slightly under the spec's 0.17 min (about 10.2s) minimum.",
+        "suggested_fix": "Add one short line (e.g. Anna: 'Can I help?') or a slightly longer pause to bring the clip within the 10-15 second window."
       }
     ],
     "rubric_scores": {
       "grammar_accuracy": 5,
-      "naturalness": 4,
+      "naturalness": 5,
       "level_fit": 5,
-      "grammar_point_teaching": 5,
+      "grammar_point_teaching": 4,
       "gloss_quality": 5
     },
     "hard_gate_failures": [],
-    "summary": "A clean A2 micro-dialogue. Line 1 models past continuous with 'when' accurately and the grammar note explains it correctly with a matching example. All vocabulary is at or below A2; target word 'birthday' and review words 'party' and 'cake' all appear naturally, and the three glosses are accurate and simpler than the words they explain. Two minor points: the 'surprise' element of the theme is not realised in the dialogue, and the interaction prompt is slightly unidiomatic ('when a friend called you last time' -> 'the last time a friend called you'). Neither blocks approval."
+    "summary": "A clean, accurate micro-dialogue. Both lines model the target structure (past continuous with 'when') correctly and naturally, all vocabulary is at or below A2, and the three glosses are simple, accurate and easier than the words they explain. No grammar, collocation or gloss errors. Minor points only: the 'surprise' element of the theme is not explicit in the clip, the grammar note could add that 'when' takes the past simple, and the clip may run a second or two under the 10-second minimum. None of these blocks approval."
   },
   "gate_decision": {
     "schema_version": "1.0.0",
@@ -37,22 +44,22 @@
     "gate": 1,
     "user": "examiner",
     "decision": "approve",
-    "diff": "episode: Make the surprise element explicit with A2-level wording, e.g. change s1l2 to 'Great! Is it a surprise for my birthday party?' and s1l3 to 'Yes! A big cake - don't look!'}, or reframe the party as a surprise for someone else ('Is it for Mum's surprise birthday party?').\nepisode: Rephrase as 'What were you doing the last time a friend called you?'",
-    "notes": "A clean A2 micro-dialogue. Line 1 models past continuous with 'when' accurately and the grammar note explains it correctly with a matching example. All vocabulary is at or below A2; target word 'birthday' and review words 'party' and 'cake' all appear naturally, and the three glosses are accurate and simpler than the words they explain. Two minor points: the 'surprise' element of the theme is not realised in the dialogue, and the interaction prompt is slightly unidiomatic ('when a friend called you last time' -> 'the last time a friend called you'). Neither blocks approval.",
-    "timestamp": "2026-10-20T10:53:04.234591Z"
+    "diff": "episode: Add a small cue of surprise, e.g. Anna's line 3: 'Oh, that's nice! It's a surprise for Mum!' or adjust the visual cue/stage direction so the surprise element is explicit.\nepisode: Extend the note: '...another action in the past. We use the past simple after \"when\" for the shorter action: I was baking when you called.'\nepisode: Add one short line (e.g. Anna: 'Can I help?') or a slightly longer pause to bring the clip within the 10-15 second window.",
+    "notes": "A clean, accurate micro-dialogue. Both lines model the target structure (past continuous with 'when') correctly and naturally, all vocabulary is at or below A2, and the three glosses are simple, accurate and easier than the words they explain. No grammar, collocation or gloss errors. Minor points only: the 'surprise' element of the theme is not explicit in the clip, the grammar note could add that 'when' takes the past simple, and the clip may run a second or two under the 10-second minimum. None of these blocks approval.",
+    "timestamp": "2026-10-22T07:12:07.011889Z"
   },
   "costs": [
     {
       "station": "review_examiner",
       "vendor": "gateway",
       "model": "kimi/kimi-k3",
-      "input_tokens": 716,
-      "output_tokens": 2273,
+      "input_tokens": 711,
+      "output_tokens": 1980,
       "cache_creation_input_tokens": 0,
       "cache_read_input_tokens": 1024,
-      "usd": 0.00731,
+      "usd": 0.006428,
       "priced": true,
-      "timestamp": "2026-10-20T10:53:04.234282Z"
+      "timestamp": "2026-10-22T07:12:07.011456Z"
     }
   ]
 }

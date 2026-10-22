@@ -8,44 +8,60 @@
     "issues": [
       {
         "line_id": null,
+        "category": "grammar_point",
+        "severity": "critical",
+        "description": "The grammar note is factually wrong as written. It groups 'every morning' with adverbs of frequency and then states 'They usually go before the main verb.' True adverbs of frequency (usually, always, often) do go before the main verb, but 'every morning' is a time/frequency expression that goes at the end (or start) of the clause — exactly as the dialogue itself shows: 'I go by motorbike every morning.' The note contradicts the model line and would teach learners to produce errors like 'I every morning go by motorbike.'",
+        "suggested_fix": "Rewrite the note: \"Adverbs of frequency like 'usually' tell us how often something happens. They go before the main verb: 'I usually go by motorbike.' Expressions like 'every morning' also tell us how often, but they usually go at the end of the sentence: 'I go by motorbike every morning.'\""
+      },
+      {
+        "line_id": null,
         "category": "gloss",
         "severity": "major",
-        "description": "The gloss for the target word 'motorbike' — 'a bike that goes by itself, not by your legs' — is misleading. A motorbike does not go 'by itself'; it has an engine and needs a rider. 'By itself' suggests the vehicle moves on its own, which is not the defining feature. The intended contrast (engine power vs pedalling) should be stated directly.",
-        "suggested_fix": "Change the gloss to: 'a bicycle with an engine — you do not use your legs to make it go'."
+        "description": "The target-word gloss for 'motorbike' ('a bike that moves without your legs') is misleading: it never mentions the engine/motor, the defining feature. Many things move 'without your legs' (a car, a bus, an escalator), so the gloss fails to pin down the meaning and is awkwardly phrased.",
+        "suggested_fix": "Change the gloss to: \"a two-wheeled vehicle with an engine, like a bicycle with a motor\""
+      },
+      {
+        "line_id": null,
+        "category": "gloss",
+        "severity": "minor",
+        "description": "The gloss for 'morning' ('the early part of the day, before 12') is accurate but '12' could be clearer as '12 o'clock / midday' for A2 readers.",
+        "suggested_fix": "Use: \"the early part of the day, before 12 o'clock (midday)\""
       }
     ],
     "rubric_scores": {
       "grammar_accuracy": 5,
       "naturalness": 5,
       "level_fit": 5,
-      "grammar_point_teaching": 5,
-      "gloss_quality": 3
+      "grammar_point_teaching": 2,
+      "gloss_quality": 2
     },
-    "hard_gate_failures": [],
-    "summary": "All three dialogue lines are grammatically correct, natural and firmly A2, and they model the grammar point well: 'usually', 'always' and 'sometimes' all appear before the main verb, matching the (accurate) grammar note. Review words 'street' and 'morning' are recycled naturally, and the quiz-free micro-dialogue format is respected with a plausible 10-15 second length. The one real problem is the gloss for the target word 'motorbike': 'a bike that goes by itself' is misleading, since a motorbike has an engine and a rider — it does not move by itself. Fix that gloss and the episode is ready to record."
+    "hard_gate_failures": [
+      "Grammar note teaches a wrong rule: it claims 'every morning' goes before the main verb, contradicting the dialogue and standard usage."
+    ],
+    "summary": "The dialogue itself is excellent for A2: three short, natural, accurate lines using 'usually' and 'every morning' correctly, with review words 'street' and 'morning' and target 'motorbike' all at level. However, the episode fails on its teaching layer. The grammar note is critically wrong: it labels 'every morning' an adverb of frequency and says such items go before the main verb, which contradicts the dialogue's own correct end-placed 'every morning' and would teach learners an error. Additionally, the target-word gloss for 'motorbike' never mentions the engine and is misleading. Both are fixable with the suggested edits, but the wrong grammar rule is a critical teaching failure, so this must be rejected and resubmitted."
   },
   "gate_decision": {
     "schema_version": "1.0.0",
     "episode_id": "en-A2-x09",
     "gate": 1,
     "user": "examiner",
-    "decision": "edit-and-approve",
-    "diff": "episode: Change the gloss to: 'a bicycle with an engine — you do not use your legs to make it go'.",
-    "notes": "All three dialogue lines are grammatically correct, natural and firmly A2, and they model the grammar point well: 'usually', 'always' and 'sometimes' all appear before the main verb, matching the (accurate) grammar note. Review words 'street' and 'morning' are recycled naturally, and the quiz-free micro-dialogue format is respected with a plausible 10-15 second length. The one real problem is the gloss for the target word 'motorbike': 'a bike that goes by itself' is misleading, since a motorbike has an engine and a rider — it does not move by itself. Fix that gloss and the episode is ready to record.",
-    "timestamp": "2026-10-20T10:54:11.151259Z"
+    "decision": "reject",
+    "diff": "episode: Rewrite the note: \"Adverbs of frequency like 'usually' tell us how often something happens. They go before the main verb: 'I usually go by motorbike.' Expressions like 'every morning' also tell us how often, but they usually go at the end of the sentence: 'I go by motorbike every morning.'\"\nepisode: Change the gloss to: \"a two-wheeled vehicle with an engine, like a bicycle with a motor\"\nepisode: Use: \"the early part of the day, before 12 o'clock (midday)\"",
+    "notes": "The dialogue itself is excellent for A2: three short, natural, accurate lines using 'usually' and 'every morning' correctly, with review words 'street' and 'morning' and target 'motorbike' all at level. However, the episode fails on its teaching layer. The grammar note is critically wrong: it labels 'every morning' an adverb of frequency and says such items go before the main verb, which contradicts the dialogue's own correct end-placed 'every morning' and would teach learners an error. Additionally, the target-word gloss for 'motorbike' never mentions the engine and is misleading. Both are fixable with the suggested edits, but the wrong grammar rule is a critical teaching failure, so this must be rejected and resubmitted.",
+    "timestamp": "2026-10-22T07:21:46.696346Z"
   },
   "costs": [
     {
       "station": "review_examiner",
       "vendor": "gateway",
       "model": "kimi/kimi-k3",
-      "input_tokens": 746,
-      "output_tokens": 2560,
+      "input_tokens": 1740,
+      "output_tokens": 2223,
       "cache_creation_input_tokens": 0,
-      "cache_read_input_tokens": 1024,
-      "usd": 0.008189,
+      "cache_read_input_tokens": 0,
+      "usd": 0.007713,
       "priced": true,
-      "timestamp": "2026-10-20T10:54:11.150766Z"
+      "timestamp": "2026-10-22T07:21:46.695995Z"
     }
   ]
 }

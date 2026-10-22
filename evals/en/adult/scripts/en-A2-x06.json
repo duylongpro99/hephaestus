@@ -1,8 +1,8 @@
 {
   "schema_version": "1.0.0",
   "episode_id": "en-A2-x06",
-  "title_working": "Shopping for Winter Clothes",
-  "hook": "Anna and Ben are looking for winter clothes.",
+  "title_working": "Winter Jeans",
+  "hook": "Anna and Ben talk about winter clothes.",
   "segments": [
     {
       "id": "s1",
@@ -13,42 +13,42 @@
         {
           "id": "s1l1",
           "speaker": "anna",
-          "text": "This shop has the warmest coats.",
+          "text": "Do you like these jeans?",
           "translation": {
-            "vi": "Cửa hàng này có áo khoác ấm nhất đấy."
+            "vi": "Bạn có thích chiếc quần jeans này không?"
           },
-          "pause_after_ms": 400,
-          "visual_cue": "warm winter coats in a shop"
+          "pause_after_ms": 500,
+          "visual_cue": "jeans"
         },
         {
           "id": "s1l2",
           "speaker": "ben",
-          "text": "But I need new jeans, not a coat.",
+          "text": "Yes, they are warmer than my old ones.",
           "translation": {
-            "vi": "Nhưng mình cần quần jeans mới, không phải áo khoác."
+            "vi": "Ừ, chúng ấm hơn chiếc cũ của mình."
           },
-          "pause_after_ms": 400,
-          "visual_cue": "pair of blue jeans"
+          "pause_after_ms": 500,
+          "visual_cue": "old jeans"
         },
         {
           "id": "s1l3",
           "speaker": "anna",
-          "text": "These jeans are cheaper than those.",
+          "text": "This shop is the cheapest.",
           "translation": {
-            "vi": "Quần jeans này rẻ hơn mấy cái kia đấy."
+            "vi": "Tiệm này rẻ nhất đấy."
           },
-          "pause_after_ms": 400,
-          "visual_cue": "price tag on jeans"
+          "pause_after_ms": 500,
+          "visual_cue": "shop"
         },
         {
           "id": "s1l4",
           "speaker": "ben",
-          "text": "Great, I'll buy them.",
+          "text": "Let's buy them.",
           "translation": {
-            "vi": "Tuyệt, mình sẽ mua nó."
+            "vi": "Mình mua chúng đi."
           },
-          "pause_after_ms": 400,
-          "visual_cue": "Ben holding jeans"
+          "pause_after_ms": 500,
+          "visual_cue": null
         }
       ],
       "items": []
@@ -58,16 +58,32 @@
     {
       "word": "jeans",
       "gloss": {
-        "en": "clothes for your legs, usually blue",
+        "en": "strong blue clothes for your legs, usually long",
         "vi": "quần jeans"
       },
       "is_target": true
+    },
+    {
+      "word": "shop",
+      "gloss": {
+        "en": "a place where you can buy things",
+        "vi": "cửa hàng"
+      },
+      "is_target": false
+    },
+    {
+      "word": "buy",
+      "gloss": {
+        "en": "to get something by paying money for it",
+        "vi": "mua"
+      },
+      "is_target": false
     }
   ],
   "grammar_notes": [
-    "Use -er + than to compare two things, and the + -est to say one thing is top in a group."
+    "Comparatives like 'warmer than' compare two things. Superlatives like 'the cheapest' say one thing is the best in a group."
   ],
   "interaction_prompts": [
-    "What winter clothes do you like to buy?"
+    "Which shop near you is the cheapest for clothes?"
   ]
 }

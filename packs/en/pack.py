@@ -131,13 +131,15 @@ class EnPack:
         return []  # stress hints arrive with the Voice Director
 
     def dictionary_gloss(self, lemma: str, support_lang: str) -> str | None:
+        senses = self.dictionary_senses(lemma, support_lang, limit=1)
+        return senses[0] if senses else None
+
+    def dictionary_senses(self, lemma: str, support_lang: str, limit: int = 3) -> list[str]:
+        """WordNet definitions of `lemma`, most common sense first."""
         if support_lang != "en":
-            return None  # WordNet is monolingual; other glosses come from the Scriptwriter
-        for synset in self._wordnet.synsets(lemma):
-            definition = synset.definition()
-            if definition:
-                return definition
-        return None
+            return []  # WordNet is monolingual; other glosses come from the Scriptwriter
+        definitions = [s.definition() for s in self._wordnet.synsets(lemma)]
+        return [d for d in definitions if d][:limit]
 
     def simpler_synonyms(self, lemma: str, level: str) -> list[str]:
         """WordNet synonyms of `lemma` at or below `level`, most frequent first."""

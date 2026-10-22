@@ -7,52 +7,45 @@
     "reviewer": "examiner",
     "issues": [
       {
-        "line_id": "s1l2",
-        "category": "grammar",
-        "severity": "major",
-        "description": "Tense mismatch in the model sentence: the past-time clause 'After I joined the gym' is paired with a present-simple main clause 'my body feels good every week'. A native speaker would notice this wobble (natural options are 'Since I joined..., my body has felt...' or a past+past frame). It also clashes with the grammar note's past+past model ('Before I joined the gym, I sat a lot'), so as the lesson's only 'after' example it teaches a shaky pattern.",
-        "suggested_fix": "Change to: 'I sat a lot. After I joined the gym, my body started to feel good every week.' (keeps the after-clause, the meaning, and the review words 'body' and 'week')."
-      },
-      {
         "line_id": null,
-        "category": "collocation",
+        "category": "grammar_point",
         "severity": "minor",
-        "description": "The hook 'Anna asks him about before and after' is elliptical and unnatural; a native speaker would not say 'asks him about before and after' without a noun.",
-        "suggested_fix": "Change the hook to: 'Ben goes to the gym now. Anna asks him about his life before and after the gym.'"
+        "description": "The grammar point is 'before and after clauses', but the dialogue and the grammar note only demonstrate 'before'. The note mentions 'after' but gives no example of an after clause, so learners see only half the point in action.",
+        "suggested_fix": "Add an 'after' example to the grammar note, e.g.: \"After I go to the gym, I feel good.\" Or change a dialogue line to include one, e.g. Ben: 'After I go to the gym, I feel strong.'"
       }
     ],
     "rubric_scores": {
-      "grammar_accuracy": 4,
-      "naturalness": 4,
+      "grammar_accuracy": 5,
+      "naturalness": 5,
       "level_fit": 5,
       "grammar_point_teaching": 4,
       "gloss_quality": 5
     },
     "hard_gate_failures": [],
-    "summary": "A clean, level-appropriate micro-dialogue: both lines are simple A2 English, the target word 'gym' and review words 'week' and 'body' all appear, the glosses are accurate and simpler than the words they explain, and the 'before' clause is modelled well. One fix is needed: Ben's 'after' sentence mixes a past-time clause with a present-simple main clause, which is a noticeable tense wobble and undermines the grammar point it is meant to model; aligning it to a past+past frame fixes it. The hook's 'asks him about before and after' is a minor unnatural ellipsis worth tidying. Approve once the s1l2 edit is made."
+    "summary": "A clean, accurate micro-dialogue at A2. All three lines are grammatical and natural ('Before I joined the gym, I was tired.', 'How many days a week do you go?', 'Three days. I want a strong body.'), the target word 'gym' is used and glossed simply and correctly, and both review words ('week', 'body') appear naturally. Every word and structure is at or below A2, and the length fits the 10-15 second spec. The only blemish is that the grammar point 'before and after clauses' is illustrated only with 'before'; the note names 'after' but gives no example. This is minor and does not block approval."
   },
   "gate_decision": {
     "schema_version": "1.0.0",
     "episode_id": "en-A2-x10",
     "gate": 1,
     "user": "examiner",
-    "decision": "edit-and-approve",
-    "diff": "s1l2: Change to: 'I sat a lot. After I joined the gym, my body started to feel good every week.' (keeps the after-clause, the meaning, and the review words 'body' and 'week').\nepisode: Change the hook to: 'Ben goes to the gym now. Anna asks him about his life before and after the gym.'",
-    "notes": "A clean, level-appropriate micro-dialogue: both lines are simple A2 English, the target word 'gym' and review words 'week' and 'body' all appear, the glosses are accurate and simpler than the words they explain, and the 'before' clause is modelled well. One fix is needed: Ben's 'after' sentence mixes a past-time clause with a present-simple main clause, which is a noticeable tense wobble and undermines the grammar point it is meant to model; aligning it to a past+past frame fixes it. The hook's 'asks him about before and after' is a minor unnatural ellipsis worth tidying. Approve once the s1l2 edit is made.",
-    "timestamp": "2026-10-20T10:54:51.101856Z"
+    "decision": "approve",
+    "diff": "episode: Add an 'after' example to the grammar note, e.g.: \"After I go to the gym, I feel good.\" Or change a dialogue line to include one, e.g. Ben: 'After I go to the gym, I feel strong.'",
+    "notes": "A clean, accurate micro-dialogue at A2. All three lines are grammatical and natural ('Before I joined the gym, I was tired.', 'How many days a week do you go?', 'Three days. I want a strong body.'), the target word 'gym' is used and glossed simply and correctly, and both review words ('week', 'body') appear naturally. Every word and structure is at or below A2, and the length fits the 10-15 second spec. The only blemish is that the grammar point 'before and after clauses' is illustrated only with 'before'; the note names 'after' but gives no example. This is minor and does not block approval.",
+    "timestamp": "2026-10-22T07:13:20.604888Z"
   },
   "costs": [
     {
       "station": "review_examiner",
       "vendor": "gateway",
       "model": "kimi/kimi-k3",
-      "input_tokens": 726,
-      "output_tokens": 3101,
+      "input_tokens": 668,
+      "output_tokens": 1383,
       "cache_creation_input_tokens": 0,
       "cache_read_input_tokens": 1024,
-      "usd": 0.0098,
+      "usd": 0.004611,
       "priced": true,
-      "timestamp": "2026-10-20T10:54:51.101296Z"
+      "timestamp": "2026-10-22T07:13:20.604496Z"
     }
   ]
 }

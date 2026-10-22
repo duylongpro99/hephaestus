@@ -93,3 +93,22 @@ production, but neither blocks the next build phase:
 - Should the gloss and coherence fixes come before the walking skeleton, or run alongside it?
 - Do full 6-8 minute episodes need their own spike before production, as ADR 0001 decision 6
   says?
+
+## Follow-up run: gloss and coherence fixes (2026-10-22)
+
+The writer now gets the top three WordNet senses of each target and review word, and the clip
+format asks for a planned exchange (opening, a reply that answers it, an optional reaction).
+
+| | Before | After |
+|---|---|---|
+| Major or critical issues | 18 | 9 |
+| Dialogue coherence (consistency, comprehension) | 5 | 0 |
+| Loose glosses | 5 | 3 (2 of them review words: `bus`, `work`) |
+| Examiner approvals | 10/10 | 9/10 |
+| Learner approvals | 10/10 | 10/10 |
+| Cost for 10 clips, script + panel | $0.22 | $0.22 |
+
+The one reject is x09: its grammar note calls "every morning" an adverb of frequency, which the
+examiner rated critical. Grammar notes are a new error class, not a regression of the fixes.
+The learner reviewer (Qwen) once returned the decision `request_changes`, failed validation
+after the repair round, and passed on a rerun.

@@ -1,8 +1,8 @@
 {
   "schema_version": "1.0.0",
   "episode_id": "en-A2-x10",
-  "title_working": "Ben's New Gym Hobby",
-  "hook": "Ben goes to the gym now. Anna asks him about before and after.",
+  "title_working": "Ben joins a gym",
+  "hook": "",
   "segments": [
     {
       "id": "s1",
@@ -12,22 +12,32 @@
       "lines": [
         {
           "id": "s1l1",
-          "speaker": "anna",
-          "text": "Before you joined the gym, what did you do?",
+          "speaker": "ben",
+          "text": "Before I joined the gym, I was tired.",
           "translation": {
-            "vi": "Trước khi bạn bắt đầu đi gym, bạn làm gì?"
+            "vi": "Trước khi mình tham gia phòng gym, mình đã mệt."
           },
           "pause_after_ms": 500,
           "visual_cue": null
         },
         {
           "id": "s1l2",
-          "speaker": "ben",
-          "text": "I sat a lot. After I joined the gym, my body feels good every week.",
+          "speaker": "anna",
+          "text": "How many days a week do you go?",
           "translation": {
-            "vi": "Mình ngồi nhiều. Sau khi mình bắt đầu đi gym, cơ thể mình thấy khỏe mỗi tuần."
+            "vi": "Bạn đi bao nhiêu ngày một tuần?"
           },
-          "pause_after_ms": 600,
+          "pause_after_ms": 500,
+          "visual_cue": null
+        },
+        {
+          "id": "s1l3",
+          "speaker": "ben",
+          "text": "Three days. I want a strong body.",
+          "translation": {
+            "vi": "Ba ngày. Mình muốn có một cơ thể khỏe mạnh."
+          },
+          "pause_after_ms": 500,
           "visual_cue": null
         }
       ],
@@ -38,32 +48,16 @@
     {
       "word": "gym",
       "gloss": {
-        "en": "a place where you go to exercise",
+        "en": "a place with machines to make the body strong",
         "vi": "phòng tập thể dục"
       },
       "is_target": true
-    },
-    {
-      "word": "week",
-      "gloss": {
-        "en": "seven days",
-        "vi": "bảy ngày"
-      },
-      "is_target": false
-    },
-    {
-      "word": "body",
-      "gloss": {
-        "en": "the part of you that has arms, legs, and a head",
-        "vi": "cơ thể"
-      },
-      "is_target": false
     }
   ],
   "grammar_notes": [
-    "Use 'before' or 'after' + subject + verb to say when something happens. Example: 'Before I joined the gym, I sat a lot.'"
+    "Use 'before' or 'after' with a subject and verb to show time order. Example: 'Before I joined the gym, I was tired.'"
   ],
   "interaction_prompts": [
-    "Do you have a new hobby? What do you do before or after it?"
+    "Do you go to a gym? Tell us about your hobby."
   ]
 }

@@ -7,36 +7,29 @@
     "reviewer": "examiner",
     "issues": [
       {
-        "line_id": "s1l2",
-        "category": "naturalness",
-        "severity": "major",
-        "description": "Ben's reply is a non sequitur: he answers the interview question with 'Yes, I have,' then adds 'I have never worked on weekends,' which has no connection to the question. No native speaker would respond this way, and in a three-line dialogue it makes the exchange feel incoherent. It also models the target 'never' structure in a context where it does not belong semantically.",
-        "suggested_fix": "Replace the second sentence with a 'never' sentence tied to the interview theme, e.g. 'Yes, I have. I have never had an interview in English.' (All words stay at A2; 'never + past participle' is still modelled.)"
-      },
-      {
-        "line_id": "s1l2",
-        "category": "collocation",
-        "severity": "minor",
-        "description": "'worked on weekends' is American English; a British speaker would say 'worked at weekends' or 'worked at the weekend'. Moot if the suggested rewrite above is adopted.",
-        "suggested_fix": "If the sentence is kept, use 'I have never worked at weekends.' (BrE)"
-      },
-      {
         "line_id": null,
         "category": "gloss",
+        "severity": "major",
+        "description": "The review word 'work' is glossed as a noun ('an activity that you do, often for money'), but in the dialogue (s1l2) it is used as a verb ('I work at a school'). A learner matching the gloss to the sentence cannot fit 'an activity' into 'I ___ at a school', so the gloss misleads for this usage.",
+        "suggested_fix": "Change the gloss to the verb meaning, e.g. 'to do a job, often to earn money; to have a job'."
+      },
+      {
+        "line_id": "s1l2",
+        "category": "consistency",
         "severity": "minor",
-        "description": "The target gloss for 'interview' ('a formal meeting to talk about a job') misses the defining idea: being asked questions so someone can decide whether to give you the job. As written it could describe any meeting about a job, and 'formal' is itself around B1, harder than ideal for an A2 gloss.",
-        "suggested_fix": "Use: 'a meeting where people ask you questions before they give you a job'."
+        "description": "Anna answers 'Yes, I have' to a question about interviews, then says 'I work at a school'. The implied link (the interview was for the school job) is a jump for A2 learners and the two sentences sit awkwardly side by side.",
+        "suggested_fix": "Make the link explicit with A2-level language, e.g. 'Yes, I have. It was for my job at a school.'"
       }
     ],
     "rubric_scores": {
       "grammar_accuracy": 5,
-      "naturalness": 3,
+      "naturalness": 4,
       "level_fit": 5,
-      "grammar_point_teaching": 4,
-      "gloss_quality": 4
+      "grammar_point_teaching": 5,
+      "gloss_quality": 3
     },
     "hard_gate_failures": [],
-    "summary": "All English lines are grammatically correct and comfortably A2, and both 'ever' and 'never' structures are present with an accurate grammar note. The main flaw is discourse-level: Ben's 'I have never worked on weekends' does not follow from the interview question, making the short dialogue incoherent and modelling 'never' in an odd context — easily fixed by swapping in a 'never' sentence about interviews. The target gloss for 'interview' should mention being asked questions to get the job, and BrE 'at weekends' is preferred if the sentence stays. No critical issues; fixable by line edits."
+    "summary": "A clean, level-appropriate micro dialogue. The grammar point (present perfect with ever/never) is modelled correctly in a question, a short answer and a negative, and the grammar note states the rule accurately for A2. All vocabulary is at or below A2 apart from the target word 'interview', whose gloss is simple and accurate. Two fixes are needed: the 'work' gloss defines the noun although the word is used as a verb in the dialogue, and Anna's second sentence should connect explicitly to the interview question. Both are quick edits, so edit-and-approve."
   },
   "gate_decision": {
     "schema_version": "1.0.0",
@@ -44,22 +37,22 @@
     "gate": 1,
     "user": "examiner",
     "decision": "edit-and-approve",
-    "diff": "s1l2: Replace the second sentence with a 'never' sentence tied to the interview theme, e.g. 'Yes, I have. I have never had an interview in English.' (All words stay at A2; 'never + past participle' is still modelled.)\ns1l2: If the sentence is kept, use 'I have never worked at weekends.' (BrE)\nepisode: Use: 'a meeting where people ask you questions before they give you a job'.",
-    "notes": "All English lines are grammatically correct and comfortably A2, and both 'ever' and 'never' structures are present with an accurate grammar note. The main flaw is discourse-level: Ben's 'I have never worked on weekends' does not follow from the interview question, making the short dialogue incoherent and modelling 'never' in an odd context — easily fixed by swapping in a 'never' sentence about interviews. The target gloss for 'interview' should mention being asked questions to get the job, and BrE 'at weekends' is preferred if the sentence stays. No critical issues; fixable by line edits.",
-    "timestamp": "2026-10-20T10:50:18.875969Z"
+    "diff": "episode: Change the gloss to the verb meaning, e.g. 'to do a job, often to earn money; to have a job'.\ns1l2: Make the link explicit with A2-level language, e.g. 'Yes, I have. It was for my job at a school.'",
+    "notes": "A clean, level-appropriate micro dialogue. The grammar point (present perfect with ever/never) is modelled correctly in a question, a short answer and a negative, and the grammar note states the rule accurately for A2. All vocabulary is at or below A2 apart from the target word 'interview', whose gloss is simple and accurate. Two fixes are needed: the 'work' gloss defines the noun although the word is used as a verb in the dialogue, and Anna's second sentence should connect explicitly to the interview question. Both are quick edits, so edit-and-approve.",
+    "timestamp": "2026-10-22T07:09:30.765446Z"
   },
   "costs": [
     {
       "station": "review_examiner",
       "vendor": "gateway",
       "model": "kimi/kimi-k3",
-      "input_tokens": 1784,
-      "output_tokens": 4041,
+      "input_tokens": 1790,
+      "output_tokens": 2631,
       "cache_creation_input_tokens": 0,
       "cache_read_input_tokens": 0,
-      "usd": 0.013193,
+      "usd": 0.008967,
       "priced": true,
-      "timestamp": "2026-10-20T10:50:18.875375Z"
+      "timestamp": "2026-10-22T07:09:30.764870Z"
     }
   ]
 }

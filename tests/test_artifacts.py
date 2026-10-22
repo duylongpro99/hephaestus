@@ -115,3 +115,12 @@ def test_insert_rejects_unknown_speaker(session):
         session.insert_line("s3l1", "narrator", "Hi.", {"vi": "Chào."}, 500)
 
 
+
+
+def test_writer_gets_dictionary_senses_for_spec_words(spec):
+    pack = load_pack("en")
+    config = resolve(spec.channel, spec.level)
+    prompt = a2.build_user(spec, config, pack)
+    for word in [*spec.target_words, *spec.review_words]:
+        if pack.dictionary_senses(word, "en"):
+            assert f"- {word}: (1) " in prompt

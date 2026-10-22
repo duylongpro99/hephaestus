@@ -10,29 +10,22 @@
         "line_id": "s1l1",
         "category": "translation_naturalness",
         "severity": "minor",
-        "description": "The Vietnamese line can sound ambiguous because ốm can mean thin in some contexts, and it feels a little stronger than You look sick. A clearer and more natural line would say Ben looks unwell.",
-        "suggested_fix": "Ben ơi, trông bạn có vẻ không khỏe."
+        "description": "The phrase Bạn trông ốm quá is understandable, but in everyday Southern Vietnamese it can also sound like a comment about weight, and it feels a little translated. A clearer, more natural phrase for a friend who looks unwell would be Bạn trông không khỏe.",
+        "suggested_fix": "Bạn trông không khỏe, Ben. Có chuyện gì vậy?"
+      },
+      {
+        "line_id": "s1l3",
+        "category": "translation_naturalness",
+        "severity": "minor",
+        "description": "Bạn không nên đi làm hôm nay is clear, but the time expression sounds slightly English-influenced. In spoken Vietnamese, it is more natural to put hôm nay earlier.",
+        "suggested_fix": "Bạn nên đến hiệu thuốc. Hôm nay bạn không nên đi làm."
       },
       {
         "line_id": null,
         "category": "explanation",
         "severity": "minor",
-        "description": "The target-word gloss for headache is understandable, but when your head feels sick is not the clearest meaning for A2 learners. The Vietnamese gloss could also be the direct, common phrase.",
-        "suggested_fix": "headache gloss: en = when your head hurts; vi = đau đầu"
-      },
-      {
-        "line_id": null,
-        "category": "translation_naturalness",
-        "severity": "minor",
-        "description": "For sick, bị ốm is acceptable, but it can feel dialect-dependent or ambiguous. A slightly clearer Vietnamese gloss would include bị bệnh or không khỏe.",
-        "suggested_fix": "sick gloss vi: bị bệnh, cảm thấy không khỏe"
-      },
-      {
-        "line_id": null,
-        "category": "engagement",
-        "severity": "minor",
-        "description": "The hook is clear but a little flat. A question hook would make me more curious to listen on my commute.",
-        "suggested_fix": "Hook: Ben has a headache. Should he go to work?"
+        "description": "The gloss for headache says when your head feels bad. At A2, I would understand it, but hurts is simpler and closer to đau đầu. The Vietnamese gloss could also include the common phrase used in the dialogue.",
+        "suggested_fix": "headache: en when your head hurts; vi đau đầu; cơn đau đầu"
       }
     ],
     "rubric_scores": {
@@ -43,30 +36,30 @@
       "explanation_helpfulness": 4
     },
     "hard_gate_failures": [],
-    "summary": "This micro-dialogue is short, clear, and suitable for A2 learners. The grammar point is easy to notice, and the target and review words appear naturally. I could follow it easily. The main edits are small Vietnamese naturalness improvements and a clearer gloss for headache. After those edits, I would happily listen and learn."
+    "summary": "The clip is short, clear, and suitable for A2. I can follow the problem, the advice, and the grammar point with should and shouldn't. The Vietnamese is mostly good, with only small naturalness and gloss improvements."
   },
   "gate_decision": {
     "schema_version": "1.0.0",
     "episode_id": "en-A2-x05",
     "gate": 1,
     "user": "learner",
-    "decision": "edit-and-approve",
-    "diff": "s1l1: Ben ơi, trông bạn có vẻ không khỏe.\nepisode: headache gloss: en = when your head hurts; vi = đau đầu\nepisode: sick gloss vi: bị bệnh, cảm thấy không khỏe\nepisode: Hook: Ben has a headache. Should he go to work?",
-    "notes": "This micro-dialogue is short, clear, and suitable for A2 learners. The grammar point is easy to notice, and the target and review words appear naturally. I could follow it easily. The main edits are small Vietnamese naturalness improvements and a clearer gloss for headache. After those edits, I would happily listen and learn.",
-    "timestamp": "2026-10-20T10:53:32.409049Z"
+    "decision": "approve",
+    "diff": "s1l1: Bạn trông không khỏe, Ben. Có chuyện gì vậy?\ns1l3: Bạn nên đến hiệu thuốc. Hôm nay bạn không nên đi làm.\nepisode: headache: en when your head hurts; vi đau đầu; cơn đau đầu",
+    "notes": "The clip is short, clear, and suitable for A2. I can follow the problem, the advice, and the grammar point with should and shouldn't. The Vietnamese is mostly good, with only small naturalness and gloss improvements.",
+    "timestamp": "2026-10-22T07:11:37.352939Z"
   },
   "costs": [
     {
       "station": "review_learner",
       "vendor": "gateway",
       "model": "qwen3.8-max-0902",
-      "input_tokens": 687,
-      "output_tokens": 8616,
+      "input_tokens": 1809,
+      "output_tokens": 6371,
       "cache_creation_input_tokens": 0,
-      "cache_read_input_tokens": 1024,
-      "usd": 0.01064,
+      "cache_read_input_tokens": 0,
+      "usd": 0.008369,
       "priced": true,
-      "timestamp": "2026-10-20T10:53:32.408131Z"
+      "timestamp": "2026-10-22T07:11:37.351674Z"
     }
   ]
 }

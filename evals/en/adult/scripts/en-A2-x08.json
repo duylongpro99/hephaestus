@@ -1,54 +1,34 @@
 {
   "schema_version": "1.0.0",
   "episode_id": "en-A2-x08",
-  "title_working": "Cooking Dinner for Friends",
-  "hook": "Ben and Anna are in the kitchen. Listen for 'have to' and 'don't have to'.",
+  "title_working": "Vegetables for Dinner",
+  "hook": "",
   "segments": [
     {
       "id": "s1",
       "type": "dialogue",
       "speed": "natural",
-      "layout": null,
+      "layout": "podcast_a",
       "lines": [
         {
           "id": "s1l1",
           "speaker": "anna",
-          "text": "I have to cook dinner for friends.",
+          "text": "I have to buy a vegetable for the food.",
           "translation": {
-            "vi": "Mình phải nấu bữa tối cho bạn bè."
+            "vi": "Mình phải mua rau cho bữa ăn."
           },
-          "pause_after_ms": 300,
-          "visual_cue": null
+          "pause_after_ms": 500,
+          "visual_cue": "a vegetable at a market"
         },
         {
           "id": "s1l2",
           "speaker": "ben",
-          "text": "You don't have to cook alone.",
+          "text": "You don't have to. I have vegetables in the kitchen.",
           "translation": {
-            "vi": "Bạn không cần phải nấu một mình đâu."
+            "vi": "Bạn không cần phải đâu. Mình có rau trong bếp rồi."
           },
-          "pause_after_ms": 300,
-          "visual_cue": null
-        },
-        {
-          "id": "s1l3",
-          "speaker": "anna",
-          "text": "Is there a vegetable in the kitchen?",
-          "translation": {
-            "vi": "Có rau gì trong bếp không?"
-          },
-          "pause_after_ms": 300,
-          "visual_cue": "a vegetable on a kitchen counter"
-        },
-        {
-          "id": "s1l4",
-          "speaker": "ben",
-          "text": "Yes, the food is ready.",
-          "translation": {
-            "vi": "Ừ, thức ăn đã sẵn sàng rồi."
-          },
-          "pause_after_ms": 300,
-          "visual_cue": "ready food on plates"
+          "pause_after_ms": 500,
+          "visual_cue": "vegetables in the kitchen"
         }
       ],
       "items": []
@@ -58,24 +38,24 @@
     {
       "word": "vegetable",
       "gloss": {
-        "en": "a thing that grows in the ground and you can eat",
-        "vi": "rau củ"
+        "en": "a food from a plant, not meat or fruit",
+        "vi": "rau củ, thức ăn từ thực vật"
       },
       "is_target": true
     },
     {
-      "word": "kitchen",
+      "word": "food",
       "gloss": {
-        "en": "the room where you cook food",
-        "vi": "bếp / nhà bếp"
+        "en": "something you eat",
+        "vi": "đồ ăn, thức ăn"
       },
       "is_target": false
     },
     {
-      "word": "food",
+      "word": "kitchen",
       "gloss": {
-        "en": "things that people eat",
-        "vi": "thức ăn / đồ ăn"
+        "en": "the room where you make food",
+        "vi": "phòng bếp, nơi nấu ăn"
       },
       "is_target": false
     }
@@ -84,6 +64,6 @@
     "Use 'have to' to say something is necessary. Use 'don't have to' to say something is not necessary."
   ],
   "interaction_prompts": [
-    "What do you have to do before you cook dinner?"
+    "What do you have to do before you make dinner for friends?"
   ]
 }

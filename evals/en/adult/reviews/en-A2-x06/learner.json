@@ -7,43 +7,64 @@
     "reviewer": "learner",
     "issues": [
       {
+        "line_id": "s1l2",
+        "category": "translation_naturalness",
+        "severity": "major",
+        "description": "The Vietnamese line sounds machine-translated. 'chiếc cũ' is incomplete because it needs a noun, and 'chúng' feels unnatural when talking about one pair of jeans.",
+        "suggested_fix": "Change the Vietnamese to: 'Ừ, chiếc quần jeans này ấm hơn chiếc quần jeans cũ của mình.'"
+      },
+      {
+        "line_id": "s1l2",
+        "category": "comprehension",
+        "severity": "minor",
+        "description": "The English phrase 'my old ones' may be hard for A2 listeners because 'ones' is a pronoun. I would understand 'old jeans' more quickly.",
+        "suggested_fix": "Change the English line to: 'Yes, they are warmer than my old jeans.'"
+      },
+      {
         "line_id": "s1l4",
-        "category": "translation_accuracy",
+        "category": "translation_naturalness",
         "severity": "minor",
-        "description": "In English, 'them' refers to the jeans, which has a plural form. The Vietnamese translation uses 'nó', which is singular, so an A2 learner may get confused about how to translate 'them' in this context.",
-        "suggested_fix": "Change the translation to: 'Tuyệt, mình sẽ mua chúng.'"
+        "description": "'Mình mua chúng đi' is understandable, but 'chúng' sounds unnatural here and 'mình' can be a little ambiguous.",
+        "suggested_fix": "Change the Vietnamese to: 'Mình mua chiếc quần này đi.'"
+      },
+      {
+        "line_id": "s1l1",
+        "category": "translation_naturalness",
+        "severity": "minor",
+        "description": "'Bạn' is not wrong, but if Anna and Ben are friends, 'cậu' sounds more natural in casual Vietnamese subtitles.",
+        "suggested_fix": "Change the Vietnamese to: 'Cậu có thích chiếc quần jeans này không?'"
       },
       {
         "line_id": null,
         "category": "explanation",
         "severity": "minor",
-        "description": "The gloss for 'jeans' is understandable, but 'clothes for your legs' is a little vague. It could describe many kinds of trousers and does not make the word feel specific.",
-        "suggested_fix": "Change the English gloss to: 'a type of trousers, usually blue'. Keep the Vietnamese gloss as 'quần jeans'."
-      },
-      {
-        "line_id": null,
-        "category": "explanation",
-        "severity": "minor",
-        "description": "The grammar note is correct but too general for me at A2. I would understand it better if it used the examples from the dialogue.",
-        "suggested_fix": "Change the note to: 'Use -er + than to compare two things: These jeans are cheaper than those. Use the + -est to say one thing is top in a group: This shop has the warmest coats.'"
+        "description": "The grammar note says superlatives mean 'the best in a group', but 'the cheapest' is about price, not necessarily quality. This could confuse me.",
+        "suggested_fix": "Rewrite the note as: Comparatives like 'warmer than' compare two things. Superlatives like 'the cheapest' say one thing has the lowest price of all."
       },
       {
         "line_id": null,
         "category": "engagement",
         "severity": "minor",
-        "description": "The hook is clear, but it is a little flat. It does not make me curious about what Anna and Ben will choose or buy.",
-        "suggested_fix": "Use a hook such as: 'Anna and Ben need winter clothes. Which jeans are cheaper?'"
+        "description": "The hook is clear but flat. It does not make me curious about the shopping moment.",
+        "suggested_fix": "Change the hook to: 'Anna and Ben look for warm, cheap winter jeans.'"
+      },
+      {
+        "line_id": null,
+        "category": "engagement",
+        "severity": "minor",
+        "description": "The interaction prompt sounds a little stiff. A more natural question would be easier for A2 learners to answer.",
+        "suggested_fix": "Change the prompt to: 'Which shop near you has the cheapest clothes?'"
       }
     ],
     "rubric_scores": {
-      "comprehensibility": 5,
+      "comprehensibility": 4,
       "translation_accuracy": 4,
-      "translation_naturalness": 4,
-      "engagement": 4,
-      "explanation_helpfulness": 3
+      "translation_naturalness": 3,
+      "engagement": 3,
+      "explanation_helpfulness": 4
     },
     "hard_gate_failures": [],
-    "summary": "This micro-dialogue is short, clear, and suitable for A2 learners. The shopping situation is easy to follow, the target word 'jeans' is used clearly, and the review words 'shop' and 'buy' appear naturally. The Vietnamese translation is mostly natural, but the final line should handle 'them' more clearly. The gloss and grammar note would be more helpful with slightly clearer wording and examples."
+    "summary": "The episode is short, simple, and mostly suitable for A2 learners. The target words and grammar point are clear, but the Vietnamese translation needs more natural phrasing, especially in line s1l2. I would listen happily after the suggested edits."
   },
   "gate_decision": {
     "schema_version": "1.0.0",
@@ -51,22 +72,22 @@
     "gate": 1,
     "user": "learner",
     "decision": "edit-and-approve",
-    "diff": "s1l4: Change the translation to: 'Tuyệt, mình sẽ mua chúng.'\nepisode: Change the English gloss to: 'a type of trousers, usually blue'. Keep the Vietnamese gloss as 'quần jeans'.\nepisode: Change the note to: 'Use -er + than to compare two things: These jeans are cheaper than those. Use the + -est to say one thing is top in a group: This shop has the warmest coats.'\nepisode: Use a hook such as: 'Anna and Ben need winter clothes. Which jeans are cheaper?'",
-    "notes": "This micro-dialogue is short, clear, and suitable for A2 learners. The shopping situation is easy to follow, the target word 'jeans' is used clearly, and the review words 'shop' and 'buy' appear naturally. The Vietnamese translation is mostly natural, but the final line should handle 'them' more clearly. The gloss and grammar note would be more helpful with slightly clearer wording and examples.",
-    "timestamp": "2026-10-20T10:55:37.119296Z"
+    "diff": "s1l2: Change the Vietnamese to: 'Ừ, chiếc quần jeans này ấm hơn chiếc quần jeans cũ của mình.'\ns1l2: Change the English line to: 'Yes, they are warmer than my old jeans.'\ns1l4: Change the Vietnamese to: 'Mình mua chiếc quần này đi.'\ns1l1: Change the Vietnamese to: 'Cậu có thích chiếc quần jeans này không?'\nepisode: Rewrite the note as: Comparatives like 'warmer than' compare two things. Superlatives like 'the cheapest' say one thing has the lowest price of all.\nepisode: Change the hook to: 'Anna and Ben look for warm, cheap winter jeans.'\nepisode: Change the prompt to: 'Which shop near you has the cheapest clothes?'",
+    "notes": "The episode is short, simple, and mostly suitable for A2 learners. The target words and grammar point are clear, but the Vietnamese translation needs more natural phrasing, especially in line s1l2. I would listen happily after the suggested edits.",
+    "timestamp": "2026-10-22T07:15:07.650752Z"
   },
   "costs": [
     {
       "station": "review_learner",
       "vendor": "gateway",
       "model": "qwen3.8-max-0902",
-      "input_tokens": 689,
-      "output_tokens": 7334,
+      "input_tokens": 723,
+      "output_tokens": 8423,
       "cache_creation_input_tokens": 0,
       "cache_read_input_tokens": 1024,
-      "usd": 0.009102,
+      "usd": 0.010422,
       "priced": true,
-      "timestamp": "2026-10-20T10:55:37.118455Z"
+      "timestamp": "2026-10-22T07:15:07.649804Z"
     }
   ]
 }

@@ -40,7 +40,20 @@ def build_system(config: ResolvedConfig, pack: LanguagePack, fmt: str) -> list[s
     return system_blocks(instructions, config, pack, example=example)
 
 
-def build_user(spec: EpisodeSpec, config: ResolvedConfig) -> str:
+def reference_definitions(spec: EpisodeSpec, pack: LanguagePack) -> str:
+    """Dictionary senses of the spec's words, so glosses define the word and not its context."""
+    lines = []
+    for word in [*spec.target_words, *spec.review_words]:
+        senses = pack.dictionary_senses(word, pack.code)
+        if senses:
+            lines.append(f"- {word}: " + "; ".join(f"({i}) {d}" for i, d in enumerate(senses, 1)))
+    if not lines:
+        return ""
+    return ("\n\nReference definitions from a dictionary. Pick the sense your script uses and base "
+            "the simple gloss on it, in words from the level wordlist:\n" + "\n".join(lines))
+
+
+def build_user(spec: EpisodeSpec, config: ResolvedConfig, pack: LanguagePack) -> str:
     rate = config.band.rate
     low, high = spec.length_min
     # Roughly 15% of an episode is pauses; this gives the writer a word budget to aim for.
@@ -51,6 +64,7 @@ def build_user(spec: EpisodeSpec, config: ResolvedConfig) -> str:
         f"Length guide: about {words_low:.0f}-{words_high:.0f} spoken words in total, "
         f"so the estimate (words / {rate.midpoint:g} {rate.unit} + pauses) lands inside "
         f"{low:g}-{high:g} minutes."
+        + reference_definitions(spec, pack)
     )
 
 
@@ -62,7 +76,7 @@ def write_script(
     result = llm.structured(
         station=STATION,
         system=build_system(config, pack, spec.format),
-        user=build_user(spec, config),
+        user=build_user(spec, config, pack),
         output_model=draft_model,
     )
     try:

@@ -1,44 +1,34 @@
 {
   "schema_version": "1.0.0",
   "episode_id": "en-A2-x04",
-  "title_working": "Planning a Mountain Trip",
-  "hook": "Ben tells Anna about his plan for the weekend.",
+  "title_working": "Planning a Weekend Trip",
+  "hook": "Planning a weekend trip to the mountains!",
   "segments": [
     {
       "id": "s1",
       "type": "dialogue",
       "speed": "natural",
-      "layout": null,
+      "layout": "podcast_a",
       "lines": [
         {
           "id": "s1l1",
           "speaker": "anna",
-          "text": "This weekend?",
+          "text": "Are you going to take the bus this weekend?",
           "translation": {
-            "vi": "Cuối tuần này hả?"
+            "vi": "Cuối tuần này bạn định đi xe buýt à?"
           },
           "pause_after_ms": 500,
-          "visual_cue": null
+          "visual_cue": "bus"
         },
         {
           "id": "s1l2",
           "speaker": "ben",
-          "text": "I am going to take a bus trip to the mountains.",
+          "text": "Yes, our bus trip to the mountains is going to be great.",
           "translation": {
-            "vi": "Mình sẽ đi xe buýt đến vùng núi."
+            "vi": "Ừ, chuyến đi xe buýt lên núi của bọn mình sẽ tuyệt lắm đấy."
           },
           "pause_after_ms": 500,
-          "visual_cue": null
-        },
-        {
-          "id": "s1l3",
-          "speaker": "ben",
-          "text": "Yes, I am going to rest on the trip.",
-          "translation": {
-            "vi": "Ừ, mình sẽ nghỉ ngơi trong chuyến đi."
-          },
-          "pause_after_ms": 500,
-          "visual_cue": null
+          "visual_cue": "mountains"
         }
       ],
       "items": []
@@ -48,32 +38,33 @@
     {
       "word": "trip",
       "gloss": {
-        "en": "a time when you go to another place and come back",
-        "vi": "chuyến đi"
+        "en": "when you go to a place and come back",
+        "vi": "chuyến đi (đi đến một nơi rồi quay về)"
       },
       "is_target": true
     },
     {
       "word": "weekend",
       "gloss": {
-        "en": "Saturday and Sunday",
-        "vi": "cuối tuần"
+        "en": "Saturday and Sunday, the days many people do not work",
+        "vi": "cuối tuần (thứ Bảy và Chủ Nhật)"
       },
       "is_target": false
     },
     {
       "word": "bus",
       "gloss": {
-        "en": "a big car that many people use to travel",
+        "en": "a big car that carries many people on the road",
         "vi": "xe buýt"
       },
       "is_target": false
     }
   ],
   "grammar_notes": [
-    "Use 'am/is/are going to' + verb to talk about plans for the future, like 'I am going to take a bus trip.'"
+    "Use 'be going to' + verb to talk about plans for the future.",
+    "Example: 'I'm going to take the bus.'"
   ],
   "interaction_prompts": [
-    "Where are you going to go this weekend?"
+    "What are you going to do this weekend?"
   ]
 }

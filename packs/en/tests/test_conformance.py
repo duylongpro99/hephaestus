@@ -72,6 +72,12 @@ def test_dictionary_gloss(pack):
     assert pack.dictionary_gloss("purchase", "vi") is None
 
 
+def test_dictionary_senses_list_more_than_the_first(pack):
+    senses = pack.dictionary_senses("headache", "en")
+    assert 1 < len(senses) <= 3 and any("pain" in s for s in senses)
+    assert pack.dictionary_senses("headache", "vi") == []
+
+
 def test_sentences_are_indexed(pack):
     tokens = pack.tokenize("I like tea. She likes coffee.")
     assert {t.sentence for t in tokens} == {0, 1}

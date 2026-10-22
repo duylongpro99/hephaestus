@@ -9,43 +9,50 @@
       {
         "line_id": null,
         "category": "gloss",
-        "severity": "major",
-        "description": "The gloss for the target word 'jeans' — 'clothes for your legs, usually blue' — is too loose: it describes trousers (or any legwear) as much as jeans, and 'clothes' is plural while jeans is a single garment. In a micro_dialogue the gloss is the only teaching of the target word, so it must pin the meaning down.",
-        "suggested_fix": "Change the gloss to 'a kind of trousers, usually blue' or 'trousers made of strong cloth, usually blue' so a learner can tell jeans from trousers in general."
+        "severity": "minor",
+        "description": "The gloss for 'jeans' ('strong blue clothes for your legs, usually long') is slightly imprecise: jeans are not always blue, and 'usually long' implies short jeans are common (short denim ones are 'shorts', not jeans). 'Clothes' (plural) for a single garment is also a little loose.",
+        "suggested_fix": "Change the gloss to: 'trousers made of strong cloth, usually blue' — 'trousers' is known at A2 and this is accurate and simpler."
+      },
+      {
+        "line_id": null,
+        "category": "grammar_point",
+        "severity": "minor",
+        "description": "The grammar note says superlatives 'say one thing is the best in a group', but 'the cheapest' does not mean 'the best'; a superlative means something has the most of a quality in a group. A learner could wrongly equate superlative with 'good'.",
+        "suggested_fix": "Rephrase to: 'Superlatives like \"the cheapest\" say one thing is number one in a group (the most or the least of something).'"
       }
     ],
     "rubric_scores": {
       "grammar_accuracy": 5,
       "naturalness": 5,
       "level_fit": 5,
-      "grammar_point_teaching": 5,
-      "gloss_quality": 3
+      "grammar_point_teaching": 4,
+      "gloss_quality": 4
     },
     "hard_gate_failures": [],
-    "summary": "The dialogue itself is clean: all four lines are grammatical, natural, and squarely at A2. The grammar point is well covered — a superlative ('the warmest') and a comparative ('cheaper than') both appear and the grammar note states the -er/than and the/-est rules correctly. Target word 'jeans' and review words 'shop' and 'buy' are all present, and the plural pronoun 'them' in line s1l4 correctly refers back to 'jeans'. The only real problem is the English gloss for 'jeans', which is imprecise enough to mislead (it fits any trousers); since the gloss is the sole teaching vehicle in this format, it needs the suggested fix before approval."
+    "summary": "All four dialogue lines are grammatical, natural and firmly A2, and the clip correctly demonstrates both a comparative ('warmer than') and a superlative ('the cheapest') as the spec requires. Reference is consistent throughout ('they'/'them'/'ones' all point back to 'jeans'). Only two minor imprecisions: the 'jeans' gloss overstates 'blue' and oddly adds 'usually long', and the grammar note loosely equates superlatives with 'the best'. Neither would teach anything seriously wrong, so this can be approved, ideally with the suggested small wording fixes."
   },
   "gate_decision": {
     "schema_version": "1.0.0",
     "episode_id": "en-A2-x06",
     "gate": 1,
     "user": "examiner",
-    "decision": "edit-and-approve",
-    "diff": "episode: Change the gloss to 'a kind of trousers, usually blue' or 'trousers made of strong cloth, usually blue' so a learner can tell jeans from trousers in general.",
-    "notes": "The dialogue itself is clean: all four lines are grammatical, natural, and squarely at A2. The grammar point is well covered — a superlative ('the warmest') and a comparative ('cheaper than') both appear and the grammar note states the -er/than and the/-est rules correctly. Target word 'jeans' and review words 'shop' and 'buy' are all present, and the plural pronoun 'them' in line s1l4 correctly refers back to 'jeans'. The only real problem is the English gloss for 'jeans', which is imprecise enough to mislead (it fits any trousers); since the gloss is the sole teaching vehicle in this format, it needs the suggested fix before approval.",
-    "timestamp": "2026-10-20T10:52:31.314386Z"
+    "decision": "approve",
+    "diff": "episode: Change the gloss to: 'trousers made of strong cloth, usually blue' — 'trousers' is known at A2 and this is accurate and simpler.\nepisode: Rephrase to: 'Superlatives like \"the cheapest\" say one thing is number one in a group (the most or the least of something).'",
+    "notes": "All four dialogue lines are grammatical, natural and firmly A2, and the clip correctly demonstrates both a comparative ('warmer than') and a superlative ('the cheapest') as the spec requires. Reference is consistent throughout ('they'/'them'/'ones' all point back to 'jeans'). Only two minor imprecisions: the 'jeans' gloss overstates 'blue' and oddly adds 'usually long', and the grammar note loosely equates superlatives with 'the best'. Neither would teach anything seriously wrong, so this can be approved, ideally with the suggested small wording fixes.",
+    "timestamp": "2026-10-22T07:11:56.069297Z"
   },
   "costs": [
     {
       "station": "review_examiner",
       "vendor": "gateway",
       "model": "kimi/kimi-k3",
-      "input_tokens": 732,
-      "output_tokens": 2625,
+      "input_tokens": 753,
+      "output_tokens": 2098,
       "cache_creation_input_tokens": 0,
       "cache_read_input_tokens": 1024,
-      "usd": 0.008376,
+      "usd": 0.006807,
       "priced": true,
-      "timestamp": "2026-10-20T10:52:31.314129Z"
+      "timestamp": "2026-10-22T07:11:56.068879Z"
     }
   ]
 }

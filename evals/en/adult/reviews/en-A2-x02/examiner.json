@@ -7,29 +7,29 @@
     "reviewer": "examiner",
     "issues": [
       {
-        "line_id": null,
-        "category": "gloss",
-        "severity": "minor",
-        "description": "The gloss defines the singular 'noodle', but the dialogue uses the natural plural 'noodles'. Learners may not connect the two forms without a hint.",
-        "suggested_fix": "Add a short note to the gloss, e.g.: '...you cook it in hot water. People usually say \"noodles\" (plural).'"
-      },
-      {
-        "line_id": "s1l1",
+        "line_id": "s1l2",
         "category": "collocation",
         "severity": "minor",
-        "description": "'This night market has a lot of food' is grammatical and natural enough, but 'There is a lot of food at this night market' is the more idiomatic way to introduce a scene in English.",
-        "suggested_fix": "Optional: change to 'There is a lot of food at this night market.' Keep the current line if simplicity is preferred."
+        "description": "'Yes, I would like that' is grammatical but stilted as a reply to an offer; a native speaker would accept with 'Yes, please' or 'I'd love some.' The full form is kept presumably to reinforce the grammar point, so this is only a small naturalness improvement.",
+        "suggested_fix": "Change to 'Yes, please! I'd love some. The food looks great.' — still models 'would' (contracted) while sounding natural."
+      },
+      {
+        "line_id": "s1l3",
+        "category": "consistency",
+        "severity": "minor",
+        "description": "Sequencing is slightly off: in s1l2 Anna is already smiling at a food stall and says 'The food looks great', but in s1l3 Ben points to 'that noodle place' as if they have not chosen a stall yet.",
+        "suggested_fix": "Either change s1l3 to 'Let's eat here.' with Ben pointing at the same stall, or change the s1l2 visual cue to Anna looking around the market so the choice of stall happens in s1l3."
       }
     ],
     "rubric_scores": {
       "grammar_accuracy": 5,
-      "naturalness": 5,
+      "naturalness": 4,
       "level_fit": 5,
       "grammar_point_teaching": 5,
-      "gloss_quality": 4
+      "gloss_quality": 5
     },
     "hard_gate_failures": [],
-    "summary": "A clean A2 micro_dialogue. All three lines are grammatically correct and natural; the target word 'noodle(s)', the review words 'food' and 'eat', and the grammar point 'would like' for polite requests are all present and used correctly. The grammar note accurately states 'would like + noun / to + verb' and contrasts it with the less polite 'I want noodles'. Only two minor polish points: the gloss could flag the usual plural 'noodles', and line 1 could use the more idiomatic 'There is a lot of food...' pattern. No critical or major issues; approve."
+    "summary": "A clean A2 micro_dialogue. All spoken lines are grammatical and at level; the target word 'noodle' appears naturally twice, the review words 'food' and 'eat' are both used, and 'would like' is demonstrated in both the offer ('Would you like some noodle soup?') and the acceptance. The grammar note is accurate and the glosses are simple and correct. Two minor points only: Anna's acceptance line 'Yes, I would like that' is somewhat stilted compared with a natural 'Yes, please! I'd love some', and the stall-choice sequencing between s1l2 and s1l3 is slightly inconsistent. Neither blocks approval."
   },
   "gate_decision": {
     "schema_version": "1.0.0",
@@ -37,22 +37,22 @@
     "gate": 1,
     "user": "examiner",
     "decision": "approve",
-    "diff": "episode: Add a short note to the gloss, e.g.: '...you cook it in hot water. People usually say \"noodles\" (plural).'\ns1l1: Optional: change to 'There is a lot of food at this night market.' Keep the current line if simplicity is preferred.",
-    "notes": "A clean A2 micro_dialogue. All three lines are grammatically correct and natural; the target word 'noodle(s)', the review words 'food' and 'eat', and the grammar point 'would like' for polite requests are all present and used correctly. The grammar note accurately states 'would like + noun / to + verb' and contrasts it with the less polite 'I want noodles'. Only two minor polish points: the gloss could flag the usual plural 'noodles', and line 1 could use the more idiomatic 'There is a lot of food...' pattern. No critical or major issues; approve.",
-    "timestamp": "2026-10-20T10:49:13.574990Z"
+    "diff": "s1l2: Change to 'Yes, please! I'd love some. The food looks great.' — still models 'would' (contracted) while sounding natural.\ns1l3: Either change s1l3 to 'Let's eat here.' with Ben pointing at the same stall, or change the s1l2 visual cue to Anna looking around the market so the choice of stall happens in s1l3.",
+    "notes": "A clean A2 micro_dialogue. All spoken lines are grammatical and at level; the target word 'noodle' appears naturally twice, the review words 'food' and 'eat' are both used, and 'would like' is demonstrated in both the offer ('Would you like some noodle soup?') and the acceptance. The grammar note is accurate and the glosses are simple and correct. Two minor points only: Anna's acceptance line 'Yes, I would like that' is somewhat stilted compared with a natural 'Yes, please! I'd love some', and the stall-choice sequencing between s1l2 and s1l3 is slightly inconsistent. Neither blocks approval.",
+    "timestamp": "2026-10-22T07:09:18.150396Z"
   },
   "costs": [
     {
       "station": "review_examiner",
       "vendor": "gateway",
       "model": "kimi/kimi-k3",
-      "input_tokens": 1708,
-      "output_tokens": 1400,
+      "input_tokens": 1832,
+      "output_tokens": 2169,
       "cache_creation_input_tokens": 0,
       "cache_read_input_tokens": 0,
-      "usd": 0.005225,
+      "usd": 0.007606,
       "priced": true,
-      "timestamp": "2026-10-20T10:49:13.574728Z"
+      "timestamp": "2026-10-22T07:09:18.149798Z"
     }
   ]
 }

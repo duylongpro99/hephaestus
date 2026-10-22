@@ -7,36 +7,43 @@
     "reviewer": "learner",
     "issues": [
       {
-        "line_id": "s1l3",
-        "category": "engagement",
-        "severity": "major",
-        "description": "Ben says 'Yes', but Anna did not ask a yes/no question before this line. In a very short clip, this makes the dialogue feel broken and confusing.",
-        "suggested_fix": "Change the line to: 'I am going to rest on the trip.' and keep the Vietnamese: 'Mình sẽ nghỉ ngơi trong chuyến đi.'"
+        "line_id": "s1l1",
+        "category": "translation_naturalness",
+        "severity": "minor",
+        "description": "The particle 'à?' sounds like the speaker already expects the answer. It is natural in spoken Vietnamese, but a neutral yes/no form is clearer for A2 learners.",
+        "suggested_fix": "Cuối tuần này bạn có định đi xe buýt không?"
       },
       {
         "line_id": "s1l2",
+        "category": "translation_naturalness",
+        "severity": "minor",
+        "description": "'chuyến đi xe buýt lên núi' is understandable, but the noun phrase is a little packed. Putting the means of transport after the destination makes it clearer.",
+        "suggested_fix": "Ừ, chuyến đi lên núi bằng xe buýt của bọn mình sẽ tuyệt lắm đấy."
+      },
+      {
+        "line_id": null,
         "category": "translation_accuracy",
         "severity": "minor",
-        "description": "The English line includes the target word 'trip', but the Vietnamese translation only says 'đi xe buýt đến vùng núi' and does not show 'chuyến đi'.",
-        "suggested_fix": "Change vi to: 'Mình sẽ đi một chuyến xe buýt đến vùng núi.'"
+        "description": "The Vietnamese gloss for 'weekend' gives the days but leaves out the idea that many people do not work on those days. It is not wrong, but adding this would match the English gloss better.",
+        "suggested_fix": "cuối tuần (thứ Bảy và Chủ Nhật, thường là ngày nghỉ)"
       },
       {
         "line_id": null,
         "category": "explanation",
         "severity": "minor",
-        "description": "The gloss for 'bus' calls a bus a 'big car'. This may confuse learners because a bus is not a car.",
-        "suggested_fix": "Change the gloss to: en: 'a big vehicle that many people use to travel', vi: 'xe buýt'."
+        "description": "The English gloss for 'bus' says 'a big car'. For learners, 'vehicle' is more accurate. The Vietnamese gloss could also include a short explanation.",
+        "suggested_fix": "en: a big vehicle that carries many people on the road; vi: xe buýt (xe lớn chở nhiều người trên đường)"
       }
     ],
     "rubric_scores": {
-      "comprehensibility": 4,
+      "comprehensibility": 5,
       "translation_accuracy": 4,
       "translation_naturalness": 4,
-      "engagement": 3,
+      "engagement": 4,
       "explanation_helpfulness": 4
     },
     "hard_gate_failures": [],
-    "summary": "The episode is short and mostly suitable for A2, with clear target grammar and useful Vietnamese glosses. The main problem is the unexplained 'Yes' in the final line, and the translation of the target line could show 'chuyến đi' more clearly. After small edits, I would listen and learn."
+    "summary": "The micro-dialogue is clear and fits A2. The target and review words appear, and the Vietnamese is mostly natural. I would approve after small fixes: make the first question more neutral, simplify the second noun phrase, and make the weekend/bus glosses a little more complete."
   },
   "gate_decision": {
     "schema_version": "1.0.0",
@@ -44,22 +51,22 @@
     "gate": 1,
     "user": "learner",
     "decision": "edit-and-approve",
-    "diff": "s1l3: Change the line to: 'I am going to rest on the trip.' and keep the Vietnamese: 'Mình sẽ nghỉ ngơi trong chuyến đi.'\ns1l2: Change vi to: 'Mình sẽ đi một chuyến xe buýt đến vùng núi.'\nepisode: Change the gloss to: en: 'a big vehicle that many people use to travel', vi: 'xe buýt'.",
-    "notes": "The episode is short and mostly suitable for A2, with clear target grammar and useful Vietnamese glosses. The main problem is the unexplained 'Yes' in the final line, and the translation of the target line could show 'chuyến đi' more clearly. After small edits, I would listen and learn.",
-    "timestamp": "2026-10-20T10:52:52.728050Z"
+    "diff": "s1l1: Cuối tuần này bạn có định đi xe buýt không?\ns1l2: Ừ, chuyến đi lên núi bằng xe buýt của bọn mình sẽ tuyệt lắm đấy.\nepisode: cuối tuần (thứ Bảy và Chủ Nhật, thường là ngày nghỉ)\nepisode: en: a big vehicle that carries many people on the road; vi: xe buýt (xe lớn chở nhiều người trên đường)",
+    "notes": "The micro-dialogue is clear and fits A2. The target and review words appear, and the Vietnamese is mostly natural. I would approve after small fixes: make the first question more neutral, simplify the second noun phrase, and make the weekend/bus glosses a little more complete.",
+    "timestamp": "2026-10-22T07:12:29.938272Z"
   },
   "costs": [
     {
       "station": "review_learner",
       "vendor": "gateway",
       "model": "qwen3.8-max-0902",
-      "input_tokens": 1707,
-      "output_tokens": 6630,
+      "input_tokens": 1698,
+      "output_tokens": 8484,
       "cache_creation_input_tokens": 0,
       "cache_read_input_tokens": 0,
-      "usd": 0.008639,
+      "usd": 0.01086,
       "priced": true,
-      "timestamp": "2026-10-20T10:52:52.727397Z"
+      "timestamp": "2026-10-22T07:12:29.937112Z"
     }
   ]
 }
