@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-20T10:57:34.518652+00:00",
+  "generated_at": "2026-10-22T06:56:31.681841+00:00",
   "episodes": [
     {
       "episode_id": "en-A2-x01",
@@ -249,11 +249,13 @@
       "panel_usd": 0.0129,
       "decisions": {
         "examiner": "approve",
-        "learner": "edit-and-approve"
+        "learner": "edit-and-approve",
+        "human": "approve"
       },
       "level_fit": {
         "examiner": "at",
-        "learner": "at"
+        "learner": "at",
+        "human": "at"
       },
       "critical": {
         "examiner": 0,
@@ -290,11 +292,13 @@
       "panel_usd": 0.0198,
       "decisions": {
         "examiner": "edit-and-approve",
-        "learner": "edit-and-approve"
+        "learner": "edit-and-approve",
+        "human": "approve"
       },
       "level_fit": {
         "examiner": "at",
-        "learner": "at"
+        "learner": "at",
+        "human": "at"
       },
       "critical": {
         "examiner": 0,

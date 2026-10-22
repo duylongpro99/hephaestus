@@ -1,0 +1,13 @@
+{
+  "level_fit_verdict": "at",
+  "gate_decision": {
+    "schema_version": "1.0.0",
+    "episode_id": "en-A2-x08",
+    "gate": 1,
+    "user": "human",
+    "decision": "approve",
+    "diff": null,
+    "notes": "The user approved all ten clips without line-level notes on 2026-10-22.",
+    "timestamp": "2026-10-22T06:56:31.207182Z"
+  }
+}
