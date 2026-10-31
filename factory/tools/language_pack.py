@@ -4,9 +4,10 @@ Stations and tools talk to a target language only through this interface, so a n
 language is a new pack, not new station code.
 """
 
-import importlib
 from dataclasses import dataclass
 from typing import Literal, Protocol, runtime_checkable
+
+from factory.config import pack_module
 
 CEFR_LEVELS = ("PreA1", "A1", "A2", "B1", "B2", "C1", "C2")
 
@@ -96,4 +97,4 @@ class LanguagePack(Protocol):
 
 
 def load_pack(code: str) -> LanguagePack:
-    return importlib.import_module(f"packs.{code}.pack").Pack()
+    return pack_module(code).Pack()
