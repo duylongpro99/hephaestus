@@ -1,7 +1,7 @@
 ---
 title: "Walking skeleton"
 description: "Run one episode from SPEC to SCHEDULED through a Postgres-backed orchestrator, with fake vendors and an FFmpeg placeholder MP4, in one local end-to-end command."
-status: pending
+status: completed
 priority: P1
 effort: 6d
 tags: [feature, backend, infra]
@@ -65,20 +65,20 @@ the profiler, A2, A3 and the panel. Its result was go
 
 ## Success Criteria
 
-- [ ] `docker compose up -d db` and `uv run factory db migrate` create the schema; a second
+- [x] `docker compose up -d db` and `uv run factory db migrate` create the schema; a second
   migrate is a no-op.
-- [ ] Unit tests cover every legal and illegal transition, retries, budget stop and escalation,
+- [x] Unit tests cover every legal and illegal transition, retries, budget stop and escalation,
   without a database.
-- [ ] `xx-fixture` passes the same conformance suite as `en`.
-- [ ] `uv run factory run <spec> --auto-approve` takes a fixture episode from `SPEC` to
+- [x] `xx-fixture` passes the same conformance suite as `en`.
+- [x] `uv run factory run <spec> --auto-approve` takes a fixture episode from `SPEC` to
   `SCHEDULED`; each state change is a `job` row; each artifact has an `artifact` row whose hash
   matches the store.
-- [ ] `master.mp4` passes C9: video and audio streams present, duration within 5% of the
+- [x] `master.mp4` passes C9: video and audio streams present, duration within 5% of the
   `AudioManifest` total.
-- [ ] Re-running the same episode does not upload twice (the receipt check holds).
-- [ ] Without `--auto-approve` the run stops at `SCRIPT_APPROVED`'s gate and resumes after
+- [x] Re-running the same episode does not upload twice (the receipt check holds).
+- [x] Without `--auto-approve` the run stops at `SCRIPT_APPROVED`'s gate and resumes after
   `factory decide`.
-- [ ] `scripts/ci.sh` passes end to end in under 10 minutes with the network off for LLM calls.
+- [x] `scripts/ci.sh` passes end to end in under 10 minutes with the network off for LLM calls.
 
 ## Risks
 

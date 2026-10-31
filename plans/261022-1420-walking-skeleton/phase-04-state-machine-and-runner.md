@@ -1,7 +1,7 @@
 ---
 phase: 4
 title: "Episode state machine and runner"
-status: pending
+status: done
 priority: P1
 effort: "1.5d"
 dependencies: [1]

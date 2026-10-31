@@ -602,6 +602,7 @@ yt-channels/
 ├── curriculum/             # syllabus themes, exposure ledger migrations
 ├── factory/                # Python
 │   ├── orchestrator/       # state machine, queue workers, budgets
+│   ├── workers/            # deterministic production services C4-C10 (C7 moves to studio/ with Remotion)
 │   ├── agents/             # one module per A#: prompt, schema, eval
 │   ├── tools/              # profiler, rate estimator, enrichment (delegate to packs)
 │   ├── adapters/           # llm/, tts/, image/, music/, publish/, notify/
@@ -639,7 +640,7 @@ The first pilots use the three worked examples, chosen because together they exe
 
 | Step | Build | Proves |
 |---|---|---|
-| 0 | **Walking skeleton:** contracts, orchestrator state machine, artifact store, `xx-fixture` pack, fake adapters, CI end-to-end producing a placeholder MP4 | The assembly line works before any station is good |
+| 0 | **Walking skeleton** (done: [plan](../plans/261022-1420-walking-skeleton/plan.md)): contracts, orchestrator state machine, artifact store, `xx-fixture` pack, fake adapters, CI end-to-end producing a placeholder MP4 | The assembly line works before any station is good |
 | 1 | Contracts, **LanguagePack interface + conformance tests**, Level Framework (CEFR internal scale plus alias maps), Audience Profile schema, C1, A2, profiler, A3 loop | Level-correct scripts from any ResolvedConfig; pilot packs `en` and `ja` |
 | 2 | C2 enrichment, A4, A5, originality gate, CLI review | Scripts that pass QA; first 10+10 human-approved scripts |
 | 3 | A6, C4/C5, one Remotion podcast composition (RTL- and ruby-capable), C8 | An end-to-end MP4 |

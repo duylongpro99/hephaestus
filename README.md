@@ -2,9 +2,11 @@
 
 A factory that turns a curriculum into level-graded language-learning episodes
 for any target language, learner age and proficiency level. The current code is
-the EN A2 script spike: the artifact contracts, the `en` Language Pack, the
+the EN A2 script spike (the artifact contracts, the `en` Language Pack, the
 lexical profiler, the Scriptwriter (A2) and Level Editor (A3) agents, and a
-two-persona review panel.
+two-persona review panel) plus the walking skeleton: a Postgres-backed
+orchestrator that takes an episode from `SPEC` to `SCHEDULED`, with fake TTS,
+image and publish vendors and an FFmpeg placeholder MP4.
 
 ## Setup
 
@@ -25,6 +27,15 @@ uv run factory models gateway
 
 See [ADR 0002](docs/decisions/0002-per-role-llm-providers.md).
 
+The orchestrator keeps episode state in Postgres, run with Docker Compose
+([`compose.yaml`](compose.yaml)). It also needs FFmpeg (`ffmpeg` and `ffprobe`) on the PATH.
+Set `DATABASE_URL` in `.env` as in `.env.example`, then:
+
+```bash
+docker compose up -d --wait db
+uv run factory db migrate                 # applies new migrations; a second run is a no-op
+```
+
 ## Commands
 
 ```bash
@@ -35,6 +46,24 @@ uv run factory review <spec.json>                        # two-persona review pa
 uv run factory decide <spec.json> --decision ... --level-fit ...  # record a human spot-check
 uv run factory summary evals/en/adult/specs              # aggregate runs and reviews
 ```
+
+Orchestrator commands (need Postgres):
+
+```bash
+uv run factory run <spec.json>               # create the episode, run it until SCHEDULED or a human gate
+uv run factory decide <spec.json> --gate 1 --decision approve   # open gate 1 (script) or 2 (final)
+uv run factory run <spec.json>               # continue after the decision
+uv run factory status <episode_id>           # state, jobs and spend against the budget
+```
+
+`factory run --auto-approve` approves both gates as user `auto`; `--fake-llm` serves every LLM
+role from `tests/fixtures/<pack>/<episode>/`. TTS, images and publishing are fakes for now.
+
+`scripts/ci.sh` checks the whole repository the way a hosted CI would: lint, unit and pack
+conformance tests, a fresh migrated database, the database and end-to-end tests, and one
+`xx-fixture` episode from `SPEC` to `SCHEDULED` with no LLM endpoint. It prints the failed step
+and exits non-zero on any failure. Pytest skips the `db` and `e2e` tests when `DATABASE_URL` is
+unset.
 
 ## Docs
 
