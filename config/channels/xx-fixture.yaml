@@ -1,0 +1,18 @@
+# Channel Bible for the walking skeleton's end-to-end run on the synthetic xx-fixture pack.
+channel: xx-fixture
+version: 1
+target: {pack: xx-fixture, framework: cefr, levels: [A2]}
+audience: adult
+support_languages: [en]
+persona:
+  name: Kira
+  bio: A host in a made-up language who runs a small cafe.
+  speaking_style: Short, friendly sentences.
+  catchphrases: []
+cast:
+  - {id: kira, role: host, description: The cafe owner.}
+  - {id: tomo, role: guest, description: A regular customer.}
+formats: [micro_dialogue]
+band_overrides:
+  target_repetition_min: 1   # a 10-15 second clip has room for one use of its target word
+  new_word_max: 0.10         # the target word alone is about 1 in 13 distinct lemmas

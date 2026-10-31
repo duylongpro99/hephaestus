@@ -47,3 +47,8 @@ roles:
     model: qwen3.8-max-0902
     max_tokens: 32000
     params: {}
+  a9_packager:
+    provider: gateway
+    model: ds/deepseek-v4-pro
+    max_tokens: 8000    # titles, descriptions and tags per support language
+    params: {}

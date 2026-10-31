@@ -139,8 +139,13 @@ def load_yaml(path: Path) -> dict:
         return yaml.safe_load(fh)
 
 
+def pack_module(code: str):
+    """The module of a pack; a code such as `xx-fixture` lives in the package `packs.xx_fixture`."""
+    return importlib.import_module(f"packs.{code.replace('-', '_')}.pack")
+
+
 def pack_summary(code: str) -> PackSummary:
-    pack_cls = importlib.import_module(f"packs.{code}.pack").Pack
+    pack_cls = pack_module(code).Pack
     return PackSummary(
         code=pack_cls.code,
         script_direction=pack_cls.script_direction,
