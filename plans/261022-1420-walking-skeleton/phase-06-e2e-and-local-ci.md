@@ -1,7 +1,7 @@
 ---
 phase: 6
 title: "End-to-end command and local CI"
-status: pending
+status: done
 priority: P1
 effort: "0.5d"
 dependencies: [5]

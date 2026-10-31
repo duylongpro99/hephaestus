@@ -1,7 +1,7 @@
 ---
 phase: 2
 title: "Production contracts and fake adapters"
-status: pending
+status: done
 priority: P1
 effort: "1d"
 dependencies: []

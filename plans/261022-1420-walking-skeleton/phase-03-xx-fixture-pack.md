@@ -1,7 +1,7 @@
 ---
 phase: 3
 title: "xx-fixture pack"
-status: pending
+status: done
 priority: P2
 effort: "0.5d"
 dependencies: []

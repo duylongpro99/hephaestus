@@ -1,7 +1,7 @@
 ---
 phase: 5
 title: "Stations SPEC to SCHEDULED"
-status: pending
+status: done
 priority: P1
 effort: "1.5d"
 dependencies: [2, 3, 4]

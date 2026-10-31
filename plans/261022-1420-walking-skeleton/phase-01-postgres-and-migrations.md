@@ -1,7 +1,7 @@
 ---
 phase: 1
 title: "Postgres and migrations"
-status: pending
+status: done
 priority: P1
 effort: "1d"
 dependencies: []
