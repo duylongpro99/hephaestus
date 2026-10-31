@@ -1,0 +1,126 @@
+{
+  "$defs": {
+    "Caption": {
+      "additionalProperties": false,
+      "properties": {
+        "duration_s": {
+          "title": "Duration S",
+          "type": "number"
+        },
+        "line_id": {
+          "title": "Line Id",
+          "type": "string"
+        },
+        "start_s": {
+          "title": "Start S",
+          "type": "number"
+        },
+        "text": {
+          "title": "Text",
+          "type": "string"
+        }
+      },
+      "required": [
+        "line_id",
+        "text",
+        "start_s",
+        "duration_s"
+      ],
+      "title": "Caption",
+      "type": "object"
+    },
+    "Scene": {
+      "additionalProperties": false,
+      "properties": {
+        "captions": {
+          "items": {
+            "$ref": "#/$defs/Caption"
+          },
+          "title": "Captions",
+          "type": "array"
+        },
+        "duration_s": {
+          "title": "Duration S",
+          "type": "number"
+        },
+        "image_uri": {
+          "title": "Image Uri",
+          "type": "string"
+        },
+        "segment_id": {
+          "title": "Segment Id",
+          "type": "string"
+        },
+        "start_s": {
+          "title": "Start S",
+          "type": "number"
+        },
+        "template": {
+          "title": "Template",
+          "type": "string"
+        }
+      },
+      "required": [
+        "segment_id",
+        "template",
+        "image_uri",
+        "start_s",
+        "duration_s",
+        "captions"
+      ],
+      "title": "Scene",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Renderer input (architecture \u00a74.4): a pure function of Script, AudioManifest and ShotList, by C7.",
+  "properties": {
+    "audio_uri": {
+      "title": "Audio Uri",
+      "type": "string"
+    },
+    "episode_id": {
+      "title": "Episode Id",
+      "type": "string"
+    },
+    "fps": {
+      "title": "Fps",
+      "type": "integer"
+    },
+    "height": {
+      "title": "Height",
+      "type": "integer"
+    },
+    "scenes": {
+      "items": {
+        "$ref": "#/$defs/Scene"
+      },
+      "title": "Scenes",
+      "type": "array"
+    },
+    "schema_version": {
+      "default": "1.0.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "total_duration_s": {
+      "title": "Total Duration S",
+      "type": "number"
+    },
+    "width": {
+      "title": "Width",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "episode_id",
+    "width",
+    "height",
+    "fps",
+    "audio_uri",
+    "total_duration_s",
+    "scenes"
+  ],
+  "title": "RenderProps",
+  "type": "object"
+}

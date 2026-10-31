@@ -1,0 +1,130 @@
+{
+  "$defs": {
+    "HintSpan": {
+      "additionalProperties": false,
+      "properties": {
+        "end": {
+          "title": "End",
+          "type": "integer"
+        },
+        "kind": {
+          "title": "Kind",
+          "type": "string"
+        },
+        "start": {
+          "title": "Start",
+          "type": "integer"
+        },
+        "value": {
+          "title": "Value",
+          "type": "string"
+        }
+      },
+      "required": [
+        "start",
+        "end",
+        "kind",
+        "value"
+      ],
+      "title": "HintSpan",
+      "type": "object"
+    },
+    "LineEnrichment": {
+      "additionalProperties": false,
+      "properties": {
+        "hints": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/HintSpan"
+          },
+          "title": "Hints",
+          "type": "array"
+        },
+        "line_id": {
+          "title": "Line Id",
+          "type": "string"
+        },
+        "romanization": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Romanization"
+        },
+        "ruby": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/RubySpan"
+          },
+          "title": "Ruby",
+          "type": "array"
+        }
+      },
+      "required": [
+        "line_id"
+      ],
+      "title": "LineEnrichment",
+      "type": "object"
+    },
+    "RubySpan": {
+      "additionalProperties": false,
+      "properties": {
+        "end": {
+          "title": "End",
+          "type": "integer"
+        },
+        "start": {
+          "title": "Start",
+          "type": "integer"
+        },
+        "text": {
+          "title": "Text",
+          "type": "string"
+        }
+      },
+      "required": [
+        "start",
+        "end",
+        "text"
+      ],
+      "title": "RubySpan",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Reading aids per line from the Language Pack (architecture \u00a77, C2). Lines without aids are omitted.",
+  "properties": {
+    "episode_id": {
+      "title": "Episode Id",
+      "type": "string"
+    },
+    "lines": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/LineEnrichment"
+      },
+      "title": "Lines",
+      "type": "array"
+    },
+    "policy": {
+      "title": "Policy",
+      "type": "string"
+    },
+    "schema_version": {
+      "default": "1.0.0",
+      "title": "Schema Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "episode_id",
+    "policy"
+  ],
+  "title": "Enrichment",
+  "type": "object"
+}

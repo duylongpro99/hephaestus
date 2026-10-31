@@ -1,0 +1,105 @@
+{
+  "$defs": {
+    "LineDirective": {
+      "additionalProperties": false,
+      "properties": {
+        "accent_overrides": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "default": {},
+          "title": "Accent Overrides",
+          "type": "object"
+        },
+        "line_id": {
+          "title": "Line Id",
+          "type": "string"
+        },
+        "pause_ms": {
+          "title": "Pause Ms",
+          "type": "integer"
+        },
+        "rate": {
+          "title": "Rate",
+          "type": "number"
+        },
+        "rate_unit": {
+          "enum": [
+            "wpm",
+            "syllables_s",
+            "mora_s",
+            "chars_min"
+          ],
+          "title": "Rate Unit",
+          "type": "string"
+        },
+        "speaker": {
+          "title": "Speaker",
+          "type": "string"
+        },
+        "style_tags": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Style Tags",
+          "type": "array"
+        },
+        "variant": {
+          "enum": [
+            "slow",
+            "natural"
+          ],
+          "title": "Variant",
+          "type": "string"
+        },
+        "vendor": {
+          "title": "Vendor",
+          "type": "string"
+        },
+        "voice_id": {
+          "title": "Voice Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "line_id",
+        "speaker",
+        "vendor",
+        "voice_id",
+        "rate",
+        "rate_unit",
+        "pause_ms",
+        "variant"
+      ],
+      "title": "LineDirective",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "How each line is spoken (architecture \u00a74.4), written by A6.",
+  "properties": {
+    "episode_id": {
+      "title": "Episode Id",
+      "type": "string"
+    },
+    "lines": {
+      "items": {
+        "$ref": "#/$defs/LineDirective"
+      },
+      "title": "Lines",
+      "type": "array"
+    },
+    "schema_version": {
+      "default": "1.0.0",
+      "title": "Schema Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "episode_id",
+    "lines"
+  ],
+  "title": "VoiceDirectives",
+  "type": "object"
+}

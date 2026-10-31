@@ -1,0 +1,50 @@
+{
+  "additionalProperties": false,
+  "description": "The encoded episode video, written by C8 and checked by C9.",
+  "properties": {
+    "episode_id": {
+      "title": "Episode Id",
+      "type": "string"
+    },
+    "fps": {
+      "title": "Fps",
+      "type": "integer"
+    },
+    "height": {
+      "title": "Height",
+      "type": "integer"
+    },
+    "schema_version": {
+      "default": "1.0.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "sha256": {
+      "title": "Sha256",
+      "type": "string"
+    },
+    "size_bytes": {
+      "title": "Size Bytes",
+      "type": "integer"
+    },
+    "uri": {
+      "title": "Uri",
+      "type": "string"
+    },
+    "width": {
+      "title": "Width",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "episode_id",
+    "uri",
+    "sha256",
+    "size_bytes",
+    "width",
+    "height",
+    "fps"
+  ],
+  "title": "RenderedVideo",
+  "type": "object"
+}
