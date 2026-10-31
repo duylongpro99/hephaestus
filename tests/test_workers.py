@@ -1,0 +1,155 @@
+"""Production workers on the xx-fixture episode: voice, visuals, composer, render, checks, publishing."""
+
+import json
+import wave
+from datetime import datetime, timezone
+
+import pytest
+
+from factory.adapters.image.fake import FakeImageProvider
+from factory.adapters.llm.base import LLMError
+from factory.adapters.llm.fake import FakeLLMProvider
+from factory.adapters.publish.fake import FakePublisher
+from factory.adapters.tts.fake import FakeTTS
+from factory.agents.drafts import draft_models, to_script
+from factory.artifacts import ArtifactStore, canonical
+from factory.config import resolve
+from factory.contracts import EpisodeSpec
+from factory.tools.enrichment import enrich
+from factory.tools.language_pack import load_pack
+from factory.workers import compliance, composer, packaging, publisher, render, tech_checks, visuals, voice
+from tests.conftest import FIXTURES
+
+EPISODE = FIXTURES / "xx-fixture" / "xx-A2-e2e"
+SPEC_PATH = FIXTURES.parent.parent / "evals" / "xx-fixture" / "adult" / "specs" / "xx-A2-e2e.json"
+
+
+@pytest.fixture(scope="module")
+def spec():
+    return EpisodeSpec.model_validate_json(SPEC_PATH.read_text(encoding="utf-8"))
+
+
+@pytest.fixture(scope="module")
+def config(spec):
+    return resolve(spec.channel, spec.level)
+
+
+@pytest.fixture(scope="module")
+def pack():
+    return load_pack("xx-fixture")
+
+
+@pytest.fixture(scope="module")
+def script(spec):
+    draft = draft_models("xx-fixture", ("en",)).model_validate_json((EPISODE / "a2_scriptwriter.json").read_text())
+    return to_script(draft, spec.episode_id, "xx-fixture", ["en"])
+
+
+@pytest.fixture(scope="module")
+def produced(tmp_path_factory, script, config, pack):
+    """Audio, shots, props and the rendered video, made once for the module."""
+    store = ArtifactStore(tmp_path_factory.mktemp("store"))
+    directives = voice.direct(script, config, pack)
+    audio = voice.voice(script, directives, FakeTTS(pack), store.root / "audio", store.uri)
+    shots = visuals.shoot(script, config, FakeImageProvider(), store.root / "shots", store.uri)
+    props = composer.compose(script, audio, shots)
+    video = render.render(props, store.resolve, store.root / "render")
+    return store, directives, audio, shots, props, video
+
+
+def test_enrichment_is_empty_for_a_pack_without_reading_aids(script, pack):
+    assert enrich(script, pack, "A2").lines == []
+
+
+def test_voice_directives_follow_cast_and_band(produced, script, config):
+    _, directives, *_ = produced
+    assert [d.line_id for d in directives.lines] == [line.id for line in script.iter_lines()]
+    assert {d.speaker: d.voice_id for d in directives.lines} == {"kira": "fake-a", "tomo": "fake-b"}
+    assert all(d.rate == config.band.rate.midpoint and d.variant == "natural" for d in directives.lines)
+
+
+def test_master_track_is_lines_plus_pauses(produced):
+    store, _, audio, *_ = produced
+    with wave.open(str(store.resolve(audio.master_uri))) as wav:
+        seconds = wav.getnframes() / wav.getframerate()
+    assert seconds == pytest.approx(audio.total_duration_s, abs=0.01)
+    last = audio.lines[-1]
+    assert last.start_s + last.duration_s + last.pause_after_s == pytest.approx(audio.total_duration_s, abs=0.001)
+
+
+def test_composer_is_pure_and_deterministic(produced, script):
+    _, _, audio, shots, props, _ = produced
+    again = composer.compose(script.model_copy(deep=True), audio.model_copy(deep=True), shots.model_copy(deep=True))
+    assert canonical(again) == canonical(props)
+    assert [c.line_id for s in props.scenes for c in s.captions] == [line.id for line in script.iter_lines()]
+    assert props.scenes[0].start_s == 0 and props.total_duration_s == audio.total_duration_s
+
+
+def test_render_passes_tech_checks(produced):
+    _, _, audio, _, props, video = produced
+    report = tech_checks.check(video, audio, props.width, props.height)
+    assert report.hard_gate_failures == [], report.summary
+
+
+def test_tech_checks_catch_a_wrong_duration_and_size(produced):
+    _, _, audio, _, props, video = produced
+    longer = audio.model_copy(update={"total_duration_s": audio.total_duration_s * 2})
+    failures = tech_checks.check(video, longer, 1280, 720).hard_gate_failures
+    assert any("expected 1280x720" in f for f in failures) and any("duration" in f for f in failures)
+
+
+def test_packager_fills_flags_and_chapters(spec, config, script, produced):
+    _, _, _, _, props, _ = produced
+    copy, costs = packaging.write_copy(spec, script, config, FakeLLMProvider(EPISODE))
+    package = packaging.package(spec, config, props, "video.mp4", copy)
+    assert package.title["en"] and package.made_for_kids is False and package.contains_synthetic_media
+    assert [c.start_s for c in package.chapters] == [0]
+    assert compliance.check(package, config).hard_gate_failures == []
+
+
+def test_packager_requires_copy_in_every_support_language(tmp_path, spec, config, script):
+    fixture = json.loads((EPISODE / "a9_packager.json").read_text())
+    fixture["copies"][0]["language"] = "vi"
+    (tmp_path / "a9_packager.json").write_text(json.dumps(fixture))
+    with pytest.raises(LLMError, match="no copy for en"):
+        packaging.write_copy(spec, script, config, FakeLLMProvider(tmp_path))
+
+
+def test_compliance_flags_a_wrong_made_for_kids(spec, config, script, produced):
+    _, _, _, _, props, _ = produced
+    copy, _ = packaging.write_copy(spec, script, config, FakeLLMProvider(EPISODE))
+    package = packaging.package(spec, config, props, "video.mp4", copy).model_copy(
+        update={"made_for_kids": True, "contains_synthetic_media": False})
+    failures = compliance.check(package, config).hard_gate_failures
+    assert any("made_for_kids" in f for f in failures) and any("synthetic" in f for f in failures)
+
+
+class CountingPublisher(FakePublisher):
+    def __init__(self, out_dir):
+        super().__init__(out_dir)
+        self.uploads = 0
+
+    def upload(self, video, package):
+        self.uploads += 1
+        return super().upload(video, package)
+
+
+def test_publisher_refuses_a_second_upload(tmp_path, spec, config, script, produced):
+    _, _, _, _, props, video = produced
+    copy, _ = packaging.write_copy(spec, script, config, FakeLLMProvider(EPISODE))
+    package = packaging.package(spec, config, props, "video.mp4", copy)
+    pub, now = CountingPublisher(tmp_path), datetime(2026, 10, 22, 9, 30, tzinfo=timezone.utc)
+    receipt, uploaded = publisher.upload(None, pub, video, package, now)
+    again, uploaded_again = publisher.upload(receipt, pub, video, package, now)
+    assert uploaded and not uploaded_again and again == receipt and pub.uploads == 1
+    publish_at = publisher.publish_time(package, now)
+    assert publish_at == datetime(2026, 10, 23, 10, 0, tzinfo=timezone.utc)
+    assert publisher.schedule(receipt, pub, publish_at).status == "scheduled"
+
+
+def test_ids_that_would_escape_the_media_folder_are_refused(tmp_path, script, config, pack):
+    bad = script.model_copy(deep=True)
+    bad.segments[0].lines[0].id = "../../x"
+    directives = voice.direct(bad, config, pack)
+    with pytest.raises(ValueError, match="cannot name a file"):
+        voice.voice(bad, directives, FakeTTS(pack), tmp_path, str)

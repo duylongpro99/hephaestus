@@ -12,13 +12,18 @@ dependencies = [
     "typer>=0.27.0",
     "wn>=1.1.1",
     "openai>=3.28.0",
+    "psycopg[binary]>=3.2",
+    "pillow>=11",
 ]
 
 [project.scripts]
 factory = "factory.cli:app"
 
 [dependency-groups]
-dev = ["pytest>=8"]
+dev = [
+    "pytest>=8",
+    "ruff>=0.17.1",
+]
 
 [tool.uv.sources]
 en-core-web-sm = { url = "https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.8.0/en_core_web_sm-3.8.0-py3-none-any.whl" }
@@ -32,3 +37,15 @@ packages = ["factory", "packs"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests", "packs"]
+markers = [
+    "db: needs Postgres at $DATABASE_URL; skipped when it is unset",
+    "e2e: runs a whole episode through the orchestrator (needs Postgres and FFmpeg)",
+]
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+extend-exclude = [".claude"]
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F"]

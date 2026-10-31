@@ -1,0 +1,21 @@
+# Local state store for the orchestrator. Start with: docker compose up -d db
+services:
+  db:
+    image: postgres:18
+    environment:
+      POSTGRES_USER: factory
+      POSTGRES_PASSWORD: factory
+      POSTGRES_DB: factory
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      # Postgres 18+ keeps data in a versioned subdirectory, so pg_upgrade --link works in place.
+      - postgres:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U factory -d factory"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+
+volumes:
+  postgres:

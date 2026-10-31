@@ -9,11 +9,13 @@ import typer
 
 from factory.adapters.llm.base import LLMError
 from factory.config import REPO_ROOT, ResolvedConfig, resolve
-from factory.contracts import CostEntry, CostLedger, EpisodeSpec, GateDecision, Script
+from factory.contracts import CostLedger, EpisodeSpec, GateDecision, Script
 from factory.tools.language_pack import load_pack
 from factory.tools.profiler import format_report, profile
 
 app = typer.Typer(no_args_is_help=True, add_completion=False)
+db_app = typer.Typer(no_args_is_help=True, help="The orchestrator's Postgres database.")
+app.add_typer(db_app, name="db")
 
 
 def load_spec(path: Path) -> EpisodeSpec:
@@ -73,7 +75,7 @@ def profile_cmd(
 @app.command("script")
 def script_cmd(
     spec_path: Path = typer.Argument(..., exists=True, help="EpisodeSpec JSON"),
-    fresh: bool = typer.Option(False, help="Ignore a stored A2 draft and call the model again"),
+    fresh: bool = typer.Option(False, help="Ignore stored A2 and A3 outputs and call the models again"),
     max_turns: int = typer.Option(4, help="Maximum A3 editing turns"),
     writer_role: str = typer.Option("a2_scriptwriter", "--writer", help="config/llm.yaml role that drafts the script"),
 ):
@@ -81,7 +83,8 @@ def script_cmd(
     from factory.adapters.llm.router import provider_for
     from factory.agents.a2_scriptwriter import agent as a2
     from factory.agents.a3_level_editor import agent as a3
-    from factory.artifacts import ArtifactStore
+    from factory.artifacts import ArtifactStore, Producer
+    from factory.orchestrator.stations import LevelLoopFailed, draft_script, level_script, wordlist_hash
 
     started = time.monotonic()
     spec = load_spec(spec_path)
@@ -95,58 +98,52 @@ def script_cmd(
     except LLMError as exc:
         fail(exc)
     store = ArtifactStore()
-    where = {"channel": spec.channel, "episode": spec.episode_id, "season": spec.season_id}
+    out = Producer(store, spec.channel, spec.episode_id, spec.season_id, fresh=fresh)
     ledger = CostLedger(episode_id=spec.episode_id, budget_usd=spec.budget_usd)
 
-    a2_version = a2.version(writer.identity)
-    from factory.agents.prefix import wordlist_block
-    from factory.artifacts import sha256_text
-
-    # The wordlist comes from pack data that neither the config hash nor the code hash covers.
-    wordlist_hash = sha256_text(wordlist_block(config, pack))
-    a2_inputs = [spec, config.config_hash, wordlist_hash]
-    envelope = None if fresh else store.read_envelope(**where, station=a2.STATION, version=a2_version,
-                                                      inputs=a2_inputs)
-    if envelope:
-        draft = Script.model_validate(envelope["artifact"])
-        a2_costs = [CostEntry.model_validate(c) for c in envelope.get("cost", [])]
-        typer.echo(f"A2: reusing stored draft {a2.STATION}@{envelope['hash']}")
+    typer.echo(f"A2: {spec.episode_id} with {writer.identity} ...")
+    try:
+        draft = draft_script(out, spec, config, pack, writer)
+    except LLMError as exc:
+        fail(exc)
+    a2_costs = out.ledger[:]
+    if out.last.reused:
+        typer.echo(f"A2: reusing stored draft {a2.STATION}@{out.last.envelope['hash']}")
     else:
-        typer.echo(f"A2: drafting {spec.episode_id} with {writer.identity} ...")
-        try:
-            draft, a2_costs = a2.write_script(spec, config, pack, writer)
-        except LLMError as exc:
-            fail(exc)
-        store.write(**where, station=a2.STATION, version=a2_version, inputs=a2_inputs, artifact=draft,
-                    extra={"cost": [c.model_dump(mode="json") for c in a2_costs]})
         typer.echo(f"A2: done, ${sum(c.usd for c in a2_costs):.4f}, "
                    f"cache read {sum(c.cache_read_input_tokens for c in a2_costs)} tokens")
-    ledger.entries += a2_costs
 
-    result = a3.level_loop(draft, spec, config, pack, editor, max_turns=max_turns)
-    ledger.entries += result.costs
+    try:
+        leveled = level_script(out, draft, spec, config, pack, editor, max_turns=max_turns)
+        script, status, turns, error = leveled.script, leveled.status, leveled.turns, None
+        first_report, final_report = leveled.first_report, leveled.report
+        script_path = next(p.path for p in out.produced if p.envelope["station"] == a3.STATION)
+        if out.produced[-2].reused:
+            typer.echo(f"A3: reusing stored result {a3.STATION}@{out.produced[-2].envelope['hash']}")
+    except LevelLoopFailed as exc:
+        result = exc.result
+        script, status, turns, error = result.script, "ESCALATED", result.turns, result.error
+        first_report, final_report = result.reports[0], result.reports[-1]
+        ledger.entries += exc.costs
+        script_path = None
+    ledger.entries = out.ledger + ledger.entries
     a3_version = a3.version(editor.identity)
-    a3_inputs = [draft, spec, config.config_hash, wordlist_hash]
-    script_path = store.write(**where, station=a3.STATION, version=a3_version, inputs=a3_inputs,
-                              artifact=result.script,
-                              extra={"status": result.status, "turns": result.turns,
-                                     "cost": [c.model_dump(mode="json") for c in result.costs]})
-    store.write(**where, station="level_report", version=a3_version, inputs=a3_inputs,
-                artifact=result.reports[-1], extra={"status": result.status, "turns": result.turns})
-    store.write(**where, station="cost_ledger", version=a3_version, inputs=a3_inputs, artifact=ledger)
+    a3_inputs = [draft, spec, config.config_hash, wordlist_hash(config, pack), max_turns]
+    store.write(channel=spec.channel, episode=spec.episode_id, season=spec.season_id, station="cost_ledger",
+                version=a3_version, inputs=a3_inputs, artifact=ledger)
 
     elapsed = round(time.monotonic() - started, 1)
     out_dir = eval_dir(config)
-    write_json(out_dir / "scripts" / f"{spec.episode_id}.json", result.script.model_dump(mode="json"))
+    write_json(out_dir / "scripts" / f"{spec.episode_id}.json", script.model_dump(mode="json"))
     append_attempt(out_dir / "runs" / f"{spec.episode_id}.json", {
         "episode_id": spec.episode_id,
-        "status": result.status,
-        "error": result.error,
-        "a3_turns": result.turns,
+        "status": status,
+        "error": error,
+        "a3_turns": turns,
         "elapsed_s": elapsed,
-        "station_versions": {a2.STATION: a2_version, a3.STATION: a3_version},
-        "first_report": result.reports[0].model_dump(mode="json"),
-        "final_report": result.reports[-1].model_dump(mode="json"),
+        "station_versions": {a2.STATION: a2.version(writer.identity), a3.STATION: a3_version},
+        "first_report": first_report.model_dump(mode="json"),
+        "final_report": final_report.model_dump(mode="json"),
         "cost_ledger": ledger.model_dump(mode="json"),
     })
 
@@ -154,30 +151,37 @@ def script_cmd(
         typer.echo(f"  {entry.station:<16} {entry.model:<18} in={entry.input_tokens} out={entry.output_tokens} "
                    f"cache_w={entry.cache_creation_input_tokens} cache_r={entry.cache_read_input_tokens} ${entry.usd:.4f}"
                    + ("" if entry.priced else " (no price for this model; not in the total)"))
-    typer.echo(format_report(result.reports[-1]))
-    typer.echo(f"status {result.status} after {result.turns} A3 turn(s); total ${ledger.total_usd:.4f}; {elapsed:.0f}s")
-    typer.echo(f"artifact: {script_path}")
-    raise typer.Exit(0 if result.status == "PASSED" else 2)
+    typer.echo(format_report(final_report))
+    typer.echo(f"status {status} after {turns} A3 turn(s); total ${ledger.total_usd:.4f}; {elapsed:.0f}s")
+    if error:
+        typer.echo(f"error: {error}")
+    if script_path:
+        typer.echo(f"artifact: {script_path}")
+    raise typer.Exit(0 if status == "PASSED" else 2)
 
 
 @app.command("review")
 def review_cmd(
     spec_path: Path = typer.Argument(..., exists=True, help="EpisodeSpec JSON"),
     script_path: Path | None = typer.Option(None, "--script", help="Script JSON (default: the exported eval script)"),
+    fresh: bool = typer.Option(False, help="Ignore stored reviews of this script and call the reviewers again"),
 ):
     """Run the two-persona review panel on a script, one independent call per persona."""
     from factory.adapters.llm.router import provider_for
     from factory.agents.review_panel import agent as panel
+    from factory.artifacts import ArtifactStore, Producer
+    from factory.orchestrator.stations import review_script
 
     spec = load_spec(spec_path)
     config = resolve(spec.channel, spec.level)
     script_path = script_path or eval_dir(config) / "scripts" / f"{spec.episode_id}.json"
     script = Script.model_validate_json(script_path.read_text(encoding="utf-8"))
     run_path = eval_dir(config) / "runs" / f"{spec.episode_id}.json"
+    out = Producer(ArtifactStore(), spec.channel, spec.episode_id, spec.season_id, fresh=fresh)
     for persona in panel.PERSONAS:
         try:
             llm = provider_for(panel.station(persona))
-            result = panel.review(persona, spec, script, llm)
+            [result] = review_script(out, spec, script, {persona: llm})
         except LLMError as exc:
             fail(exc)
         write_json(eval_dir(config) / "reviews" / spec.episode_id / f"{persona}.json", {
@@ -187,7 +191,8 @@ def review_cmd(
             "gate_decision": result.decision.model_dump(mode="json"),
             "costs": [c.model_dump(mode="json") for c in result.costs],
         })
-        if run_path.exists():  # the panel's cost belongs to the script's ledger
+        # The panel's cost belongs to the script's ledger, once: a stored review was counted when it ran.
+        if run_path.exists() and not out.last.reused:
             record = read_json(run_path)
             data = {k: v for k, v in record["attempts"][-1]["cost_ledger"].items() if k != "total_usd"}
             data["entries"] += [c.model_dump(mode="json") for c in result.costs]
@@ -196,7 +201,8 @@ def review_cmd(
             write_json(run_path, record)
         counts = {sev: sum(i.severity == sev for i in result.qa_report.issues) for sev in ("critical", "major", "minor")}
         typer.echo(f"{persona:<9} {result.decision.decision:<16} level {result.level_fit_verdict:<5} "
-                   f"issues {counts}  ${sum(c.usd for c in result.costs):.4f}")
+                   f"issues {counts}  ${sum(c.usd for c in result.costs):.4f}"
+                   + ("  (stored review)" if out.last.reused else ""))
 
 
 @app.command("decide")
@@ -204,19 +210,134 @@ def decide_cmd(
     spec_path: Path = typer.Argument(..., exists=True, help="EpisodeSpec JSON"),
     decision: str = typer.Option(..., help="approve | edit-and-approve | reject"),
     notes: str = typer.Option("", help="What you found, using the panel's rubric"),
-    level_fit: str = typer.Option(..., help="below | at | above the spec level"),
+    level_fit: str | None = typer.Option(None, help="below | at | above the spec level; also saves the decision as eval data"),
+    gate: int = typer.Option(1, help="1 = script approval, 2 = final approval"),
+    diff: str | None = typer.Option(None, help="With edit-and-approve: the edits, as a unified diff or notes per line id"),
 ):
-    """Record a human spot-check GateDecision for a script (user: human)."""
+    """Record a human GateDecision (user: human) for an episode in the database, and as eval data with --level-fit."""
+    import os
+
+    from factory.orchestrator import repo
+    from factory.orchestrator.states import GATES
+
     spec = load_spec(spec_path)
-    config = resolve(spec.channel, spec.level)
-    if level_fit not in ("below", "at", "above"):
-        raise typer.BadParameter("level-fit must be below, at or above")
     if decision not in ("approve", "edit-and-approve", "reject"):
         raise typer.BadParameter("decision must be approve, edit-and-approve or reject")
-    gate_decision = GateDecision(episode_id=spec.episode_id, gate=1, user="human", decision=decision, notes=notes)
-    path = eval_dir(config) / "reviews" / spec.episode_id / "human.json"
-    write_json(path, {"level_fit_verdict": level_fit, "gate_decision": gate_decision.model_dump(mode="json")})
-    typer.echo(f"wrote {path}")
+    if gate not in (1, 2):
+        raise typer.BadParameter("gate must be 1 or 2")
+    if level_fit is not None and level_fit not in ("below", "at", "above"):
+        raise typer.BadParameter("level-fit must be below, at or above")
+    gate_decision = GateDecision(episode_id=spec.episode_id, gate=gate, user="human", decision=decision, notes=notes,
+                                 diff=diff)
+    recorded = False
+    if level_fit is not None:
+        if gate != 1:
+            raise typer.BadParameter("--level-fit applies to the script gate (1) only")
+        config = resolve(spec.channel, spec.level)
+        path = eval_dir(config) / "reviews" / spec.episode_id / "human.json"
+        write_json(path, {"level_fit_verdict": level_fit, "gate_decision": gate_decision.model_dump(mode="json")})
+        typer.echo(f"wrote {path}")
+        recorded = True
+    if os.environ.get("DATABASE_URL"):
+        with db_connect() as conn:
+            episode = repo.get_episode(conn, spec.episode_id)
+            if episode:
+                if episode["status"] != GATES[gate]:
+                    typer.echo(f"error: {spec.episode_id} is at {episode['status']}, not waiting at gate {gate} "
+                               f"({GATES[gate]})", err=True)
+                    raise typer.Exit(1)
+                with conn.transaction():
+                    repo.insert_gate_decision(conn, gate_decision)
+                typer.echo(f"recorded gate {gate} {decision} for {spec.episode_id}; `factory run` continues it")
+                recorded = True
+    if not recorded:
+        typer.echo(f"error: {spec.episode_id} is not in the database; pass --level-fit to save eval data", err=True)
+        raise typer.Exit(1)
+
+
+@app.command("run")
+def run_cmd(
+    spec_path: Path = typer.Argument(..., exists=True, help="EpisodeSpec JSON"),
+    auto_approve: bool = typer.Option(False, help="Approve human gates as user 'auto' instead of waiting"),
+    fake_llm: bool = typer.Option(False, help="Serve every LLM role from tests/fixtures/<pack>/<episode>/"),
+    artifacts: Path = typer.Option(None, help="Artifact store root (default: artifacts/)"),
+):
+    """Create the episode if new, then move it through the stations until SCHEDULED, a gate, or a stop."""
+    from datetime import datetime, timezone
+    from functools import cache
+
+    from factory.adapters.image.fake import FakeImageProvider
+    from factory.adapters.llm.fake import FakeLLMProvider
+    from factory.adapters.llm.router import provider_for
+    from factory.adapters.publish.fake import FakePublisher
+    from factory.adapters.tts.fake import FakeTTS
+    from factory.agents.review_panel.agent import PERSONAS
+    from factory.artifacts import ARTIFACT_ROOT, ArtifactStore
+    from factory.orchestrator import repo
+    from factory.orchestrator.runner import Runner
+    from factory.orchestrator.stations import Stations, Vendors
+    from factory.orchestrator.states import DONE, PIPELINE, STOPPED
+
+    spec = load_spec(spec_path)
+    store = ArtifactStore(artifacts or ARTIFACT_ROOT)
+    fixtures = REPO_ROOT / "tests" / "fixtures"
+    with db_connect() as conn:
+        if repo.get_episode(conn, spec.episode_id) is None:
+            config = resolve(spec.channel, spec.level)
+            if spec.config_hash != config.config_hash:
+                typer.echo(f"error: spec config_hash {spec.config_hash[:19]} differs from the live config "
+                           f"{config.config_hash[:19]}; re-resolve the spec before creating the episode", err=True)
+                raise typer.Exit(1)
+            with conn.transaction():
+                repo.create_episode(conn, spec, config, datetime.now(timezone.utc))
+            typer.echo(f"created {spec.episode_id} at SPEC (config {config.config_hash[:19]})")
+        else:
+            config = ResolvedConfig.model_validate(repo.get_episode(conn, spec.episode_id)["resolved_config"])
+            repo.create_episode(conn, spec, config, datetime.now(timezone.utc))  # refuses a changed spec
+
+        @cache
+        def llm(role: str):
+            if fake_llm:
+                return FakeLLMProvider(fixtures / config.pack.code / spec.episode_id)
+            return provider_for(role)
+
+        vendors = Vendors(llm=llm, tts=FakeTTS, images=FakeImageProvider(),
+                          publisher=FakePublisher(store.root / "_fake_publisher"))
+        runner = Runner(conn, Stations(vendors).registry(), store, auto_approve=auto_approve,
+                        panel_users=tuple(PERSONAS))
+        state = runner.advance(spec.episode_id)
+        print_status(conn, spec.episode_id)
+    if state in STOPPED:
+        raise typer.Exit(1)
+    if state not in DONE:
+        gate = PIPELINE[state].gate
+        typer.echo(f"waiting at gate {gate}: record a decision with `factory decide {spec_path} --gate {gate} "
+                   "--decision approve|edit-and-approve|reject`, then run again")
+
+
+def print_status(conn, episode_id: str) -> None:
+    from factory.orchestrator import repo
+
+    episode = repo.get_episode(conn, episode_id)
+    if episode is None:
+        typer.echo(f"error: no episode {episode_id}", err=True)
+        raise typer.Exit(1)
+    for job in repo.jobs(conn, episode_id):
+        took = (job["finished_at"] - job["started_at"]).total_seconds()
+        typer.echo(f"  {job['station']:<16} {job['from_status']:>15} -> {job['to_status'] or '(retry)':<15} "
+                   f"#{job['attempt']} {job['status']:<10} {took:6.2f}s" + (f"  {job['error']}" if job["error"] else ""))
+    spent = repo.spent_usd(conn, episode_id)
+    typer.echo(f"{episode_id}: {episode['status']}; spent ${spent:.4f} of ${float(episode['budget_usd']):.2f}")
+    for receipt in repo.receipts(conn, episode_id):
+        typer.echo(f"  receipt {receipt.platform}/{receipt.external_id} {receipt.status} "
+                   f"publish_at {receipt.publish_at.isoformat() if receipt.publish_at else '-'}")
+
+
+@app.command("status")
+def status_cmd(episode_id: str = typer.Argument(..., help="Episode id")):
+    """Print an episode's state, its jobs and its spend against the budget."""
+    with db_connect() as conn:
+        print_status(conn, episode_id)
 
 
 @app.command("summary")
@@ -283,6 +404,26 @@ def models_cmd(provider: str = typer.Argument(..., help="A provider name from co
     for name in names:
         typer.echo(name)
     typer.echo(f"{len(names)} model(s)", err=True)
+
+
+def db_connect():
+    from factory.orchestrator.db import DatabaseError, connect
+
+    try:
+        return connect()
+    except DatabaseError as exc:
+        typer.echo(f"error: {exc}", err=True)
+        raise typer.Exit(1)
+
+
+@db_app.command("migrate")
+def db_migrate_cmd():
+    """Apply the SQL migrations the database does not have yet."""
+    from factory.orchestrator.db import migrate
+
+    with db_connect() as conn:
+        applied = migrate(conn)
+    typer.echo(f"applied {', '.join(applied)}" if applied else "database is up to date")
 
 
 @app.callback()
