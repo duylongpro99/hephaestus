@@ -124,3 +124,9 @@ def test_writer_gets_dictionary_senses_for_spec_words(spec):
     for word in [*spec.target_words, *spec.review_words]:
         if pack.dictionary_senses(word, "en"):
             assert f"- {word}: (1) " in prompt
+
+
+def test_a_write_leaves_no_temporary_file(tmp_path, spec, script):
+    store = ArtifactStore(tmp_path)
+    path = store.write(channel="c", episode=spec.episode_id, station="a2", version="m+1", inputs=[spec], artifact=script)
+    assert sorted(p.name for p in path.parent.iterdir()) == [path.name]

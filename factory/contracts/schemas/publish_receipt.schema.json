@@ -1,0 +1,63 @@
+{
+  "additionalProperties": false,
+  "description": "Proof of an upload (architecture \u00a74.4), stored by C10 before anything else touches the video.",
+  "properties": {
+    "episode_id": {
+      "title": "Episode Id",
+      "type": "string"
+    },
+    "external_id": {
+      "title": "External Id",
+      "type": "string"
+    },
+    "platform": {
+      "title": "Platform",
+      "type": "string"
+    },
+    "publish_at": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Publish At"
+    },
+    "quota_units": {
+      "default": 0,
+      "title": "Quota Units",
+      "type": "integer"
+    },
+    "schema_version": {
+      "default": "1.0.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "private",
+        "scheduled"
+      ],
+      "title": "Status",
+      "type": "string"
+    },
+    "upload_ts": {
+      "format": "date-time",
+      "title": "Upload Ts",
+      "type": "string"
+    }
+  },
+  "required": [
+    "episode_id",
+    "platform",
+    "external_id",
+    "upload_ts",
+    "status"
+  ],
+  "title": "PublishReceipt",
+  "type": "object"
+}
