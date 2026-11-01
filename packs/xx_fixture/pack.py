@@ -7,7 +7,7 @@ dictionary.
 
 import re
 
-from factory.tools.language_pack import CEFR_LEVELS, DataLicense, Hint, Level, Ruby, Token, VoiceRef, at_or_below
+from factory.tools.language_pack import CEFR_LEVELS, DataLicense, Hint, Level, Ruby, Token, VoiceSpec, at_or_below
 
 A1_WORDS = {
     "mi": "I", "tu": "you", "ka": "she", "lo": "he", "sa": "is", "na": "not", "ya": "yes", "ne": "no",
@@ -38,7 +38,9 @@ class XxFixturePack:
     rate_unit = "wpm"
     native_rate = 150.0
     fonts: list[str] = []
-    voices: list[VoiceRef] = [VoiceRef(vendor="fake", id="fake-a"), VoiceRef(vendor="fake", id="fake-b")]
+    voices: list[VoiceSpec] = [
+        VoiceSpec(key="xx-a", locale="xx", gender="female"), VoiceSpec(key="xx-b", locale="xx", gender="male"),
+    ]
     licenses: list[DataLicense] = []  # every word is invented for this pack
 
     def tokenize(self, text: str) -> list[Token]:

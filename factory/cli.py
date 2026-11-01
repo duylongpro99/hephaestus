@@ -1,12 +1,14 @@
 """The `factory` command line."""
 
 import json
+import os
 import time
 from datetime import datetime, timezone
 from pathlib import Path
 
 import typer
 
+from factory.adapters.costs import MediaError
 from factory.adapters.llm.base import LLMError
 from factory.config import REPO_ROOT, ResolvedConfig, resolve
 from factory.contracts import CostLedger, EpisodeSpec, GateDecision, Script
@@ -16,6 +18,13 @@ from factory.tools.profiler import format_report, profile
 app = typer.Typer(no_args_is_help=True, add_completion=False)
 db_app = typer.Typer(no_args_is_help=True, help="The orchestrator's Postgres database.")
 app.add_typer(db_app, name="db")
+media_app = typer.Typer(no_args_is_help=True, help="Media providers from config/media.yaml: voices, checks, auth.")
+media_check_app = typer.Typer(no_args_is_help=True, help="Run one request through a profile's provider.")
+media_auth_app = typer.Typer(no_args_is_help=True, help="Authorize a provider that needs a user's consent.")
+app.add_typer(media_app, name="media")
+media_app.add_typer(media_check_app, name="check")
+media_app.add_typer(media_auth_app, name="auth")
+PROFILE_HELP = "config/media.yaml profile (default: $FACTORY_MEDIA_PROFILE or fake)"
 
 
 def load_spec(path: Path) -> EpisodeSpec:
@@ -32,9 +41,10 @@ def write_json(path: Path, data) -> None:
     path.write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
 
-def fail(exc: LLMError):
-    spent = sum(c.usd for c in exc.costs)
-    typer.echo(f"error: {exc}" + (f" (already spent ${spent:.4f})" if exc.costs else ""), err=True)
+def fail(exc: Exception):
+    costs = getattr(exc, "costs", [])
+    spent = sum(c.usd for c in costs)
+    typer.echo(f"error: {exc}" + (f" (already spent ${spent:.4f})" if costs else ""), err=True)
     raise typer.Exit(1)
 
 
@@ -215,7 +225,6 @@ def decide_cmd(
     diff: str | None = typer.Option(None, help="With edit-and-approve: the edits, as a unified diff or notes per line id"),
 ):
     """Record a human GateDecision (user: human) for an episode in the database, and as eval data with --level-fit."""
-    import os
 
     from factory.orchestrator import repo
     from factory.orchestrator.states import GATES
@@ -261,16 +270,15 @@ def run_cmd(
     auto_approve: bool = typer.Option(False, help="Approve human gates as user 'auto' instead of waiting"),
     fake_llm: bool = typer.Option(False, help="Serve every LLM role from tests/fixtures/<pack>/<episode>/"),
     artifacts: Path = typer.Option(None, help="Artifact store root (default: artifacts/)"),
+    media_profile: str = typer.Option(None, help="config/media.yaml profile (default: $FACTORY_MEDIA_PROFILE or fake)"),
 ):
     """Create the episode if new, then move it through the stations until SCHEDULED, a gate, or a stop."""
     from datetime import datetime, timezone
     from functools import cache
 
-    from factory.adapters.image.fake import FakeImageProvider
+    from factory.adapters import media
     from factory.adapters.llm.fake import FakeLLMProvider
     from factory.adapters.llm.router import provider_for
-    from factory.adapters.publish.fake import FakePublisher
-    from factory.adapters.tts.fake import FakeTTS
     from factory.agents.review_panel.agent import PERSONAS
     from factory.artifacts import ARTIFACT_ROOT, ArtifactStore
     from factory.orchestrator import repo
@@ -281,19 +289,42 @@ def run_cmd(
     spec = load_spec(spec_path)
     store = ArtifactStore(artifacts or ARTIFACT_ROOT)
     fixtures = REPO_ROOT / "tests" / "fixtures"
+    requested = media_profile or os.environ.get(media.PROFILE_ENV) or None
+    try:
+        media_config = media.load_media_config()
+    except media.MediaError as exc:
+        fail(exc)
     with db_connect() as conn:
-        if repo.get_episode(conn, spec.episode_id) is None:
-            config = resolve(spec.channel, spec.level)
-            if spec.config_hash != config.config_hash:
-                typer.echo(f"error: spec config_hash {spec.config_hash[:19]} differs from the live config "
-                           f"{config.config_hash[:19]}; re-resolve the spec before creating the episode", err=True)
-                raise typer.Exit(1)
-            with conn.transaction():
-                repo.create_episode(conn, spec, config, datetime.now(timezone.utc))
-            typer.echo(f"created {spec.episode_id} at SPEC (config {config.config_hash[:19]})")
-        else:
-            config = ResolvedConfig.model_validate(repo.get_episode(conn, spec.episode_id)["resolved_config"])
-            repo.create_episode(conn, spec, config, datetime.now(timezone.utc))  # refuses a changed spec
+        existing = repo.get_episode(conn, spec.episode_id)
+        # The profile is pinned at creation; a resumed run keeps it so no episode mixes providers.
+        profile = existing["media_profile"] if existing and not requested else requested or media.DEFAULT_PROFILE
+        if existing and existing["media_profile"] != profile:
+            fail(repo.EpisodeExists(f"episode {spec.episode_id} runs on media profile {existing['media_profile']}, "
+                                    f"not {profile}; drop --media-profile/${media.PROFILE_ENV} to resume it"))
+        try:
+            media_config.profile(profile)
+            publisher = media.publisher_for(profile, store.root, media_config)
+            images = media.image_for(profile, media_config)
+        except media.MediaError as exc:
+            fail(exc)
+        try:
+            if existing is None:
+                config = resolve(spec.channel, spec.level)
+                if spec.config_hash != config.config_hash:
+                    typer.echo(f"error: spec config_hash {spec.config_hash[:19]} differs from the live config "
+                               f"{config.config_hash[:19]}; re-resolve the spec before creating the episode",
+                               err=True)
+                    raise typer.Exit(1)
+                with conn.transaction():
+                    repo.create_episode(conn, spec, config, datetime.now(timezone.utc), profile)
+                typer.echo(f"created {spec.episode_id} at SPEC (config {config.config_hash[:19]}, "
+                           f"media profile {profile})")
+            else:
+                config = ResolvedConfig.model_validate(existing["resolved_config"])
+                # refuses a changed spec or media profile
+                repo.create_episode(conn, spec, config, datetime.now(timezone.utc), profile)
+        except repo.EpisodeExists as exc:
+            fail(exc)
 
         @cache
         def llm(role: str):
@@ -301,8 +332,13 @@ def run_cmd(
                 return FakeLLMProvider(fixtures / config.pack.code / spec.episode_id)
             return provider_for(role)
 
-        vendors = Vendors(llm=llm, tts=FakeTTS, images=FakeImageProvider(),
-                          publisher=FakePublisher(store.root / "_fake_publisher"))
+        try:  # fail before any station runs when a voice of the pack has no provider voice
+            media.speech_for(profile, load_pack(config.pack.code), media_config)
+        except media.MediaError as exc:
+            fail(exc)
+        vendors = Vendors(llm=llm, speech=cache(lambda pack: media.speech_for(profile, pack, media_config)),
+                          images=images, video=cache(lambda pack: media.video_for(profile, pack, media_config)),
+                          publisher=publisher)
         runner = Runner(conn, Stations(vendors).registry(), store, auto_approve=auto_approve,
                         panel_users=tuple(PERSONAS))
         state = runner.advance(spec.episode_id)
@@ -404,6 +440,182 @@ def models_cmd(provider: str = typer.Argument(..., help="A provider name from co
     for name in names:
         typer.echo(name)
     typer.echo(f"{len(names)} model(s)", err=True)
+
+
+def media_profile_name(profile: str | None) -> str:
+    from factory.adapters.media import default_profile
+
+    return profile or default_profile()
+
+
+def print_charges(charges) -> None:
+    for c in charges:
+        typer.echo(f"cost: {c.vendor} {c.model} ${c.usd:.6f}{'' if c.priced else ' (unpriced)'}")
+
+
+@media_app.command("voices")
+def media_voices_cmd(profile: str = typer.Option(None, help=PROFILE_HELP)):
+    """Show which provider voice speaks each pack voice key in a profile."""
+    from factory.adapters import media
+
+    profile = media_profile_name(profile)
+    try:
+        loaded = media.load_media_config()
+        speech = loaded.profile(profile).speech
+    except MediaError as exc:
+        fail(exc)
+    typer.echo(f"profile {profile}: speech provider {speech.provider} at {speech.sample_rate} Hz")
+    for key, voice_id in speech.voices.items():
+        typer.echo(f"  {key} -> {voice_id}")
+
+
+@media_check_app.command("speech")
+def media_check_speech_cmd(
+    text: str = typer.Option(..., help="The line to say"),
+    pack: str = typer.Option("en", help="Language Pack code"),
+    voice: str = typer.Option(None, help="A pack voice key (default: the pack's first voice)"),
+    rate: float = typer.Option(1.0, help="Speaking rate relative to the pack's native rate"),
+    out: Path = typer.Option(Path("artifacts/_checks"), help="Directory for the WAV"),
+    profile: str = typer.Option(None, help=PROFILE_HELP),
+):
+    """Synthesize one line and print its duration, word timings and cost."""
+    from factory.adapters import media
+    from factory.adapters.speech.base import SpeechRequest
+
+    language_pack = load_pack(pack)
+    key = voice or language_pack.voices[0].key
+    path = out / f"speech-{key}-{rate:.2f}.wav"
+    try:
+        speech = media.speech_for(media_profile_name(profile), language_pack)
+        started = time.monotonic()
+        result = speech.synthesize(SpeechRequest(text=text, language=language_pack.code, voice=key, rate=rate), path)
+    except MediaError as exc:
+        fail(exc)
+    typer.echo(f"{speech.identity}: {result.duration_s:.2f}s of audio in {time.monotonic() - started:.1f}s")
+    words = result.words
+    typer.echo(f"word timings: {len(words)}" if words is not None else "word timings: none from this provider")
+    print_charges(result.charges)
+    typer.echo(f"wrote {path}")
+
+
+@media_check_app.command("image")
+def media_check_image_cmd(
+    prompt: str = typer.Option(..., help="What to draw"),
+    width: int = typer.Option(1920, help="Shot width"),
+    height: int = typer.Option(1080, help="Shot height"),
+    out: Path = typer.Option(Path("artifacts/_checks"), help="Directory for the PNG"),
+    profile: str = typer.Option(None, help=PROFILE_HELP),
+):
+    """Draw one shot and print the time it took and its cost."""
+    import hashlib
+
+    from factory.adapters import media
+    from factory.adapters.image.base import ImageRequest
+
+    request = ImageRequest.for_prompt(prompt, width, height)
+    path = out / f"image-{hashlib.sha256(prompt.encode()).hexdigest()[:8]}-{width}x{height}.png"
+    try:
+        images = media.image_for(media_profile_name(profile))
+        started = time.monotonic()
+        charges = images.generate(request, path)
+    except MediaError as exc:
+        fail(exc)
+    typer.echo(f"{images.identity}: {width}x{height} in {time.monotonic() - started:.1f}s (seed {request.seed})")
+    print_charges(charges)
+    typer.echo(f"wrote {path}")
+
+
+@media_check_app.command("video")
+def media_check_video_cmd(
+    props: Path = typer.Option(..., exists=True, help="A RenderProps JSON; its URIs resolve under --artifacts"),
+    artifacts: Path = typer.Option(None, help="Artifact store root (default: artifacts/)"),
+    pack: str = typer.Option(None, help="Language Pack whose caption font to use"),
+    out: Path = typer.Option(Path("artifacts/_checks/render"), help="Directory for the MP4"),
+    profile: str = typer.Option(None, help=PROFILE_HELP),
+):
+    """Render a RenderProps and print how long it took."""
+    from factory.adapters import media
+    from factory.artifacts import ARTIFACT_ROOT, ArtifactStore
+    from factory.contracts import RenderProps
+
+    render_props = RenderProps.model_validate_json(props.read_text(encoding="utf-8"))
+    store = ArtifactStore(artifacts or ARTIFACT_ROOT)
+    try:
+        renderer = media.video_for(media_profile_name(profile), load_pack(pack) if pack else None)
+        started = time.monotonic()
+        path = renderer.render(render_props, store.resolve, out)
+    except MediaError as exc:
+        fail(exc)
+    elapsed = time.monotonic() - started
+    typer.echo(f"{renderer.identity}")
+    typer.echo(f"rendered {render_props.total_duration_s:.1f}s of video ({len(render_props.scenes)} scenes) in "
+               f"{elapsed:.1f}s, {path.stat().st_size / 1e6:.1f} MB: {path}")
+
+
+@media_check_app.command("publishing")
+def media_check_publishing_cmd(
+    video: Path = typer.Option(..., exists=True, help="An MP4 to upload"),
+    package: Path = typer.Option(..., exists=True, help="A PublishPackage JSON"),
+    hours: float = typer.Option(1.0, help="Schedule it this many hours from now"),
+    artifacts: Path = typer.Option(None, help="Artifact store root, for the export provider (default: artifacts/)"),
+    profile: str = typer.Option(None, help=PROFILE_HELP),
+):
+    """Upload a video privately, then schedule it; running it again must not upload a second copy."""
+    from datetime import timedelta
+
+    from factory.adapters import media
+    from factory.artifacts import ARTIFACT_ROOT
+    from factory.contracts import PublishPackage
+
+    publish_package = PublishPackage.model_validate_json(package.read_text(encoding="utf-8"))
+    publish_at = (datetime.now(timezone.utc) + timedelta(hours=hours)).replace(second=0, microsecond=0)
+    try:
+        publisher = media.publisher_for(media_profile_name(profile), artifacts or ARTIFACT_ROOT)
+        done = publisher.upload(video, publish_package)
+        units = publisher.schedule(done.external_id, publish_at, publish_package)
+    except MediaError as exc:
+        fail(exc)
+    typer.echo(f"{publisher.platform} {done.external_id}: private, publishAt {publish_at.isoformat()}; "
+               f"quota units {done.quota_units + units} (uploads count separately)")
+
+
+@media_auth_app.command("youtube")
+def media_auth_youtube_cmd(profile: str = typer.Option(None, help=PROFILE_HELP)):
+    """Sign in to the YouTube channel in a browser and store the refresh token at the profile's token path."""
+
+    from factory.adapters import media
+    from factory.adapters.publishing.youtube import SCOPES, build_service
+
+    profile = media_profile_name(profile)
+    try:
+        loaded = media.load_media_config()
+        name = loaded.profile(profile).publishing.provider
+        provider = loaded.providers[name]
+        if provider.type != "youtube":
+            raise MediaError(f"media profile {profile} publishes with {name}, not YouTube")
+        secrets = media.repo_path(media.secret(name, provider, "client_secrets"))
+        token = media.repo_path(media.secret(name, provider, "token"))
+    except MediaError as exc:
+        fail(exc)
+    from google_auth_oauthlib.flow import InstalledAppFlow
+
+    if not secrets.is_file():
+        fail(MediaError(f"no OAuth client secrets at {secrets}; download the Desktop client JSON from Google Cloud"))
+    try:
+        creds = InstalledAppFlow.from_client_secrets_file(str(secrets), SCOPES).run_local_server(port=0)
+        channels = build_service(creds).channels().list(part="snippet", mine=True).execute().get("items", [])
+    except Exception as exc:  # OAuth or API failure: report it without a traceback, and save nothing
+        fail(MediaError(f"YouTube sign-in failed: {type(exc).__name__}: {exc}"))
+    if not channels:
+        fail(MediaError("this Google account has no YouTube channel; sign in with the channel's account"))
+    token.parent.mkdir(parents=True, exist_ok=True)
+    tmp = token.with_name(token.name + ".tmp")  # written private from the first byte, then swapped in
+    fd = os.open(tmp, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o600)
+    os.fchmod(fd, 0o600)
+    with os.fdopen(fd, "w", encoding="utf-8") as fh:
+        fh.write(creds.to_json())
+    os.replace(tmp, token)
+    typer.echo(f"authorized channel: {channels[0]['snippet']['title']}; token saved to {token} (mode 600)")
 
 
 def db_connect():

@@ -14,6 +14,10 @@ dependencies = [
     "openai>=3.28.0",
     "psycopg[binary]>=3.2",
     "pillow>=11",
+    "azure-cognitiveservices-speech>=1.53.0",
+    "httpx>=0.28.1",
+    "google-api-python-client>=2.201.0",
+    "google-auth-oauthlib>=1.5.0",
 ]
 
 [project.scripts]
@@ -40,6 +44,7 @@ testpaths = ["tests", "packs"]
 markers = [
     "db: needs Postgres at $DATABASE_URL; skipped when it is unset",
     "e2e: runs a whole episode through the orchestrator (needs Postgres and FFmpeg)",
+    "live: calls a real media provider and may cost money; runs only with FACTORY_LIVE_TESTS=1",
 ]
 
 [tool.ruff]

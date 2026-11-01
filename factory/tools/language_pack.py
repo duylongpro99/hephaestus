@@ -49,9 +49,12 @@ class Hint:
 
 
 @dataclass(frozen=True)
-class VoiceRef:
-    vendor: str
-    id: str
+class VoiceSpec:
+    """A voice the pack's channels can cast, by an abstract key; config/media.yaml maps it to a provider voice."""
+
+    key: str
+    locale: str  # BCP-47, e.g. "en-GB"
+    gender: str
     tags: tuple[str, ...] = ()
 
 
@@ -70,7 +73,7 @@ class LanguagePack(Protocol):
     rate_unit: Literal["wpm", "syllables_s", "mora_s", "chars_min"]
     native_rate: float
     fonts: list[str]
-    voices: list[VoiceRef]
+    voices: list[VoiceSpec]
     licenses: list[DataLicense]
 
     def tokenize(self, text: str) -> list[Token]: ...

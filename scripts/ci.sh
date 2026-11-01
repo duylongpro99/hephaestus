@@ -22,6 +22,8 @@ done
 # No LLM endpoint: every LLM call must come from the fake provider. Empty values also stop
 # .env from filling them in.
 export LLM_GATEWAY_URL="" LLM_GATEWAY_API_KEY=""
+# Every media purpose is served by the offline providers of the fake profile.
+export FACTORY_MEDIA_PROFILE="fake"
 DB_NAME="factory_ci"
 export DATABASE_URL="postgresql://factory:factory@localhost:5432/factory"
 CI_DATABASE_URL="postgresql://factory:factory@localhost:5432/$DB_NAME"
@@ -53,7 +55,7 @@ DATABASE_URL="$CI_DATABASE_URL" uv run factory run "$SPEC" --auto-approve --fake
 step "check the episode"
 DATABASE_URL="$CI_DATABASE_URL" uv run factory status "$EPISODE" | tee "$ARTIFACTS/status.txt"
 grep -q "^$EPISODE: SCHEDULED;" "$ARTIFACTS/status.txt"
-grep -q "receipt fake/.* scheduled" "$ARTIFACTS/status.txt"
+grep -q "receipt export/.* scheduled" "$ARTIFACTS/status.txt"
 video=$(find "$ARTIFACTS" -path "*/$EPISODE/c8_render@*/master.mp4" | head -n 1)
 [ -n "$video" ] || { echo "ci: no master.mp4 under $ARTIFACTS" >&2; false; }
 ffprobe -v error -show_entries stream=codec_type -of csv=p=0 "$video" | sort | tr '\n' ' ' | grep -q "audio video"

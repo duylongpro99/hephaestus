@@ -28,12 +28,13 @@ def script() -> Script:
 
 
 def pytest_collection_modifyitems(config, items):
-    if os.environ.get("DATABASE_URL"):
-        return
-    skip = pytest.mark.skip(reason="DATABASE_URL is not set")
+    no_db = pytest.mark.skip(reason="DATABASE_URL is not set")
+    no_live = pytest.mark.skip(reason="live provider tests run only with FACTORY_LIVE_TESTS=1")
     for item in items:
-        if "db" in item.keywords or "e2e" in item.keywords:
-            item.add_marker(skip)
+        if not os.environ.get("DATABASE_URL") and ("db" in item.keywords or "e2e" in item.keywords):
+            item.add_marker(no_db)
+        if os.environ.get("FACTORY_LIVE_TESTS") != "1" and "live" in item.keywords:
+            item.add_marker(no_live)
 
 
 @pytest.fixture

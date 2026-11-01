@@ -5,6 +5,7 @@ from datetime import datetime, timedelta, timezone
 
 import pytest
 
+from factory.adapters.costs import MediaError
 from factory.artifacts import ArtifactStore, Built
 from factory.config import resolve
 from factory.contracts import CostEntry, EpisodeSpec, GateDecision, QAReport
@@ -212,3 +213,24 @@ def test_an_episode_already_over_budget_runs_no_station(db, tmp_path, episode):
     toys = Toys()
     assert runner(db, toys, tmp_path).advance(episode) == State.BUDGET_EXCEEDED
     assert not toys.builds
+
+
+def test_an_episode_keeps_the_media_profile_it_was_created_with(db, spec, episode):
+    config, now = resolve(spec.channel, spec.level), datetime(2026, 10, 23, tzinfo=timezone.utc)
+    assert repo.get_episode(db, episode)["media_profile"] == "fake"
+    assert repo.create_episode(db, spec, config, now, "fake") is False
+    with pytest.raises(repo.EpisodeExists, match="media profile fake, not live"):
+        repo.create_episode(db, spec, config, now, "live")
+
+
+def test_a_media_failure_still_records_what_its_earlier_requests_billed(db, tmp_path, episode):
+    class ProviderDown(MediaError):
+        def __init__(self, message):
+            super().__init__(message)
+            self.costs = [CostEntry(station="c4_tts", vendor="speechco", model="v1", usd=0.5)]
+
+    toys = Toys()
+    toys.raise_in["voice"] = ProviderDown
+    assert runner(db, toys, tmp_path).advance(episode) == State.ESCALATED
+    attempts = sum(1 for j in repo.jobs(db, episode) if j["station"] == "voice")
+    assert attempts > 1 and repo.spent_usd(db, episode) == pytest.approx(0.5 * attempts)

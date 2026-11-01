@@ -25,8 +25,10 @@ dụ minh họa. Thiết kế đầy đủ ở [docs/architecture.md](docs/archi
 
 Trạng thái hiện tại: spike script EN A2 (contracts, pack `en`, lexical profiler, agent
 Scriptwriter A2 và Level Editor A3, review panel hai persona) cộng walking skeleton: orchestrator
-dùng Postgres đưa một episode từ `SPEC` đến `SCHEDULED`, với TTS/image/publish giả và MP4
-placeholder từ FFmpeg.
+dùng Postgres đưa một episode từ `SPEC` đến `SCHEDULED`. Media đi qua interface theo mục đích:
+profile `fake` (mặc định, CI) dùng giọng sine, ảnh màu đơn và export ra thư mục; profile `live`
+dùng Azure Speech, Cloudflare Workers AI (DeepInfra dự phòng), FFmpeg + Pillow và YouTube
+(code xong, chưa smoke test trên tài khoản thật).
 
 ## Cấu trúc
 
@@ -34,10 +36,12 @@ placeholder từ FFmpeg.
 - `factory/agents/`: các bước LLM có giới hạn (`a2_scriptwriter`, `a3_level_editor`, `review_panel`).
 - `factory/orchestrator/`: state machine, runner, stations, repo Postgres và `migrations/`.
 - `factory/workers/`: các station không phải LLM (voice, visuals, composer, render, publisher, …).
-- `factory/adapters/`: interface vendor (llm, tts, image, publish, ffmpeg) kèm bản fake.
+- `factory/adapters/`: interface theo mục đích (llm, speech, image, video, publishing) kèm bản fake;
+  `media.py` dựng provider theo `config/media.yaml` (ADR 0004).
 - `factory/tools/`: profiler, rate estimator, language pack loader, enrichment.
 - `packs/<lang>/`: Language Pack (`en`, `xx_fixture`); mỗi pack phải pass conformance test.
-- `config/`: `llm.yaml` (provider theo role), `frameworks/`, `audiences/`, `channels/`.
+- `config/`: `llm.yaml` (provider theo role), `media.yaml` (provider theo mục đích, profile `fake`/`live`),
+  `frameworks/`, `audiences/`, `channels/`.
 - `evals/`: spec và kết quả đánh giá; `tests/fixtures/`: dữ liệu cho `--fake-llm`.
 - `docs/decisions/`: ADR. `plans/`: plan, report, journal.
 
@@ -51,11 +55,15 @@ uv run pytest -m "not db and not e2e"     # chỉ unit + conformance
 docker compose up -d --wait db && uv run factory db migrate
 uv run factory run <spec.json> [--auto-approve] [--fake-llm]
 uv run factory status <episode_id>
+uv run factory run <spec.json> --media-profile live   # provider thật theo config/media.yaml
+uv run factory media voices|check <speech|image|video|publishing>|auth youtube
+FACTORY_LIVE_TESTS=1 uv run pytest -m live           # test gọi provider thật (tốn tiền/quota)
 scripts/ci.sh                             # CI local đầy đủ: lint, test, DB mới, episode xx-fixture end-to-end
 ```
 
 Cần `ffmpeg`/`ffprobe` trên PATH cho test e2e. LLM endpoint cấu hình qua `.env`
-(`LLM_GATEWAY_URL`, `LLM_GATEWAY_API_KEY`); xem `.env.example` và ADR 0002.
+(`LLM_GATEWAY_URL`, `LLM_GATEWAY_API_KEY`); xem `.env.example` và ADR 0002. Secret của media
+provider (Azure, Cloudflare, DeepInfra, YouTube) cũng ở `.env`; xem ADR 0003, 0004.
 
 ## Quy ước
 

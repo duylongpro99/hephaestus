@@ -193,7 +193,7 @@ class LanguagePack(Protocol):
     def pronunciation_hints(self, text) -> list[Hint]  # pitch accent, tones, stress, liaison
     def dictionary_gloss(self, lemma, support_lang) -> str | None
     fonts: list[str]                                   # glyph coverage for render + Visual QA
-    voices: list[VoiceRef]                             # per TTS vendor, tagged by age/gender/style
+    voices: list[VoiceSpec]                            # abstract keys with locale/gender/tags; media config maps them to provider voices
     licenses: list[DataLicense]                        # wordlist/dictionary provenance for the Compliance Officer
 ```
 
@@ -297,7 +297,7 @@ Reading aids (furigana, pinyin, romaja, transliteration, vowel marks) and romani
 |---|---|---|
 | `LevelReport` | C-profiler | coverage %, off-level tokens[], target-word counts, sentence-length stats, estimated rate |
 | `QAReport` | A4, A5 | issues[{line_id, category, severity, suggested_fix}], rubric scores, hard_gate_failures[] |
-| `VoiceDirectives` | A6 | per line: voice_id, style tags, rate, pause_ms, accent overrides, variant (slow/natural) |
+| `VoiceDirectives` | A6 | per line: abstract voice key, style tags, rate, pause_ms, accent overrides, variant (slow/natural) |
 | `AudioManifest` | C4, C5 | per line: wav uri, duration, word/char timestamps; master uri; LUFS |
 | `ShotList` | A7 | per segment: template, assets[], image prompts, character pose/expression, on-screen text |
 | `RenderProps` | C7 | Remotion input props (a deterministic function of Script + Audio + ShotList) |
@@ -380,6 +380,8 @@ EPISODE:
 ## 7. Production workers (deterministic)
 
 *The vendors below are the design-time candidates. The providers chosen for the first slice (Azure Speech, FLUX.2 [klein] on Cloudflare Workers AI, FFmpeg + Pillow render with Remotion deferred, YouTube Data API v3) and the free tiers used in dev and staging are in [ADR 0003](decisions/0003-real-media-and-publish-providers.md).*
+
+*Workers reach media vendors only through purpose interfaces (`SpeechSynthesizer`, `ImageGenerator`, `VideoRenderer`, `VideoPublisher`); `config/media.yaml` picks the provider behind each one per profile, and the vendor names in this table are implementations, not dependencies of the stations ([ADR 0004](decisions/0004-purpose-oriented-media-adapters.md)).*
 
 | Service | Implementation | Notes |
 |---|---|---|
@@ -609,7 +611,7 @@ yt-channels/
 │   ├── workers/            # deterministic production services C4-C10 (C7 moves to studio/ with Remotion)
 │   ├── agents/             # one module per A#: prompt, schema, eval
 │   ├── tools/              # profiler, rate estimator, enrichment (delegate to packs)
-│   ├── adapters/           # llm/, tts/, image/, music/, publish/, notify/
+│   ├── adapters/           # llm/, speech/, image/, video/, publishing/ (one package per purpose), music/, notify/
 │   └── contracts/          # pydantic models = JSON schemas for artifacts
 ├── studio/                 # TypeScript: Remotion compositions + composer
 ├── console/                # human review web app

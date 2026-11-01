@@ -28,6 +28,6 @@
   ],
   "source": "adhoc",
   "ordering": "loose",
-  "config_hash": "sha256:1bb30abe00c08cc2ffbd9d9410aa5556752f20e68fa4c8ac5f6ca9d76185f60d",
+  "config_hash": "sha256:98c0f0f26f204d94b13b0e5e6385e84937f2ad6f6f37e817839f02426318f0ea",
   "budget_usd": 0.5
 }

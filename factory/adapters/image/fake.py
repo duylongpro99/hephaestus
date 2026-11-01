@@ -5,6 +5,9 @@ import struct
 import zlib
 from pathlib import Path
 
+from factory.adapters.costs import Charge
+from factory.adapters.image.base import ImageRequest
+
 
 def colour(prompt: str) -> tuple[int, int, int]:
     """A mid-dark colour, so white burned-in text stays legible on it."""
@@ -23,10 +26,10 @@ def solid_png(width: int, height: int, rgb: tuple[int, int, int]) -> bytes:
             + _chunk(b"IDAT", zlib.compress(row * height, 9)) + _chunk(b"IEND", b""))
 
 
-class FakeImageProvider:
-    vendor = "fake"
-    identity = "fake/solid-png-1"
+class FakeImage:
+    identity = "fake_image/solid-png-1"
 
-    def generate(self, prompt: str, width: int, height: int, out_path: Path) -> None:
+    def generate(self, request: ImageRequest, out_path: Path) -> list[Charge]:
         out_path.parent.mkdir(parents=True, exist_ok=True)
-        out_path.write_bytes(solid_png(width, height, colour(prompt)))
+        out_path.write_bytes(solid_png(request.width, request.height, colour(request.prompt)))
+        return []

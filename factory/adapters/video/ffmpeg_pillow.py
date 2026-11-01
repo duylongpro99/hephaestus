@@ -1,13 +1,15 @@
-"""C8 render: RenderProps -> master.mp4 (architecture §7).
+"""The FFmpeg + Pillow renderer: each caption becomes one still frame (architecture §7).
 
-A placeholder until Remotion arrives in build step 3: each caption becomes one frame (the
-scene's image with the line's text drawn on it, via Pillow so any FFmpeg build works), shown
-for the line's time on the audio track, then FFmpeg encodes the frames with the master audio.
+Each frame is the scene's image with the line's text drawn on it, via Pillow so any FFmpeg build
+works, shown for the line's time on the audio track; FFmpeg then encodes the frames with the
+master audio. Remotion, when it comes, is another VideoRenderer beside this one.
 """
 
+from functools import cached_property
 from pathlib import Path
 from typing import Callable
 
+import PIL
 from PIL import Image, ImageDraw, ImageFont
 
 from factory.adapters import ffmpeg
@@ -29,12 +31,16 @@ def wrap(draw: ImageDraw.ImageDraw, text: str, font, max_width: float) -> list[s
     return [*lines, current] if current else lines
 
 
-def caption_frame(image: Path, text: str, out_path: Path) -> None:
+def load_font(path: Path | None):
+    return ImageFont.truetype(str(path), FONT_SIZE) if path else ImageFont.load_default(size=FONT_SIZE)
+
+
+def caption_frame(image: Path, text: str, out_path: Path, font_path: Path | None = None) -> None:
     """The scene image with `text` centred near the bottom, white with a dark outline."""
     with Image.open(image) as base:
         frame = base.convert("RGB")
     draw = ImageDraw.Draw(frame)
-    font = ImageFont.load_default(size=FONT_SIZE)
+    font = load_font(font_path)
     rows = wrap(draw, text, font, frame.width * 0.85)
     line_height = FONT_SIZE * 1.25
     y = frame.height - 120 - line_height * len(rows)
@@ -45,14 +51,14 @@ def caption_frame(image: Path, text: str, out_path: Path) -> None:
     frame.save(out_path, format="PNG")
 
 
-def render(props: RenderProps, resolve: Callable[[str], Path], media_dir: Path) -> Path:
+def render(props: RenderProps, resolve: Callable[[str], Path], media_dir: Path, font_path: Path | None = None) -> Path:
     frames_dir = media_dir / "frames"
     frames_dir.mkdir(parents=True, exist_ok=True)
     entries = []
     for scene in props.scenes:
         for caption in scene.captions:
             frame = frames_dir / f"{safe_name(caption.line_id)}.png"
-            caption_frame(resolve(scene.image_uri), caption.text, frame)
+            caption_frame(resolve(scene.image_uri), caption.text, frame, font_path)
             entries.append((frame, caption.duration_s))
     if not entries:
         raise ValueError(f"{props.episode_id}: nothing to render; the props have no captions")
@@ -71,3 +77,16 @@ def render(props: RenderProps, resolve: Callable[[str], Path], media_dir: Path) 
         out,
     )
     return out
+
+
+class FFmpegPillowRenderer:
+    def __init__(self, font: Path | None = None):
+        self.font = font  # the pack's caption font; Pillow's default font when the pack ships none
+
+    @cached_property
+    def identity(self) -> str:
+        font = self.font.name if self.font else "default"
+        return f"ffmpeg_pillow/{ffmpeg.version()}; pillow {PIL.__version__}; font {font}"
+
+    def render(self, props: RenderProps, resolve: Callable[[str], Path], media_dir: Path) -> Path:
+        return render(props, resolve, media_dir, self.font)

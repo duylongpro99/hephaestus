@@ -13,6 +13,6 @@
   "cast": ["kira", "tomo"],
   "source": "adhoc",
   "ordering": "loose",
-  "config_hash": "sha256:880e77f522002b68d00c5d09ba0bfb004b04c0d1c14656f1955e5360df7befd5",
+  "config_hash": "sha256:3ea9d80eb8b9bad20f2b687fa55c7af756c99cdf222de1c01b091a82cf698840",
   "budget_usd": 1.0
 }
