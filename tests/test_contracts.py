@@ -5,7 +5,10 @@ import pytest
 from pydantic import ValidationError
 
 from factory.config import CONFIG_DIR, load_yaml, pack_summary, resolve, resolve_layers
-from factory.contracts import CONTRACTS, SCHEMA_VERSIONS, CostEntry, CostLedger, EpisodeSpec, GateDecision, Script
+from factory.contracts import (
+    CONTRACTS, SCHEMA_VERSIONS, CostEntry, CostLedger, EpisodeSpec, GateDecision, QAIssue, ReviewerNote,
+    RevisionRequest, Script,
+)
 from factory.contracts.__main__ import SCHEMA_DIR, render
 from tests.conftest import load_fixture
 
@@ -60,6 +63,22 @@ def test_gate_decision_and_ledger_round_trip():
     ])
     assert ledger.total_usd == 0.75
     assert ledger.station_usd("a3") == 0.25
+
+
+def test_revision_request_round_trips_and_needs_something_to_fix():
+    issue = QAIssue(line_id="s2l1", category="naturalness", severity="major", description="stiff",
+                    suggested_fix="say it simply")
+    request = RevisionRequest(episode_id="e1", round=1, rejected_by="review_panel", notes=[
+        ReviewerNote(reviewer="examiner", gate=1, notes="too formal", issues=[issue]),
+    ])
+    assert RevisionRequest.model_validate_json(request.model_dump_json()) == request
+    with pytest.raises(ValidationError, match="at least one note or issue"):
+        RevisionRequest(episode_id="e1", round=1, rejected_by="gate_1",
+                        notes=[ReviewerNote(reviewer="human", gate=1, notes="  ")])
+    with pytest.raises(ValidationError):
+        RevisionRequest(episode_id="e1", round=1, rejected_by="gate_1", notes=[])
+    with pytest.raises(ValidationError):
+        RevisionRequest.model_validate(request.model_dump() | {"round": 0})
 
 
 def _layers():

@@ -3,7 +3,7 @@
 import pytest
 
 from factory.orchestrator.states import (
-    DONE, GATES, MAX_REJECTS, PIPELINE, STOPPED, IllegalTransition, State, after_attempt, backoff_s,
+    DONE, GATES, MAX_REWRITES, PIPELINE, STOPPED, IllegalTransition, State, after_attempt, backoff_s,
     check_transition, is_legal, over_budget,
 )
 
@@ -76,15 +76,13 @@ def test_escalate_and_fail_go_to_the_human_queue(outcome):
     assert after_attempt(State.DRAFTED, outcome, 1, 0).to == State.ESCALATED
 
 
-def test_panel_reject_rewrites_once_then_escalates():
-    first = after_attempt(State.ENRICHED, "reject", 1, rejects=0)
-    assert (first.job_status, first.to) == ("rejected", State.DRAFTED)
-    again = after_attempt(State.ENRICHED, "reject", 1, rejects=MAX_REJECTS)
+@pytest.mark.parametrize("state", [State.ENRICHED, State.QA_OK])
+def test_script_rejects_rewrite_until_the_shared_limit_then_escalate(state):
+    for rewrites in range(MAX_REWRITES):
+        move = after_attempt(state, "reject", 1, rewrites=rewrites)
+        assert (move.job_status, move.to) == ("rejected", State.DRAFTED)
+    again = after_attempt(state, "reject", 1, rewrites=MAX_REWRITES)
     assert (again.job_status, again.to) == ("escalated", State.ESCALATED)
-
-
-def test_human_gate_reject_always_returns_to_drafted():
-    assert after_attempt(State.QA_OK, "reject", 1, rejects=5).to == State.DRAFTED
 
 
 def test_a_station_without_a_reject_path_cannot_reject():
@@ -97,6 +95,7 @@ def test_budget_stop():
     assert over_budget(1.0001, 1.0)
 
 
-def test_final_gate_reject_escalates():
-    move = after_attempt(State.COMPLIANT, "reject", 1, 0)
+@pytest.mark.parametrize("rewrites", [0, MAX_REWRITES])
+def test_final_gate_reject_escalates(rewrites):
+    move = after_attempt(State.COMPLIANT, "reject", 1, rewrites)
     assert (move.job_status, move.to) == ("rejected", State.ESCALATED)

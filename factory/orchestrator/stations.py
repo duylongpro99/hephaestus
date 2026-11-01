@@ -11,6 +11,8 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Callable
 
+from pydantic import ValidationError
+
 from factory.adapters.costs import ledger_entries
 from factory.adapters.image import base as image_base
 from factory.adapters.image.base import ImageGenerator
@@ -28,10 +30,11 @@ from factory.artifacts import Built, Producer, sha256_text, station_version
 from factory.config import ResolvedConfig, pack_module
 from factory.contracts import (
     AudioManifest, CostEntry, Enrichment, EpisodeSpec, GateDecision, LevelReport, PublishPackage, PublishReceipt, QAReport, RenderedVideo,
-    RenderProps, Script, ShotList, VoiceDirectives,
+    RenderProps, ReviewerNote, RevisionRequest, Script, ShotList, VoiceDirectives,
 )
 from factory.orchestrator import repo
 from factory.orchestrator.runner import StationContext, StationResult
+from factory.orchestrator.states import PIPELINE, State
 from factory.tools import enrichment
 from factory.tools.language_pack import LanguagePack
 from factory.tools.profiler import profile
@@ -75,27 +78,34 @@ class Leveled:
     turns: int
     first_report: LevelReport
     report: LevelReport
+    reason: str | None = None  # why it is ESCALATED, when the gate report does not say
 
 
 def level_script(out: Producer, draft: Script, spec: EpisodeSpec, config: ResolvedConfig, pack: LanguagePack,
-                 editor: LLMProvider, max_turns: int = 4) -> Leveled:
-    """A3 + profiler: patch the draft until the code gates pass or the turns run out."""
+                 editor: LLMProvider, max_turns: int = 4, revision: RevisionRequest | None = None) -> Leveled:
+    """A3 + profiler: patch the draft until the code gates pass or the turns run out.
+
+    With a `revision`, A3 also acts on the reviewers' notes, and the revision is part of the inputs.
+    """
     version = a3.version(editor.identity)
     inputs = [draft, spec, config.config_hash, wordlist_hash(config, pack), max_turns]
+    if revision is not None:
+        inputs.append(revision)
 
     def build(media: Path) -> Built:
-        result = a3.level_loop(draft, spec, config, pack, editor, max_turns=max_turns)
+        result = a3.level_loop(draft, spec, config, pack, editor, max_turns=max_turns, revision=revision)
         if result.error:
             raise LevelLoopFailed(result)
-        return Built(result.script, result.costs, {"status": result.status, "turns": result.turns})
+        extra = {"status": result.status, "turns": result.turns} | ({"reason": result.reason} if result.reason else {})
+        return Built(result.script, result.costs, extra)
 
     script = out.produce(a3.STATION, version, inputs, Script, build)
     envelope = out.last.envelope
+    outcome = {key: envelope[key] for key in ("status", "turns", "reason") if key in envelope}
     report = out.produce("level_report", version, inputs, LevelReport,
-                         lambda media: Built(profile(script, spec, config, pack), extra={
-                             "status": envelope["status"], "turns": envelope["turns"]}))
+                         lambda media: Built(profile(script, spec, config, pack), extra=outcome))
     return Leveled(script=script, status=envelope["status"], turns=envelope["turns"],
-                   first_report=profile(draft, spec, config, pack), report=report)
+                   first_report=profile(draft, spec, config, pack), report=report, reason=envelope.get("reason"))
 
 
 def review_script(out: Producer, spec: EpisodeSpec, script: Script,
@@ -118,6 +128,36 @@ def review_script(out: Producer, spec: EpisodeSpec, script: Script,
             costs=[CostEntry.model_validate(c) for c in envelope.get("cost", [])],  # as recorded, even when reused
         ))
     return reviews
+
+
+def revision_request(ctx: StationContext, round_: int, script: Script,
+                     reviewers: dict[str, LLMProvider]) -> RevisionRequest:
+    """The notes of the latest reject that sent `script` back: each rejecting persona, or the human at gate 1."""
+    job = repo.last_rewrite_job(ctx.conn, ctx.episode)
+    if job is None:
+        raise LookupError(f"episode {ctx.episode} has no reject to revise after")
+    if job["station"] == "review_panel":
+        notes = []
+        for persona, llm in reviewers.items():
+            # Read the review of this exact script: the latest-artifact pointer goes stale when a revision
+            # returns to a script the panel already judged, because the store reuses that review.
+            envelope = ctx.store.read_envelope(
+                channel=ctx.channel, episode=ctx.episode, station=panel.station(persona),
+                version=panel.version(persona, llm.identity), inputs=[ctx.spec, script], season=ctx.season)
+            if envelope is None:
+                raise LookupError(f"no {panel.station(persona)} review of the rejected script")
+            decision = GateDecision.model_validate(envelope["gate_decision"])
+            if decision.decision == "reject":
+                issues = QAReport.model_validate(envelope["artifact"]).issues
+                notes.append(ReviewerNote(reviewer=persona, gate=decision.gate, notes=decision.notes, issues=issues))
+    else:
+        gate = PIPELINE[State(job["from_status"])].gate
+        row = repo.gate_decision_since(ctx.conn, ctx.episode, gate, job["started_at"], tuple(panel.PERSONAS),
+                                       decisions=("reject",))
+        if row is None:
+            raise LookupError(f"no human reject at gate {gate} for {ctx.episode}")
+        notes = [ReviewerNote(reviewer=row["user"], gate=gate, notes=row["notes"] or "")]
+    return RevisionRequest(episode_id=ctx.episode, round=round_, rejected_by=job["station"], notes=notes)
 
 
 # Stations ------------------------------------------------------------------------------------
@@ -172,10 +212,26 @@ class Stations:
         draft_script(ctx, ctx.spec, ctx.config, ctx.pack, self.v.llm(a2.STATION))
         return StationResult()
 
+    def reviewers(self) -> dict[str, LLMProvider]:
+        return {p: self.v.llm(panel.station(p)) for p in panel.PERSONAS}
+
     def level_editor(self, ctx: StationContext) -> StationResult:
-        draft = ctx.read(a2.STATION, Script)
-        leveled = level_script(ctx, draft, ctx.spec, ctx.config, ctx.pack, self.v.llm(a3.STATION))
+        """A2's draft the first time; after a reject, the latest A3 script revised on the reviewers' notes."""
+        rewrites = repo.count_rewrites(ctx.conn, ctx.episode)
+        if rewrites == 0:
+            script, revision = ctx.read(a2.STATION, Script), None
+        else:
+            script = ctx.read(a3.STATION, Script)
+            try:
+                request = revision_request(ctx, rewrites, script, self.reviewers())
+            except (LookupError, ValidationError) as exc:
+                return StationResult("escalate", f"cannot build the revision request: {exc}")
+            revision = ctx.produce("revision_request", station_version(CODE, Path(__file__).resolve()),
+                                   [request, script], RevisionRequest, lambda media: Built(request))
+        leveled = level_script(ctx, script, ctx.spec, ctx.config, ctx.pack, self.v.llm(a3.STATION), revision=revision)
         if leveled.status != "PASSED":
+            if leveled.reason:
+                return StationResult("escalate", f"{leveled.reason} after {leveled.turns} A3 turn(s)")
             gates = ", ".join(f.gate for f in leveled.report.gate_failures)
             return StationResult("escalate", f"level gates still failing after {leveled.turns} A3 turn(s): {gates}")
         return StationResult()
@@ -189,7 +245,7 @@ class Stations:
 
     def review_panel(self, ctx: StationContext) -> StationResult:
         script = ctx.read(a3.STATION, Script)
-        reviews = review_script(ctx, ctx.spec, script, {p: self.v.llm(panel.station(p)) for p in panel.PERSONAS})
+        reviews = review_script(ctx, ctx.spec, script, self.reviewers())
         decisions = [r.decision for r in reviews]
         rejected = [r for r in reviews if not r.approved]
         if rejected:

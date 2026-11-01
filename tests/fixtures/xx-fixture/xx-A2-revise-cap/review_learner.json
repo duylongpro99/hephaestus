@@ -1,0 +1,8 @@
+{
+  "issues": [],
+  "rubric_scores": [{"name": "clarity", "score": 5}, {"name": "interest", "score": 4}],
+  "level_fit_verdict": "at",
+  "hard_gate_failures": [],
+  "decision": "approve",
+  "summary": "Canned learner verdict for the walking skeleton."
+}

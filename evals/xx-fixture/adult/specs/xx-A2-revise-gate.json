@@ -1,0 +1,33 @@
+{
+  "schema_version": "1.0.0",
+  "episode_id": "xx-A2-revise-gate",
+  "channel": "xx-fixture",
+  "level": "A2",
+  "format": "micro_dialogue",
+  "theme": "ordering at a cafe",
+  "target_words": [
+    "kosa"
+  ],
+  "review_words": [
+    "ko",
+    "pa"
+  ],
+  "grammar_point": "present simple",
+  "rate_target": {
+    "unit": "wpm",
+    "min": 100.0,
+    "max": 120.0
+  },
+  "length_min": [
+    0.17,
+    0.25
+  ],
+  "cast": [
+    "kira",
+    "tomo"
+  ],
+  "source": "adhoc",
+  "ordering": "loose",
+  "config_hash": "sha256:3ea9d80eb8b9bad20f2b687fa55c7af756c99cdf222de1c01b091a82cf698840",
+  "budget_usd": 1.0
+}

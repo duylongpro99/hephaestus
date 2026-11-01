@@ -1,0 +1,16 @@
+[
+  {
+    "name": "edit_line",
+    "arguments": {
+      "line_id": "s1l4",
+      "text": "Ta te sa kosa.",
+      "translations": {
+        "en": "The tea is cheap."
+      }
+    }
+  },
+  {
+    "name": "lexical_profile",
+    "arguments": {}
+  }
+]

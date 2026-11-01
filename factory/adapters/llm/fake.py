@@ -3,10 +3,15 @@
 `fixtures_dir/{station}.json` holds the station's output: for a structured call, the object
 the model would return (validated against the requested model, so a contract change breaks the
 fixture loudly); for a tool loop, a list of {"name", "arguments"} calls replayed in order.
+
+`{station}.{n}.json`, when present, replaces it for the station's n-th call (counting from 1), so a
+fixture can reject and then approve, or edit differently on each revision. The count lives in the
+provider instance, so it only holds within one process: a test aid, not a way to resume a run.
 """
 
 import hashlib
 import json
+from collections import Counter
 from pathlib import Path
 
 from pydantic import BaseModel, ValidationError
@@ -24,9 +29,13 @@ class FakeLLMProvider:
         for path in sorted(fixtures_dir.glob("*.json")):
             digest.update(path.name.encode("utf-8") + path.read_bytes())
         self.identity = f"fake/fixtures#{digest.hexdigest()[:8]}"
+        self._served: Counter[str] = Counter()  # calls per station, for the numbered fixtures
 
     def _fixture(self, station: str):
-        path = self.fixtures_dir / f"{station}.json"
+        self._served[station] += 1
+        path = self.fixtures_dir / f"{station}.{self._served[station]}.json"
+        if not path.exists():
+            path = self.fixtures_dir / f"{station}.json"
         if not path.exists():
             raise LLMError(f"fake LLM: no fixture {path}")
         return json.loads(path.read_text(encoding="utf-8"))

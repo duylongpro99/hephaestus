@@ -46,3 +46,18 @@ def test_fake_llm_replays_tool_calls(tmp_path):
     (tmp_path / "editor.json").write_text(json.dumps([{"name": "note", "arguments": {"word": "kosa"}}]))
     FakeLLMProvider(tmp_path).tool_loop(station="editor", system=[], user="", tools=[tool])
     assert seen == ["kosa"]
+
+
+def test_fake_llm_serves_numbered_fixtures_per_call_then_the_default(tmp_path):
+    class Out(BaseModel):
+        n: int
+
+    for name, n in [("s.1.json", 1), ("s.2.json", 2), ("s.json", 0)]:
+        (tmp_path / name).write_text(json.dumps({"n": n}))
+    llm = FakeLLMProvider(tmp_path)
+    assert [llm.structured(station="s", system=[], user="", output_model=Out).parsed.n for _ in range(4)] == [1, 2, 0, 0]
+    (tmp_path / "only.1.json").write_text(json.dumps({"n": 1}))
+    llm = FakeLLMProvider(tmp_path)
+    assert llm.structured(station="only", system=[], user="", output_model=Out).parsed.n == 1
+    with pytest.raises(LLMError, match="no fixture"):
+        llm.structured(station="only", system=[], user="", output_model=Out)

@@ -219,7 +219,7 @@ def review_cmd(
 def decide_cmd(
     spec_path: Path = typer.Argument(..., exists=True, help="EpisodeSpec JSON"),
     decision: str = typer.Option(..., help="approve | edit-and-approve | reject"),
-    notes: str = typer.Option("", help="What you found, using the panel's rubric"),
+    notes: str = typer.Option("", help="What you found, using the panel's rubric; required with a gate 1 reject"),
     level_fit: str | None = typer.Option(None, help="below | at | above the spec level; also saves the decision as eval data"),
     gate: int = typer.Option(1, help="1 = script approval, 2 = final approval"),
     diff: str | None = typer.Option(None, help="With edit-and-approve: the edits, as a unified diff or notes per line id"),
@@ -232,6 +232,8 @@ def decide_cmd(
     spec = load_spec(spec_path)
     if decision not in ("approve", "edit-and-approve", "reject"):
         raise typer.BadParameter("decision must be approve, edit-and-approve or reject")
+    if gate == 1 and decision == "reject" and not notes.strip():
+        raise typer.BadParameter("a gate 1 reject needs --notes: the Level Editor revises the script from them")
     if gate not in (1, 2):
         raise typer.BadParameter("gate must be 1 or 2")
     if level_fit is not None and level_fit not in ("below", "at", "above"):
