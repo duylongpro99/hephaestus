@@ -52,6 +52,7 @@ Orchestrator commands (need Postgres):
 ```bash
 uv run factory run <spec.json>               # create the episode, run it until SCHEDULED or a human gate
 uv run factory decide <spec.json> --gate 1 --decision approve   # open gate 1 (script) or 2 (final)
+uv run factory decide <spec.json> --gate 1 --decision reject --notes "..."  # A3 revises the script from the notes
 uv run factory run <spec.json>               # continue after the decision
 uv run factory status <episode_id>           # state, jobs and spend against the budget
 ```

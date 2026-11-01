@@ -3,6 +3,10 @@
 One A3 turn is one editing round: the model receives the current LevelReport and script,
 edits through tools, and stops; then the profiler re-checks. After `max_turns` rounds
 without a pass, the episode is ESCALATED and the last LevelReport is kept.
+
+With a RevisionRequest (reviewers rejected the script), the loop runs at least one turn even
+when the gates pass, so the model can act on the reviewers' notes; a revision that changes
+nothing is ESCALATED.
 """
 
 import json
@@ -18,7 +22,7 @@ from factory.agents.drafts import to_draft_dict, translation_languages
 from factory.agents.prefix import system_blocks
 from factory.artifacts import ADAPTER_SOURCES, station_version
 from factory.config import ResolvedConfig
-from factory.contracts import CostEntry, EpisodeSpec, LevelReport, Line, Script, VocabItem
+from factory.contracts import CostEntry, EpisodeSpec, LevelReport, Line, RevisionRequest, Script, VocabItem
 from factory.tools.language_pack import LanguagePack
 from factory.tools.profiler import format_report, profile
 from factory.tools.rate_estimator import estimate_duration_min, speech_units
@@ -286,22 +290,45 @@ class LevelLoopResult:
     reports: list[LevelReport]
     costs: list[CostEntry] = field(default_factory=list)
     error: str | None = None  # why the loop stopped early, if it did
+    reason: str | None = None  # why a finished loop is ESCALATED, when the gate report does not say
 
 
-def build_user(session: EditSession, report: LevelReport) -> str:
+NO_CHANGES = "revision made no changes to the script"
+
+
+def format_revision(revision: RevisionRequest) -> str:
+    """The reviewers' notes and issues, verbatim, one block per reviewer."""
+    blocks = []
+    for note in revision.notes:
+        lines = [f"- {note.reviewer} (gate {note.gate})" + (f": {note.notes}" if note.notes.strip() else "")]
+        for issue in note.issues:
+            fix = f"; suggested fix: {issue.suggested_fix}" if issue.suggested_fix else ""
+            lines.append(f"  - [{issue.severity}] {issue.line_id or 'episode'} ({issue.category}): "
+                         f"{issue.description}{fix}")
+        blocks.append("\n".join(lines))
+    return "\n".join(blocks)
+
+
+def build_user(session: EditSession, report: LevelReport, revision: RevisionRequest | None = None) -> str:
     support = session.config.channel.support_languages
     draft = to_draft_dict(session.script, session.config.pack.code, support)
-    return (
-        "The script failed these gates.\n\n"
-        f"{format_report(report)}\n\n"
-        f"Episode Spec:\n{session.spec.model_dump_json()}\n\n"
-        f"Current script:\n{json.dumps(draft, ensure_ascii=False)}"
-    )
+    parts = []
+    if revision is not None:
+        parts.append(f"Reviewer feedback (rejected by {revision.rejected_by}, revision {revision.round}):\n"
+                     f"{format_revision(revision)}")
+        gates = "The script passes every code gate; keep it that way." if report.passed else \
+            f"The script also failed these gates.\n\n{format_report(report)}"
+        parts.append(gates)
+    else:
+        parts.append(f"The script failed these gates.\n\n{format_report(report)}")
+    parts += [f"Episode Spec:\n{session.spec.model_dump_json()}",
+              f"Current script:\n{json.dumps(draft, ensure_ascii=False)}"]
+    return "\n\n".join(parts)
 
 
 def level_loop(
     script: Script, spec: EpisodeSpec, config: ResolvedConfig, pack: LanguagePack, llm: LLMProvider,
-    max_turns: int = 4,
+    max_turns: int = 4, revision: RevisionRequest | None = None,
 ) -> LevelLoopResult:
     session = EditSession(script, spec, config, pack)
     system = system_blocks(PROMPT_PATH.read_text(encoding="utf-8"), config, pack)
@@ -309,11 +336,11 @@ def level_loop(
     reports = [session.report()]
     costs: list[CostEntry] = []
     turns, error = 0, None
-    while not reports[-1].passed and turns < max_turns:
+    while (not reports[-1].passed or (revision is not None and turns == 0)) and turns < max_turns:
         turns += 1
         try:
             costs += llm.tool_loop(
-                station=STATION, system=system, user=build_user(session, reports[-1]), tools=tools,
+                station=STATION, system=system, user=build_user(session, reports[-1], revision), tools=tools,
             )
             session.validate()
         except LLMError as exc:
@@ -324,6 +351,9 @@ def level_loop(
         reports.append(session.report())
         if error:
             break
-    status: Status = "PASSED" if reports[-1].passed and not error else "ESCALATED"
+    # A failing gate is the better explanation, so only an unchanged script that passes is NO_CHANGES.
+    unchanged = revision is not None and not error and reports[-1].passed and session.script == script
+    reason = NO_CHANGES if unchanged else None
+    status: Status = "PASSED" if reports[-1].passed and not error and not reason else "ESCALATED"
     return LevelLoopResult(script=session.script, status=status, turns=turns, reports=reports,
-                           costs=costs, error=error)
+                           costs=costs, error=error, reason=reason)

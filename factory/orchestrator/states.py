@@ -59,8 +59,10 @@ PIPELINE: dict[State, Step] = {
 DONE = frozenset({State.SCHEDULED})
 STOPPED = frozenset({State.ESCALATED, State.BUDGET_EXCEEDED, State.CANCELLED})
 GATES = {step.gate: state for state, step in PIPELINE.items() if step.gate}
-# A station may send an episode back for a rewrite once; the next reject escalates.
-MAX_REJECTS = 1
+# How many times an episode may be sent back for a rewrite, counted across every step with an
+# `on_reject` (the review panel and gate 1 share one budget). The next reject escalates.
+MAX_REWRITES = 2
+REWRITE_TARGETS = frozenset(step.on_reject for step in PIPELINE.values() if step.on_reject)
 
 
 class IllegalTransition(ValueError):
@@ -96,8 +98,11 @@ def backoff_s(attempt: int, base_s: float = 1.0) -> float:
     return base_s * 2 ** (attempt - 1)
 
 
-def after_attempt(state: State, outcome: Outcome, attempt: int, rejects: int) -> Move:
-    """Where an attempt's outcome sends the episode. `rejects` counts earlier rejects at this step."""
+def after_attempt(state: State, outcome: Outcome, attempt: int, rewrites: int) -> Move:
+    """Where an attempt's outcome sends the episode.
+
+    `rewrites` counts the episode's earlier rejects that sent it back for a rewrite, at any step.
+    """
     step = PIPELINE[state]
     if outcome == "ok":
         return Move("succeeded", step.next)
@@ -110,7 +115,7 @@ def after_attempt(state: State, outcome: Outcome, attempt: int, rejects: int) ->
             if step.gate is not None:  # a human rejected the finished episode: the operator decides what next
                 return Move("rejected", State.ESCALATED)
             raise IllegalTransition(f"{step.station} cannot reject")
-        if step.gate is None and rejects >= MAX_REJECTS:
+        if rewrites >= MAX_REWRITES:
             return Move("escalated", State.ESCALATED)
         return Move("rejected", step.on_reject)
     if outcome == "escalate":

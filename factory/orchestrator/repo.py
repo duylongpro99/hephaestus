@@ -7,7 +7,7 @@ import psycopg
 
 from factory.config import ResolvedConfig
 from factory.contracts import CostEntry, EpisodeSpec, GateDecision, PublishReceipt
-from factory.orchestrator.states import State, check_transition
+from factory.orchestrator.states import REWRITE_TARGETS, State, check_transition
 
 
 class EpisodeExists(ValueError):
@@ -90,6 +90,23 @@ def count_jobs(
     return conn.execute(sql, params).fetchone()["n"]
 
 
+def _rewrite_jobs(conn: psycopg.Connection, episode: str, select: str, tail: str = "") -> dict | None:
+    return conn.execute(
+        f"SELECT {select} FROM job WHERE episode = %s AND status = 'rejected' AND to_status = ANY(%s){tail}",
+        (episode, sorted(REWRITE_TARGETS)),
+    ).fetchone()
+
+
+def count_rewrites(conn: psycopg.Connection, episode: str) -> int:
+    """How many rejects sent the episode back for a rewrite, at any step."""
+    return _rewrite_jobs(conn, episode, "count(*) AS n")["n"]
+
+
+def last_rewrite_job(conn: psycopg.Connection, episode: str) -> dict | None:
+    """The job of the latest reject that sent the episode back for a rewrite."""
+    return _rewrite_jobs(conn, episode, "*", " ORDER BY id DESC LIMIT 1")
+
+
 def insert_artifact(conn: psycopg.Connection, episode: str, envelope: dict, uri: str) -> bool:
     """Record a pointer to a stored artifact; False if the episode already points at it."""
     cur = conn.execute(
@@ -139,12 +156,17 @@ def insert_gate_decision(conn: psycopg.Connection, decision: GateDecision) -> No
 
 def gate_decision_since(
     conn: psycopg.Connection, episode: str, gate: int, since: datetime, exclude_users: tuple[str, ...] = (),
+    decisions: tuple[str, ...] | None = None,
 ) -> dict | None:
-    """The latest decision at `gate` made after the episode reached it, ignoring `exclude_users`."""
+    """The latest decision at `gate` made after the episode reached it, ignoring `exclude_users`.
+
+    `decisions` narrows the match to those decision values, e.g. only rejects.
+    """
+    wanted = None if decisions is None else list(decisions)
     return conn.execute(
         'SELECT * FROM gate_decision WHERE episode = %s AND gate = %s AND ts >= %s AND NOT ("user" = ANY(%s)) '
-        "ORDER BY ts DESC, id DESC LIMIT 1",
-        (episode, gate, since, list(exclude_users)),
+        "AND (%s::text[] IS NULL OR decision = ANY(%s::text[])) ORDER BY ts DESC, id DESC LIMIT 1",
+        (episode, gate, since, list(exclude_users), wanted, wanted),
     ).fetchone()
 
 

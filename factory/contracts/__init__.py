@@ -11,6 +11,7 @@ from factory.contracts.publish_receipt import PublishReceipt
 from factory.contracts.qa_report import QAIssue, QAReport
 from factory.contracts.render_props import Caption, RenderProps, Scene
 from factory.contracts.rendered_video import RenderedVideo
+from factory.contracts.revision_request import ReviewerNote, RevisionRequest
 from factory.contracts.script import Line, QuizItem, Script, Segment, VocabItem
 from factory.contracts.shot_list import Shot, ShotList
 from factory.contracts.voice_directives import LineDirective, VoiceDirectives
@@ -30,6 +31,7 @@ CONTRACTS = {
     "publish_receipt": PublishReceipt,
     "enrichment": Enrichment,
     "rendered_video": RenderedVideo,
+    "revision_request": RevisionRequest,
 }
 
 SCHEMA_VERSIONS = {name: model.model_fields["schema_version"].default for name, model in CONTRACTS.items()}
@@ -60,6 +62,8 @@ __all__ = [
     "RateTarget",
     "RenderProps",
     "RenderedVideo",
+    "ReviewerNote",
+    "RevisionRequest",
     "RubySpan",
     "SCHEMA_VERSIONS",
     "Scene",

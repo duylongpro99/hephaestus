@@ -1,0 +1,25 @@
+{
+  "issues": [
+    {
+      "line_id": null,
+      "category": "naturalness",
+      "severity": "major",
+      "description": "The exchange has no reason to happen.",
+      "suggested_fix": "Give Kira a reason to ask."
+    }
+  ],
+  "rubric_scores": [
+    {
+      "name": "level_fit",
+      "score": 4
+    },
+    {
+      "name": "coherence",
+      "score": 3
+    }
+  ],
+  "level_fit_verdict": "at",
+  "hard_gate_failures": [],
+  "decision": "reject",
+  "summary": "The dialogue still feels flat; rethink the scene."
+}

@@ -133,7 +133,7 @@ Legend: `[A#]` = LLM agent · `[C#]` = deterministic code service · `[T]` = too
 |---|---|---|---|---|---|
 | A1 | **Showrunner** | per season | single call, structured output, adaptive thinking, effort `high` | `claude-opus-5` | Resolved config (Pack + Level + Audience + Bible) + level syllabus + analytics summary → `SeasonPlan` (theme, arc, 10–12 episode loglines, target-word pool, grammar sequence) |
 | A2 | **Scriptwriter** | per episode | single call, structured output, streaming | `claude-opus-5` → `claude-sonnet-5` | `EpisodeSpec` + Bible + few-shot → `Script` |
-| A3 | **Level Editor** | per episode | **Tool Runner loop** (≤4 turns), tools `lexical_profile`, `rate_estimate`, `find_simpler_synonym` | `claude-opus-5` → `claude-sonnet-5` | `Script` + gate failures → patched `Script`, or escalate |
+| A3 | **Level Editor** | per episode | **Tool Runner loop** (≤4 turns), tools `lexical_profile`, `rate_estimate`, `find_simpler_synonym` | `claude-opus-5` → `claude-sonnet-5` | `Script` + gate failures, or `Script` + reviewer notes (`RevisionRequest`) → patched `Script`, or escalate |
 | A4 | **Language QA Judge** | per episode | 2 independent calls: Claude + another model family | `claude-opus-5` + Gemini 3.x Pro | `Script` → `QAReport{issues[line_id, severity, fix]}` |
 | A5 | **Pedagogy & Safety Judge** | per episode | single call with a rubric | `claude-opus-5` | `Script` + spec + rubric → scores + hard-gate verdicts (age-appropriate safety from the Audience Profile, hook, arc, interaction) |
 | A6 | **Voice Director** | per episode | single call | `claude-sonnet-5` | `Script` + voice map → `VoiceDirectives` (per-line style/emotion tags, pause ms, slow/natural variant, SSML hints, pronunciation overrides from the Language Pack: pitch accent, tones, stress) |
@@ -306,6 +306,7 @@ Reading aids (furigana, pinyin, romaja, transliteration, vowel marks) and romani
 | `ThumbnailSpec` / `ThumbnailSet` | A7 / C12 | concept and pose per variant; rendered PNGs (1280×720, ≤2 MB), legibility results, chosen variant |
 | `CaptionSet` | C13 | SRT/VTT per language (target + support), cue rules used, sync report |
 | `GateDecision` | console | gate (0/1/2), user, decision (approve / edit-and-approve / reject), diff, notes, timestamp |
+| `RevisionRequest` | orchestrator, on a script reject | round, rejected_by (panel or gate 1), notes[{reviewer, gate, notes, issues[QAIssue]}]; A3's input for the rewrite |
 | `CostLedger` | orchestrator | per station: vendor, units, USD; running total vs the episode budget |
 | `PublishReceipt` | C10 | platform, external video id, upload timestamp, publishAt, status, quota units used |
 
@@ -342,6 +343,7 @@ EPISODE:
 
 - Each transition is a job in the queue. Retries use backoff, capped per station. Every job writes to the `CostLedger`.
 - A per-episode **cost budget** (default $3, set per channel) and a **loop budget** stop runaway rewrite loops.
+- **Script rejects are revised, not replayed.** A reject from the review panel or at gate 1 sends the episode back to `DRAFTED`. A3 then gets the latest script plus a `RevisionRequest` with the rejecting reviewers' notes and `QAIssue`s (a human reject at gate 1 must carry notes), runs at least one editing turn even when the code gates already pass, and must still pass them. A revision that changes nothing escalates. The panel then judges the new script. The loop budget is `MAX_REWRITES` (2, in `factory/orchestrator/states.py`), counted per episode across the panel and gate 1; the next script reject moves the episode to `ESCALATED` with a "rewrite limit reached" error. A reject at gate 2 always escalates and does not count.
 - Human edits at the gates are saved as diffs in `GateDecision`. They become few-shot examples and eval data.
 - **`UPLOADED` is separate from `SCHEDULED`** so a crash between the two never uploads twice: C10 first uploads as private and stores the `PublishReceipt` with the video id, then sets `publishAt`, thumbnail, captions and playlist in later idempotent steps keyed by that id.
 - **Ordering.** `ordering: strict` episodes publish in sequence. A rejected or escalated episode holds its slot; C16 shifts later slots and notifies the operator. The exposure ledger is updated only on `PUBLISHED`, so C1 recomputes review words for later episodes if the order actually changes.

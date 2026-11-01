@@ -1,0 +1,25 @@
+{
+  "issues": [
+    {
+      "line_id": "s1l4",
+      "category": "naturalness",
+      "severity": "major",
+      "description": "'sa so kosa' is hard to parse at A2.",
+      "suggested_fix": "Ta te sa kosa."
+    }
+  ],
+  "rubric_scores": [
+    {
+      "name": "level_fit",
+      "score": 4
+    },
+    {
+      "name": "coherence",
+      "score": 3
+    }
+  ],
+  "level_fit_verdict": "at",
+  "hard_gate_failures": [],
+  "decision": "reject",
+  "summary": "The last line stacks two intensifiers; keep it plain."
+}

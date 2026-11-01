@@ -19,7 +19,9 @@ from factory.artifacts import M, ArtifactStore, Producer, load
 from factory.config import ResolvedConfig
 from factory.contracts import CostEntry, EpisodeSpec, GateDecision
 from factory.orchestrator import repo
-from factory.orchestrator.states import DONE, PIPELINE, STOPPED, Outcome, State, Step, after_attempt, over_budget
+from factory.orchestrator.states import (
+    DONE, MAX_REWRITES, PIPELINE, STOPPED, Move, Outcome, State, Step, after_attempt, over_budget,
+)
 from factory.tools.language_pack import LanguagePack, load_pack
 
 AUTO_USER = "auto"
@@ -77,6 +79,13 @@ class StationContext(Producer):
 Station = Callable[[StationContext], StationResult]
 
 
+def rejected_error(outcome: Outcome, move: Move, reason: str | None) -> str | None:
+    """The job error: a reject that escalates says the rewrite budget ran out, then why it was rejected."""
+    if outcome == "reject" and move.job_status == "escalated":
+        return f"rewrite limit reached ({MAX_REWRITES} of {MAX_REWRITES}): {reason or 'no reason given'}"
+    return reason
+
+
 class Runner:
     def __init__(self, conn: psycopg.Connection, stations: dict[str, Station], store: ArtifactStore,
                  clock: Clock | None = None, auto_approve: bool = False, panel_users: tuple[str, ...] = ()):
@@ -127,18 +136,19 @@ class Runner:
             return False
         outcome: Outcome = "reject" if decision["decision"] == "reject" else "ok"
         attempt = repo.count_jobs(self.conn, episode["id"], step.station) + 1
-        move = after_attempt(state, outcome, attempt, rejects=0)
+        move = after_attempt(state, outcome, attempt, repo.count_rewrites(self.conn, episode["id"]))
+        error = rejected_error(outcome, move, decision["notes"]) if outcome == "reject" else None
         with self.conn.transaction():
             repo.insert_job(self.conn, episode=episode["id"], station=step.station, from_status=state,
                             to_status=move.to, attempt=attempt, status=move.job_status, started_at=decision["ts"],
-                            finished_at=self.clock.now(), error=decision["notes"] if outcome == "reject" else None)
+                            finished_at=self.clock.now(), error=error)
             repo.move(self.conn, episode["id"], state, move.to, self.clock.now())
         return True
 
     def _run_step(self, episode: dict, state: State, step: Step) -> None:
         station = self.stations[step.station]
         earlier = repo.count_jobs(self.conn, episode["id"], step.station)
-        rejects = repo.count_jobs(self.conn, episode["id"], step.station, "rejected")
+        rewrites = repo.count_rewrites(self.conn, episode["id"])
         # Retries of this step since the episode reached it count towards the cap, across restarts.
         retried = repo.count_jobs(self.conn, episode["id"], step.station, "retrying", since=episode["status_changed_at"])
         for attempt in itertools.count(retried + 1):
@@ -153,7 +163,8 @@ class Runner:
             except Exception as exc:  # a station bug or a vendor failure: retry, then escalate with the error
                 costs += getattr(exc, "costs", [])  # a media failure carries what earlier requests billed
                 result = StationResult("retry", f"{type(exc).__name__}: {exc}")
-            move = after_attempt(state, result.outcome, attempt, rejects)
+            move = after_attempt(state, result.outcome, attempt, rewrites)
+            error = rejected_error(result.outcome, move, result.error)
             with self.conn.transaction():
                 for produced in ctx.produced:
                     # An artifact's cost is counted once, when the episode first points at it: an output a
@@ -165,7 +176,7 @@ class Runner:
                     repo.insert_gate_decision(self.conn, decision)
                 repo.insert_job(self.conn, episode=episode["id"], station=step.station, from_status=state,
                                 to_status=move.to, attempt=earlier + attempt - retried, status=move.job_status,
-                                started_at=started, finished_at=self.clock.now(), error=result.error)
+                                started_at=started, finished_at=self.clock.now(), error=error)
                 if move.to is not None:
                     repo.move(self.conn, episode["id"], state, move.to, self.clock.now())
             current = move.to or state

@@ -1,0 +1,16 @@
+[
+  {
+    "name": "edit_line",
+    "arguments": {
+      "line_id": "s1l3",
+      "text": "So bu! Mi pa te ju.",
+      "translations": {
+        "en": "Very good! I want tea today."
+      }
+    }
+  },
+  {
+    "name": "lexical_profile",
+    "arguments": {}
+  }
+]

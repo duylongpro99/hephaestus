@@ -11,7 +11,7 @@ from factory.config import resolve
 from factory.contracts import CostEntry, EpisodeSpec, GateDecision, QAReport
 from factory.orchestrator import repo
 from factory.orchestrator.runner import Runner, StationResult
-from factory.orchestrator.states import PIPELINE, State
+from factory.orchestrator.states import MAX_REWRITES, PIPELINE, State
 from tests.test_workers import SPEC_PATH
 
 pytestmark = pytest.mark.db
@@ -139,12 +139,51 @@ def test_retries_back_off_then_escalate_with_the_error(db, tmp_path, episode):
     assert clock.sleeps == [1.0, 2.0]
 
 
-def test_panel_rejects_once_then_escalates(db, tmp_path, episode):
+def test_panel_rejects_until_the_rewrite_limit_then_escalates(db, tmp_path, episode):
     toys = Toys()
     toys.outcome["review_panel"] = "reject"
     assert runner(db, toys, tmp_path).advance(episode) == State.ESCALATED
     panel_jobs = [(j["status"], j["to_status"]) for j in repo.jobs(db, episode) if j["station"] == "review_panel"]
-    assert panel_jobs == [("rejected", "DRAFTED"), ("escalated", "ESCALATED")]
+    assert panel_jobs == [("rejected", "DRAFTED")] * MAX_REWRITES + [("escalated", "ESCALATED")]
+    assert repo.jobs(db, episode)[-1]["error"] == f"rewrite limit reached ({MAX_REWRITES} of {MAX_REWRITES}): toy says no"
+
+
+def human_decision(db, episode, clock, decision, gate=1, notes="too fast"):
+    with db.transaction():
+        repo.insert_gate_decision(db, GateDecision(episode_id=episode, gate=gate, user="human", decision=decision,
+                                                   notes=notes, timestamp=clock.now()))
+
+
+def test_panel_and_gate_one_rejects_share_one_rewrite_limit(db, tmp_path, episode):
+    toys, clock = Toys(), FakeClock()
+    toys.outcome["review_panel"] = "reject"
+    r = Runner(db, toys.registry(), ArtifactStore(tmp_path), clock=clock)
+    with db.transaction():  # the panel rejects once, then approves
+        repo.insert_job(db, episode=episode, station="review_panel", from_status=State.ENRICHED,
+                        to_status=State.DRAFTED, attempt=1, status="rejected", started_at=clock.now(),
+                        finished_at=clock.now())
+    del toys.outcome["review_panel"]
+    assert r.advance(episode) == State.QA_OK
+    for _ in range(MAX_REWRITES - 1):
+        human_decision(db, episode, clock, "reject")
+        assert r.advance(episode) == State.QA_OK
+    assert repo.count_rewrites(db, episode) == MAX_REWRITES
+    human_decision(db, episode, clock, "reject")
+    assert r.advance(episode) == State.ESCALATED
+    last = repo.jobs(db, episode)[-1]
+    assert (last["station"], last["status"]) == ("gate_1", "escalated")
+    assert last["error"] == f"rewrite limit reached ({MAX_REWRITES} of {MAX_REWRITES}): too fast"
+
+
+def test_a_final_gate_reject_does_not_count_as_a_rewrite(db, tmp_path, episode):
+    toys, clock = Toys(), FakeClock()
+    r = Runner(db, toys.registry(), ArtifactStore(tmp_path), clock=clock)
+    assert r.advance(episode) == State.QA_OK
+    human_decision(db, episode, clock, "approve")
+    assert r.advance(episode) == State.COMPLIANT
+    human_decision(db, episode, clock, "reject", gate=2)
+    assert r.advance(episode) == State.ESCALATED
+    assert repo.count_rewrites(db, episode) == 0
 
 
 def test_budget_stop(db, tmp_path, episode):

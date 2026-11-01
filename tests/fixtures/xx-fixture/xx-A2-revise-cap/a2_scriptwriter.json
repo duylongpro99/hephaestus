@@ -1,0 +1,26 @@
+{
+  "title_working": "Cheap Coffee",
+  "hook": "Tu pa ko ju?",
+  "segments": [
+    {
+      "id": "s1",
+      "type": "dialogue",
+      "speed": "natural",
+      "layout": null,
+      "lines": [
+        {"id": "s1l1", "speaker": "kira", "text": "Tu pa ko ju?", "pause_after_ms": 400, "visual_cue": null,
+         "translation_en": "Do you want coffee today?"},
+        {"id": "s1l2", "speaker": "tomo", "text": "Ya, mi pa ko. Ta ko la sa kosa.", "pause_after_ms": 400,
+         "visual_cue": null, "translation_en": "Yes, I want coffee. The coffee here is cheap."},
+        {"id": "s1l3", "speaker": "kira", "text": "So bu! Mi pa te.", "pause_after_ms": 400, "visual_cue": null,
+         "translation_en": "Very good! I want tea."},
+        {"id": "s1l4", "speaker": "tomo", "text": "Ta te sa so kosa.", "pause_after_ms": 400, "visual_cue": null,
+         "translation_en": "The tea is very cheap."}
+      ],
+      "items": []
+    }
+  ],
+  "vocab": [{"word": "kosa", "is_target": true, "gloss_en": "cheap: it does not cost much"}],
+  "grammar_notes": ["Sa links a thing to what it is like: ta ko sa kosa."],
+  "interaction_prompts": ["Ki tu pa ju?"]
+}
