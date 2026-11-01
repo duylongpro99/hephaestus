@@ -21,6 +21,13 @@ Sau khi sửa: ruff sạch, 271 test pass (3 test `live` bỏ qua), `scripts/ci.
 
 ## Chưa sửa (ghi lại để làm sau)
 
+> Cập nhật 2026-11-01: mọi mục dưới đây đã được xử lý trong plan
+> [Gia cố media adapter trước lần chạy live đầu tiên](../261101-1201-media-hardening-before-live/plan.md)
+> (marker `publish_attempt` và `factory publish resolve`, dùng lại WAV và dedupe ledger, retry lỗi tạm
+> thời của Azure, schedule không tính lại quota, tag `ep-<id>` trong compliance, duration theo frame,
+> hệ số `wide_char_units`, rate ngoài khoảng báo lỗi sớm). Các số đo còn phải kiểm khi smoke live nằm
+> trong [report smoke](smoke-261101-media-providers.md).
+
 - Video vừa upload có thể chưa hiện trong playlist uploads (eventual consistency). Cần đo trong smoke
   test YouTube trước khi thêm marker "đang upload" trong DB.
 - Retry station voice vẫn tổng hợp lại mọi dòng; chưa bỏ qua file WAV đã có. Adapter Azure chưa retry
