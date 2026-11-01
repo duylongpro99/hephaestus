@@ -14,7 +14,7 @@
 | 1 | First slice | `en` × adult × CEFR A2 | decided |
 | 2 | Support languages | `en` and `vi` | decided |
 | 3 | Script review | two-persona agent panel | decided |
-| 4 | Host voice | none chosen | deferred |
+| 4 | Host voice | en-GB Azure Neural voices ([ADR 0003](0003-real-media-and-publish-providers.md)) | decided 2026-11-01 |
 | 5 | Business model | none chosen | deferred |
 
 ### 1. First slice: `en` × adult × CEFR A2
@@ -57,9 +57,10 @@ reasoning. Each returns a `QAReport` and a `GateDecision`; a `critical` issue fo
   happens, the panel is not trusted as a gate and a human or cross-vendor reviewer is required
   before the walking skeleton.
 
-### 4. Host voice: deferred
+### 4. Host voice: en-GB (2026-11-01)
 
-A script spike produces no audio. The choice is needed before TTS work begins.
+A script spike produces no audio, so this was deferred until TTS work. [ADR 0003](0003-real-media-and-publish-providers.md)
+picks en-GB Azure Neural voices so the host matches Anna's Manchester bio.
 
 ### 5. Business model: deferred
 
