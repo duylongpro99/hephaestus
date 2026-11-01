@@ -51,6 +51,12 @@ Ghi lại:
       mỗi giới; chọn giọng cho Anna và Ben, ghi vào `profiles.live.speech.voices`.
 - [ ] Thời gian cho 80 câu khi bị throttle 20 request/phút (ước tính khoảng 4 phút).
 - [ ] Giá S0 trên Azure portal khớp `prices.azure-speech.neural` ($16/1M ký tự).
+- [ ] Request bị cancel (timeout, mất kết nối, throttle) có bị tính phí không. Code mặc định là
+      không tính và chỉ ghi charge cho request thành công.
+- [ ] Chênh lệch giữa `audio_duration` Azure báo và số frame WAV đã ghi. Code dùng số frame; số đo
+      chỉ để xác nhận.
+- [ ] Khi có pack CJK: Azure tính ký tự wide là 2 như tài liệu giá (`wide_char_units: 2` trong
+      `config/media.yaml`).
 
 ### Image (Cloudflare free, DeepInfra)
 
@@ -81,8 +87,15 @@ uv run factory media check publishing --profile live --video <cùng mp4> --packa
       (code coi là "chưa có video") hay `items: []`.
 - [ ] Lần chạy thứ hai không tạo video thứ hai (tìm theo tag `ep-<episode_id>` trong 50 upload
       gần nhất).
-- [ ] Video vừa upload hiện trong playlist uploads sau bao lâu. Nếu trễ, một crash ngay sau upload
-      rồi chạy lại ngay vẫn có thể upload lần hai; khi đó cần thêm marker "đang upload" trong DB.
+- [ ] Video vừa upload hiện trong playlist uploads sau bao lâu. Marker `publish_attempt` đã chặn
+      upload lần hai; số đo này dùng để chỉnh `MARKER_POLLS` (3) và `MARKER_POLL_INTERVAL_S` (60 giây)
+      trong `factory/workers/publisher.py`.
+- [ ] Upload resumable bị ngắt giữa chừng (kill process sau chunk đầu) có để lại video "processing"
+      trên kênh hay không. Kết quả quyết định lỗi nào được đặt `video_may_exist=False` để tự xóa marker.
+- [ ] Thử `factory publish resolve` trên episode staging bị escalate ở `c10_upload`: cả
+      `--external-id` (video của kênh) lẫn `--not-uploaded`.
+- [ ] Package có tag gần 500 ký tự (tính cả `ep-<id>`, dấu phẩy, ngoặc kép cho tag có khoảng trắng):
+      API có chấp nhận không, để xác nhận cách đếm của `compliance.tags_length`.
 - [ ] Sau `schedule`, video giữ nhãn `containsSyntheticMedia` và `selfDeclaredMadeForKids` đúng
       như package.
 - [ ] Quota trong Google Cloud console khớp số in ra (receipt chỉ đếm bucket 10K).
