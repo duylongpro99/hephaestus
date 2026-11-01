@@ -443,7 +443,7 @@ Launch with fewer levels per channel. For example, JP N5–N3 and EN A2–B1 at 
 | Kids animation | **2D rigs** (Rive / Lottie / SVG parts in Remotion), not per-episode generation | AI video (Kling 3.0 about $0.08–0.17/s; Veo 3.1 about $0.40/s) only for hero shots. The Sora 2 API was discontinued on 2026-09-24 |
 | Music | **ElevenLabs Music** (commercially cleared rights) or public-domain nursery rhymes with your own arrangement | ⚠️ Suno says users are "generally not the owner" after the Warner deal; its models are changing. Avoid it as the backbone of a kids IP |
 | Render | **Remotion** (free for ≤3 staff), self-hosted or on Lambda. FFmpeg for mux and loudnorm. | Shotstack at $0.20–0.40 per rendered minute is too expensive at volume |
-| Publish | YouTube Data API v3 | Since June 2026, `videos.insert` has its own 100/day bucket. **`captions.insert` costs 400 units**, so the 10K budget allows about 4–5 fully captioned videos a day. Request a quota increase. |
+| Publish | YouTube Data API v3 | Since June 2026, `videos.insert` has its own 100/day bucket at 1 unit per upload. **`captions.insert` costs 400 units**, so an episode with two caption tracks, a thumbnail and a playlist insert uses about 950 of the 10K units, about 10 fully captioned videos a day. Request a quota increase. |
 
 ### 4.1 Cost per finished episode (API spend, excluding human time)
 | | 15-min EN podcast | 3-min kids song | 20-min JP podcast |

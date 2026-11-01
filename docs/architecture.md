@@ -379,6 +379,8 @@ EPISODE:
 
 ## 7. Production workers (deterministic)
 
+*The vendors below are the design-time candidates. The providers chosen for the first slice (Azure Speech, FLUX.2 [klein] on Cloudflare Workers AI, FFmpeg + Pillow render with Remotion deferred, YouTube Data API v3) and the free tiers used in dev and staging are in [ADR 0003](decisions/0003-real-media-and-publish-providers.md).*
+
 | Service | Implementation | Notes |
 |---|---|---|
 | C1 Curriculum Scheduler | Python + Postgres | Picks the next target words in frequency order from the pack's leveled list; review slots at +1/+3/+7 episodes; updates the exposure ledger on publish |
@@ -496,14 +498,16 @@ Comments: Made-for-Kids channels have comments disabled by YouTube; other channe
 
 **YouTube Data API quota** (default 10,000 units per project per day)
 
+Since 2026-06-01, `videos.insert` has its own bucket of 100 calls a day at 1 unit each; every other call draws on the 10,000-unit bucket. Both reset at midnight Pacific time.
+
 | Call | Units | Per episode |
 |---|---|---|
-| `videos.insert` | 1,600 | 1 (plus 1,600 per Short) |
+| `videos.insert` | 1, upload bucket (100/day) | 1 (plus 1 per Short) |
 | `captions.insert` | 400 | 1 per language |
 | `thumbnails.set` | 50 | 1 |
 | `videos.update`, `playlistItems.insert` | 50 each | 1–3 |
 
-An episode with two caption languages costs about 2,500 units, so a single project publishes at most 3–4 episodes a day with no Shorts. C16 budgets quota per lane, Shorts are scheduled on separate days when quota is tight, and the admin requests a quota increase before Phase 4 scale.
+An episode with two caption languages costs about 950 units of the 10K bucket, so a single project publishes about 10 episodes a day, and captions dominate the cost. C16 budgets quota per lane, Shorts are scheduled on separate days when quota is tight, and the admin requests a quota increase before Phase 4 scale. An app left in OAuth "Testing" status gets refresh tokens that expire after 7 days, so production runs the app "In production" ([ADR 0003](decisions/0003-real-media-and-publish-providers.md)).
 
 **Vendor limits and fallbacks**
 - Each adapter has a concurrency limit, a circuit breaker and a retry policy.
