@@ -11,13 +11,14 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Callable
 
-import PIL
-
-from factory.adapters import ffmpeg
-from factory.adapters.image.base import ImageProvider
+from factory.adapters.costs import ledger_entries
+from factory.adapters.image import base as image_base
+from factory.adapters.image.base import ImageGenerator
 from factory.adapters.llm.base import LLMError, LLMProvider
-from factory.adapters.publish.base import Publisher
-from factory.adapters.tts.base import TTSProvider
+from factory.adapters.publishing.base import VideoPublisher
+from factory.adapters.speech import base as speech_base
+from factory.adapters.speech.base import SpeechSynthesizer
+from factory.adapters.video.base import VideoRenderer
 from factory.agents.a2_scriptwriter import agent as a2
 from factory.agents.a3_level_editor import agent as a3
 from factory.agents.a3_level_editor.agent import LevelLoopResult
@@ -34,7 +35,7 @@ from factory.orchestrator.runner import StationContext, StationResult
 from factory.tools import enrichment
 from factory.tools.language_pack import LanguagePack
 from factory.tools.profiler import profile
-from factory.workers import compliance, composer, packaging, publisher, render, tech_checks, visuals, voice
+from factory.workers import compliance, composer, packaging, publisher, tech_checks, visuals, voice
 
 CODE = "code"  # the "model" of a station that calls no model
 
@@ -124,10 +125,13 @@ def review_script(out: Producer, spec: EpisodeSpec, script: Script,
 
 @dataclass
 class Vendors:
-    llm: Callable[[str], LLMProvider]  # by config/llm.yaml role
-    tts: Callable[[LanguagePack], TTSProvider]
-    images: ImageProvider
-    publisher: Publisher
+    """The providers a run uses: LLMs by config/llm.yaml role, media by config/media.yaml purpose."""
+
+    llm: Callable[[str], LLMProvider]
+    speech: Callable[[LanguagePack], SpeechSynthesizer]
+    images: ImageGenerator
+    video: Callable[[LanguagePack], VideoRenderer]
+    publisher: VideoPublisher
 
 
 def file_sha256(path: Path) -> str:
@@ -198,17 +202,25 @@ class Stations:
         directives = ctx.produce("a6_voice_director", station_version(CODE, source(voice)),
                                  [script, ctx.config.config_hash], VoiceDirectives,
                                  lambda media: Built(voice.direct(script, ctx.config, ctx.pack)))
-        tts = self.v.tts(ctx.pack)
-        ctx.produce("c5_audio", station_version(tts.identity, source(voice), source(tts)), [script, directives],
-                    AudioManifest,
-                    lambda media: Built(voice.voice(script, directives, tts, media, ctx.store.uri)))
+        speech = self.v.speech(ctx.pack)
+
+        def build(media: Path) -> Built:
+            manifest, charges = voice.voice(script, directives, ctx.pack, speech, media, ctx.store.uri)
+            return Built(manifest, ledger_entries(voice.STATION, charges))
+
+        ctx.produce("c5_audio", station_version(speech.identity, source(voice), source(speech_base), source(speech)), [script, directives],
+                    AudioManifest, build)
         return StationResult()
 
     def draw_visuals(self, ctx: StationContext) -> StationResult:
         script, images = ctx.read(a3.STATION, Script), self.v.images
-        ctx.produce("a7_visual_director", station_version(images.identity, source(visuals), source(images)),
-                    [script, ctx.config.config_hash], ShotList,
-                    lambda media: Built(visuals.shoot(script, ctx.config, images, media, ctx.store.uri)))
+        def build(media: Path) -> Built:
+            shots, charges = visuals.shoot(script, ctx.config, images, media, ctx.store.uri)
+            return Built(shots, ledger_entries(visuals.STATION, charges))
+
+        ctx.produce("a7_visual_director", station_version(images.identity, source(visuals), source(image_base),
+                                                             source(images)),
+                    [script, ctx.config.config_hash], ShotList, build)
         return StationResult()
 
     def render_video(self, ctx: StationContext) -> StationResult:
@@ -217,14 +229,15 @@ class Stations:
         props = ctx.produce("c7_composer", station_version(CODE, source(composer)), [script, audio, shots],
                             RenderProps, lambda media: Built(composer.compose(script, audio, shots)))
 
+        renderer = self.v.video(ctx.pack)
+
         def build(media: Path) -> Built:
-            path = render.render(props, ctx.store.resolve, media)
+            path = renderer.render(props, ctx.store.resolve, media)
             return Built(RenderedVideo(episode_id=ctx.episode, uri=ctx.store.uri(path), sha256=file_sha256(path),
                                        size_bytes=path.stat().st_size, width=props.width, height=props.height,
                                        fps=props.fps))
 
-        identity = f"{ffmpeg.version()}; pillow {PIL.__version__}"
-        ctx.produce("c8_render", station_version(identity, source(render)), [props], RenderedVideo, build)
+        ctx.produce("c8_render", station_version(renderer.identity, source(renderer)), [props], RenderedVideo, build)
         return StationResult()
 
     def check_video(self, ctx: StationContext) -> StationResult:
@@ -261,7 +274,7 @@ class Stations:
         if uploaded:  # stored at once, before anything else can fail, so a retry never uploads again
             with ctx.conn.transaction():
                 repo.insert_receipt(ctx.conn, receipt)
-        ctx.produce("c10_upload", station_version(pub.platform, source(publisher), source(pub)),
+        ctx.produce("c10_upload", station_version(pub.identity, source(publisher), source(pub)),
                     [package, video, receipt.external_id], PublishReceipt, lambda media: Built(receipt))
         return StationResult()
 
@@ -271,8 +284,8 @@ class Stations:
         if receipt is None:
             return StationResult("fail", f"no {pub.platform} receipt for {ctx.episode}; it was never uploaded")
         publish_at = receipt.publish_at or publisher.publish_time(package, ctx.clock.now())
-        scheduled = publisher.schedule(receipt, pub, publish_at)
-        repo.schedule_receipt(ctx.conn, ctx.episode, pub.platform, publish_at)
-        ctx.produce("c10_schedule", station_version(pub.platform, source(publisher), source(pub)),
+        scheduled = publisher.schedule(receipt, pub, publish_at, package)
+        repo.schedule_receipt(ctx.conn, scheduled)
+        ctx.produce("c10_schedule", station_version(pub.identity, source(publisher), source(pub)),
                     [receipt.external_id, publish_at.isoformat()], PublishReceipt, lambda media: Built(scheduled))
         return StationResult()

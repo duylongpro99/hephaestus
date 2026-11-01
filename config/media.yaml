@@ -1,0 +1,63 @@
+# Media routing: which provider serves each media purpose (docs/decisions/0004-purpose-oriented-media-adapters.md).
+#
+# Secrets never live here. A provider's `env` names the environment variables that hold its
+# credentials; set them in the shell or in the gitignored .env file. A profile picks one provider
+# per purpose; choose it with `factory run --media-profile` or $FACTORY_MEDIA_PROFILE (default: fake).
+# Changing a provider, model, voice or option changes that station's station_version, so stored
+# artifacts from the old setting are never reused. There is no automatic fallback between
+# providers: when one runs out of quota, switch the profile's provider here.
+
+providers:
+  fake-speech: {type: fake_speech}
+  fake-image: {type: fake_image}
+  ffmpeg-pillow: {type: ffmpeg_pillow}
+  export: {type: export, options: {dir: _export}}   # under the artifact store root
+
+  azure-speech:
+    type: azure_speech
+    model: neural
+    env: {key: AZURE_SPEECH_KEY, region: AZURE_SPEECH_REGION}
+    options: {max_requests_per_minute: 20}   # the F0 (free) tier's limit; raise it on S0
+  # Both image providers draw at width x height and the adapter crops and scales to the shot size.
+  cloudflare-images:
+    type: cloudflare_workers_ai
+    model: "@cf/black-forest-labs/flux-2-klein-4b"
+    env: {account_id: CLOUDFLARE_ACCOUNT_ID, token: CLOUDFLARE_API_TOKEN}
+    options: {width: 1024, height: 576, style_suffix: "flat illustration, soft colours, no text"}
+  deepinfra-images:
+    type: deepinfra
+    model: black-forest-labs/FLUX-2-klein-4b
+    env: {key: DEEPINFRA_API_KEY}
+    options: {width: 1024, height: 576, style_suffix: "flat illustration, soft colours, no text"}
+  youtube:
+    type: youtube
+    env: {token: YOUTUBE_TOKEN_PATH, client_secrets: YOUTUBE_CLIENT_SECRETS}
+    options: {category_id: "27"}   # Education
+
+# USD per `per` billed units, per provider and model. A model without a price still runs;
+# its cost is recorded as unpriced.
+prices:
+  azure-speech:
+    neural: {usd: 16.0, per: 1000000}   # S0, per character; F0 gives 0.5M characters a month free
+  cloudflare-images:
+    # Billed in neurons: $0.011 per 1,000 beyond 10,000 free a day; about 80 neurons per 1024x576 image.
+    "@cf/black-forest-labs/flux-2-klein-4b": {usd: 0.00088, per: 1}   # per image
+  deepinfra-images:
+    black-forest-labs/FLUX-2-klein-4b: {usd: 0.014, per: 1048576}   # per pixel: $0.014 a megapixel
+
+profiles:
+  fake:
+    speech:
+      provider: fake-speech
+      voices: {en-gb-female-1: fake-a, en-gb-male-1: fake-b, xx-a: fake-a, xx-b: fake-b}
+    image: {provider: fake-image}
+    video: {provider: ffmpeg-pillow}
+    publishing: {provider: export}
+
+  live:
+    speech:
+      provider: azure-speech
+      voices: {en-gb-female-1: en-GB-SoniaNeural, en-gb-male-1: en-GB-RyanNeural}
+    image: {provider: cloudflare-images}
+    video: {provider: ffmpeg-pillow}
+    publishing: {provider: youtube}

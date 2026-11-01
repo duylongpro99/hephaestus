@@ -74,6 +74,7 @@ class CastMember(_Layer):
     id: str
     role: str
     description: str
+    voice: str | None = None  # a voice key of the pack; cast order picks one when unset
 
 
 class ChannelTarget(_Layer):
@@ -188,4 +189,13 @@ def resolve(channel: str, level: str, config_dir: Path = CONFIG_DIR) -> Resolved
     bible = load_yaml(config_dir / "channels" / f"{channel}.yaml")
     framework = load_yaml(config_dir / "frameworks" / f"{bible['target']['framework']}.yaml")
     audience = load_yaml(config_dir / "audiences" / f"{bible['audience']}.yaml")
-    return resolve_layers(pack_summary(bible["target"]["pack"]), framework, audience, bible, level)
+    config = resolve_layers(pack_summary(bible["target"]["pack"]), framework, audience, bible, level)
+    check_cast_voices(config.channel, [v.key for v in pack_module(config.pack.code).Pack.voices])
+    return config
+
+
+def check_cast_voices(bible: ChannelBible, pack_voices: list[str]) -> None:
+    unknown = [f"{m.id}: {m.voice}" for m in bible.cast if m.voice and m.voice not in pack_voices]
+    if unknown:
+        raise ValueError(f"channel {bible.channel} casts voices its pack does not have ({', '.join(unknown)}); "
+                         f"the pack offers {', '.join(pack_voices) or 'none'}")

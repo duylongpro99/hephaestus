@@ -151,6 +151,7 @@ class Runner:
                 costs += exc.costs
                 result = StationResult("retry", str(exc))
             except Exception as exc:  # a station bug or a vendor failure: retry, then escalate with the error
+                costs += getattr(exc, "costs", [])  # a media failure carries what earlier requests billed
                 result = StationResult("retry", f"{type(exc).__name__}: {exc}")
             move = after_attempt(state, result.outcome, attempt, rejects)
             with self.conn.transaction():

@@ -6,9 +6,8 @@ from functools import cache
 import pytest
 from typer.testing import CliRunner
 
-from factory.adapters.image.fake import FakeImageProvider
+from factory.adapters import media
 from factory.adapters.llm.fake import FakeLLMProvider
-from factory.adapters.tts.fake import FakeTTS
 from factory.artifacts import ArtifactStore
 from factory.cli import app
 from factory.contracts import AudioManifest, RenderedVideo
@@ -66,13 +65,14 @@ def test_receipt_is_stored_and_a_rerun_does_not_upload_again(ran, db_url, tmp_pa
         assert receipt.status == "scheduled" and receipt.publish_at is not None
         # Force the publish steps to run again, as after a crash between upload and scheduling.
         conn.execute("UPDATE episode SET status = 'FINAL_APPROVED' WHERE id = %s", (episode,))
-        publisher = CountingPublisher(store.root / "_fake_publisher")
+        publisher = CountingPublisher(store.root / "_export")
 
         @cache
         def llm(role):
             return FakeLLMProvider(EPISODE)
 
-        vendors = Vendors(llm=llm, tts=FakeTTS, images=FakeImageProvider(), publisher=publisher)
+        vendors = Vendors(llm=llm, speech=lambda pack: media.speech_for("fake", pack), images=media.image_for("fake"),
+                          video=lambda pack: media.video_for("fake", pack), publisher=publisher)
         assert Runner(conn, Stations(vendors).registry(), store).advance(episode) == State.SCHEDULED
         assert publisher.uploads == 0
         assert repo.receipts(conn, episode) == [receipt]

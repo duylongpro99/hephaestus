@@ -1,4 +1,4 @@
-"""Fake TTS: a sine tone as long as the line would take to say at the requested rate. No network."""
+"""Fake speech: a sine tone as long as the line would take to say at the requested rate. No network."""
 
 import hashlib
 import math
@@ -6,6 +6,7 @@ import struct
 import wave
 from pathlib import Path
 
+from factory.adapters.speech.base import SpeechRequest, SpeechResult, voices_hash
 from factory.tools.language_pack import LanguagePack
 
 SAMPLE_RATE = 24_000
@@ -31,17 +32,17 @@ def write_tone(out_path: Path, seconds: float, hz: int, sample_rate: int = SAMPL
     return samples / sample_rate
 
 
-class FakeTTS:
-    vendor = "fake"
-    identity = "fake/sine-tone-1"
-
-    def __init__(self, pack: LanguagePack):
-        self.pack = pack
+class FakeSpeech:
+    def __init__(self, pack: LanguagePack, voices: dict[str, str], sample_rate: int = SAMPLE_RATE):
+        self.pack, self.voices, self.sample_rate = pack, voices, sample_rate
+        self.identity = f"fake_speech/sine-tone-1@{sample_rate}#{voices_hash(voices)}"
 
     def seconds(self, text: str, rate: float) -> float:
-        units = self.pack.speech_units(text)
+        units, pack_rate = self.pack.speech_units(text), rate * self.pack.native_rate
         per_minute = self.pack.rate_unit in ("wpm", "chars_min")
-        return max(MIN_SECONDS, units / rate * 60 if per_minute else units / rate)
+        return max(MIN_SECONDS, units / pack_rate * 60 if per_minute else units / pack_rate)
 
-    def synthesize(self, text: str, voice: str, rate: float, out_path: Path) -> float:
-        return write_tone(out_path, self.seconds(text, rate), tone_hz(voice))
+    def synthesize(self, request: SpeechRequest, out_path: Path) -> SpeechResult:
+        seconds = self.seconds(request.text, request.rate)
+        duration = write_tone(out_path, seconds, tone_hz(self.voices[request.voice]), self.sample_rate)
+        return SpeechResult(duration_s=duration, words=None, charges=[])

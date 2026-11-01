@@ -10,8 +10,8 @@ persona:
   speaking_style: Warm, calm and clear. Short sentences, everyday words, gentle humour. Repeats key words naturally.
   catchphrases: ["Let's listen again.", "Easy, right?"]
 cast:
-  - {id: anna, role: host, description: The teacher and host. She explains the words and the grammar.}
-  - {id: ben, role: guest, description: "Anna's friend, a cheerful office worker who tells everyday stories."}
+  - {id: anna, role: host, voice: en-gb-female-1, description: The teacher and host. She explains the words and the grammar.}
+  - {id: ben, role: guest, voice: en-gb-male-1, description: "Anna's friend, a cheerful office worker who tells everyday stories."}
 # The spike runs 10-15 second micro_dialogue clips (user decision 2026-10-12).
 formats: [micro_dialogue, slow_dialogue_explain_replay]
 # Values here override the framework band and the audience overrides for this channel.

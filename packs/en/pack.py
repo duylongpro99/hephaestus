@@ -14,7 +14,7 @@ from factory.tools.language_pack import (
     Level,
     Ruby,
     Token,
-    VoiceRef,
+    VoiceSpec,
     at_or_below,
 )
 
@@ -35,7 +35,10 @@ class EnPack:
     rate_unit = "wpm"
     native_rate = 150.0  # conversational American English, research.md §2.1
     fonts: list[str] = []
-    voices: list[VoiceRef] = []
+    voices: list[VoiceSpec] = [
+        VoiceSpec(key="en-gb-female-1", locale="en-GB", gender="female", tags=("adult", "warm")),
+        VoiceSpec(key="en-gb-male-1", locale="en-GB", gender="male", tags=("adult", "calm")),
+    ]
 
     @cached_property
     def nlp(self):

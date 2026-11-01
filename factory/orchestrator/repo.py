@@ -24,19 +24,25 @@ def upsert_channel(conn: psycopg.Connection, config: ResolvedConfig) -> None:
     )
 
 
-def create_episode(conn: psycopg.Connection, spec: EpisodeSpec, config: ResolvedConfig, now: datetime) -> bool:
-    """Insert the episode at SPEC with its pinned config; False if it already exists with the same spec."""
+def create_episode(conn: psycopg.Connection, spec: EpisodeSpec, config: ResolvedConfig, now: datetime,
+                   media_profile: str = "fake") -> bool:
+    """Insert the episode at SPEC with its pinned config and media profile; False if it already exists with both."""
     existing = get_episode(conn, spec.episode_id)
     if existing:
         if EpisodeSpec.model_validate(existing["spec"]) != spec:
             raise EpisodeExists(f"episode {spec.episode_id} already exists with a different spec")
+        if existing["media_profile"] != media_profile:
+            raise EpisodeExists(f"episode {spec.episode_id} runs on media profile {existing['media_profile']}, "
+                                f"not {media_profile}")
         return False
     upsert_channel(conn, config)
     conn.execute(
         "INSERT INTO episode (id, channel, season, source, status, status_changed_at, config_hash, ordering, "
-        "publish_slot, budget_usd, spec, resolved_config) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
+        "publish_slot, budget_usd, spec, resolved_config, media_profile) "
+        "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
         (spec.episode_id, spec.channel, spec.season_id, spec.source, State.SPEC, now, config.config_hash,
-         spec.ordering, spec.publish_slot, spec.budget_usd, spec.model_dump_json(), config.model_dump_json()),
+         spec.ordering, spec.publish_slot, spec.budget_usd, spec.model_dump_json(), config.model_dump_json(),
+         media_profile),
     )
     return True
 
@@ -169,8 +175,9 @@ def insert_receipt(conn: psycopg.Connection, receipt: PublishReceipt) -> None:
     )
 
 
-def schedule_receipt(conn: psycopg.Connection, episode: str, platform: str, publish_at: datetime) -> None:
+def schedule_receipt(conn: psycopg.Connection, receipt: PublishReceipt) -> None:
     conn.execute(
-        "UPDATE publish_receipt SET publish_at = %s, status = 'scheduled' WHERE episode = %s AND platform = %s",
-        (publish_at, episode, platform),
+        "UPDATE publish_receipt SET publish_at = %s, status = 'scheduled', quota_units = %s "
+        "WHERE episode = %s AND platform = %s",
+        (receipt.publish_at, receipt.quota_units, receipt.episode_id, receipt.platform),
     )

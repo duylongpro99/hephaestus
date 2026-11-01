@@ -8,12 +8,12 @@ twice. Scheduling is idempotent per external id.
 from datetime import datetime, timedelta
 from pathlib import Path
 
-from factory.adapters.publish.base import Publisher
+from factory.adapters.publishing.base import VideoPublisher
 from factory.contracts import PublishPackage, PublishReceipt
 
 
 def upload(
-    existing: PublishReceipt | None, publisher: Publisher, video: Path, package: PublishPackage, now: datetime,
+    existing: PublishReceipt | None, publisher: VideoPublisher, video: Path, package: PublishPackage, now: datetime,
 ) -> tuple[PublishReceipt, bool]:
     """The receipt for this episode on the publisher's platform, and whether this call uploaded."""
     if existing is not None:
@@ -32,6 +32,9 @@ def publish_time(package: PublishPackage, now: datetime) -> datetime:
     return (now + timedelta(days=1, hours=1)).replace(minute=0, second=0, microsecond=0)
 
 
-def schedule(receipt: PublishReceipt, publisher: Publisher, publish_at: datetime) -> PublishReceipt:
-    publisher.schedule(receipt.external_id, publish_at)
-    return receipt.model_copy(update={"publish_at": publish_at, "status": "scheduled"})
+def schedule(
+    receipt: PublishReceipt, publisher: VideoPublisher, publish_at: datetime, package: PublishPackage,
+) -> PublishReceipt:
+    units = publisher.schedule(receipt.external_id, publish_at, package)
+    return receipt.model_copy(update={"publish_at": publish_at, "status": "scheduled",
+                                      "quota_units": receipt.quota_units + units})

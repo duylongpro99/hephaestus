@@ -13,7 +13,7 @@ pytestmark = pytest.mark.db
 def test_migrate_is_idempotent(db):
     assert migrate(db) == []  # the fixture already applied everything
     versions = [r["version"] for r in db.execute("SELECT version FROM schema_migrations ORDER BY version")]
-    assert versions == ["0001"]
+    assert versions == ["0001", "0002"]
 
 
 def test_schema_has_the_skeleton_tables(db):
@@ -31,7 +31,8 @@ def test_episode_status_check_lists_every_state():
 def test_one_receipt_per_episode_and_platform(db):
     db.execute("INSERT INTO channel (id, bible_version, pack, framework, audience) VALUES ('c', 1, 'xx', 'cefr', 'adult')")
     db.execute("INSERT INTO episode (id, channel, source, status, status_changed_at, config_hash, ordering, budget_usd, "
-               "spec, resolved_config) VALUES ('e', 'c', 'adhoc', 'SPEC', now(), 'h', 'loose', 1, '{}', '{}')")
+               "spec, resolved_config, media_profile) VALUES ('e', 'c', 'adhoc', 'SPEC', now(), 'h', 'loose', 1, '{}', '{}', "
+               "'fake')")
     insert = ("INSERT INTO publish_receipt (episode, platform, external_id, upload_ts, status) "
               "VALUES ('e', 'fake', %s, now(), 'private')")
     db.execute(insert, ("v1",))

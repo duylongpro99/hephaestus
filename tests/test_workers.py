@@ -2,26 +2,31 @@
 
 import json
 import wave
+from dataclasses import replace
 from datetime import datetime, timezone
 
 import pytest
 
-from factory.adapters.image.fake import FakeImageProvider
+from factory.adapters.costs import Charge, MediaError
+from factory.adapters.image.fake import FakeImage
 from factory.adapters.llm.base import LLMError
 from factory.adapters.llm.fake import FakeLLMProvider
-from factory.adapters.publish.fake import FakePublisher
-from factory.adapters.tts.fake import FakeTTS
+from factory.adapters.publishing.export import ExportPublisher
+from factory.adapters.speech.fake import FakeSpeech
+from factory.adapters.video.ffmpeg_pillow import FFmpegPillowRenderer
 from factory.agents.drafts import draft_models, to_script
 from factory.artifacts import ArtifactStore, canonical
 from factory.config import resolve
 from factory.contracts import EpisodeSpec
 from factory.tools.enrichment import enrich
 from factory.tools.language_pack import load_pack
-from factory.workers import compliance, composer, packaging, publisher, render, tech_checks, visuals, voice
+from factory.workers import compliance, composer, packaging, publisher, tech_checks, visuals, voice
+from tests.adapters import conformance
 from tests.conftest import FIXTURES
 
 EPISODE = FIXTURES / "xx-fixture" / "xx-A2-e2e"
 SPEC_PATH = FIXTURES.parent.parent / "evals" / "xx-fixture" / "adult" / "specs" / "xx-A2-e2e.json"
+VOICES = {"xx-a": "fake-a", "xx-b": "fake-b"}
 
 
 @pytest.fixture(scope="module")
@@ -50,10 +55,12 @@ def produced(tmp_path_factory, script, config, pack):
     """Audio, shots, props and the rendered video, made once for the module."""
     store = ArtifactStore(tmp_path_factory.mktemp("store"))
     directives = voice.direct(script, config, pack)
-    audio = voice.voice(script, directives, FakeTTS(pack), store.root / "audio", store.uri)
-    shots = visuals.shoot(script, config, FakeImageProvider(), store.root / "shots", store.uri)
+    audio, voice_charges = voice.voice(script, directives, pack, FakeSpeech(pack, VOICES), store.root / "audio",
+                                       store.uri)
+    shots, image_charges = visuals.shoot(script, config, FakeImage(), store.root / "shots", store.uri)
+    assert voice_charges == image_charges == []
     props = composer.compose(script, audio, shots)
-    video = render.render(props, store.resolve, store.root / "render")
+    video = conformance.check_video(FFmpegPillowRenderer(), props, store.resolve, store.root / "render")
     return store, directives, audio, shots, props, video
 
 
@@ -64,7 +71,7 @@ def test_enrichment_is_empty_for_a_pack_without_reading_aids(script, pack):
 def test_voice_directives_follow_cast_and_band(produced, script, config):
     _, directives, *_ = produced
     assert [d.line_id for d in directives.lines] == [line.id for line in script.iter_lines()]
-    assert {d.speaker: d.voice_id for d in directives.lines} == {"kira": "fake-a", "tomo": "fake-b"}
+    assert {d.speaker: d.voice for d in directives.lines} == {"kira": "xx-a", "tomo": "xx-b"}
     assert all(d.rate == config.band.rate.midpoint and d.variant == "natural" for d in directives.lines)
 
 
@@ -124,7 +131,44 @@ def test_compliance_flags_a_wrong_made_for_kids(spec, config, script, produced):
     assert any("made_for_kids" in f for f in failures) and any("synthetic" in f for f in failures)
 
 
-class CountingPublisher(FakePublisher):
+def test_the_channel_bible_picks_a_cast_voice_over_cast_order(script, config, pack):
+    cast = [config.channel.cast[0].model_copy(update={"voice": "xx-b"}), config.channel.cast[1]]
+    swapped = config.model_copy(update={"channel": config.channel.model_copy(update={"cast": cast})})
+    directives = voice.direct(script, swapped, pack)
+    assert {d.speaker: d.voice for d in directives.lines} == {"kira": "xx-b", "tomo": "xx-b"}
+
+
+def test_the_synthesizer_gets_the_rate_relative_to_the_native_rate(tmp_path, script, config, pack):
+    seen = []
+
+    class Recording(FakeSpeech):
+        def synthesize(self, request, out_path):
+            seen.append(request)
+            return super().synthesize(request, out_path)
+
+    directives = voice.direct(script, config, pack)
+    voice.voice(script, directives, pack, Recording(pack, VOICES), tmp_path, str)
+    assert [r.rate for r in seen] == [d.rate / pack.native_rate for d in directives.lines]
+    assert {r.language for r in seen} == {"xx-fixture"}
+
+
+def test_a_synthesis_failure_carries_what_the_earlier_lines_billed(tmp_path, script, config, pack):
+    calls = []
+
+    class FailsOnThird(FakeSpeech):
+        def synthesize(self, request, out_path):
+            calls.append(request)
+            if len(calls) == 3:
+                raise MediaError("provider down")
+            result = super().synthesize(request, out_path)
+            return replace(result, charges=[Charge("speechco", "v1", 0.25)])
+
+    with pytest.raises(MediaError) as failed:
+        voice.voice(script, voice.direct(script, config, pack), pack, FailsOnThird(pack, VOICES), tmp_path, str)
+    assert [(c.station, c.vendor, c.usd) for c in failed.value.costs] == [(voice.STATION, "speechco", 0.5)]
+
+
+class CountingPublisher(ExportPublisher):
     def __init__(self, out_dir):
         super().__init__(out_dir)
         self.uploads = 0
@@ -144,7 +188,7 @@ def test_publisher_refuses_a_second_upload(tmp_path, spec, config, script, produ
     assert uploaded and not uploaded_again and again == receipt and pub.uploads == 1
     publish_at = publisher.publish_time(package, now)
     assert publish_at == datetime(2026, 10, 23, 10, 0, tzinfo=timezone.utc)
-    assert publisher.schedule(receipt, pub, publish_at).status == "scheduled"
+    assert publisher.schedule(receipt, pub, publish_at, package).status == "scheduled"
 
 
 def test_ids_that_would_escape_the_media_folder_are_refused(tmp_path, script, config, pack):
@@ -152,4 +196,4 @@ def test_ids_that_would_escape_the_media_folder_are_refused(tmp_path, script, co
     bad.segments[0].lines[0].id = "../../x"
     directives = voice.direct(bad, config, pack)
     with pytest.raises(ValueError, match="cannot name a file"):
-        voice.voice(bad, directives, FakeTTS(pack), tmp_path, str)
+        voice.voice(bad, directives, pack, FakeSpeech(pack, VOICES), tmp_path, str)

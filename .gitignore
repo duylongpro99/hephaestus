@@ -1,4 +1,8 @@
 .env
+# OAuth secrets and tokens, if one is ever placed inside the repo by mistake.
+client_secret*.json
+*-token.json
+.secrets/
 .venv/
 __pycache__/
 *.pyc

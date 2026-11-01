@@ -53,20 +53,15 @@
           "title": "Variant",
           "type": "string"
         },
-        "vendor": {
-          "title": "Vendor",
-          "type": "string"
-        },
-        "voice_id": {
-          "title": "Voice Id",
+        "voice": {
+          "title": "Voice",
           "type": "string"
         }
       },
       "required": [
         "line_id",
         "speaker",
-        "vendor",
-        "voice_id",
+        "voice",
         "rate",
         "rate_unit",
         "pause_ms",
@@ -91,7 +86,7 @@
       "type": "array"
     },
     "schema_version": {
-      "default": "1.0.0",
+      "default": "2.0.0",
       "title": "Schema Version",
       "type": "string"
     }

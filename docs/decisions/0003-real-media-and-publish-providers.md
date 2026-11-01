@@ -94,7 +94,13 @@ for testing pipeline behaviour, not for judging voice quality.
 
 ### To verify at the first smoke test
 
-- `WordBoundary` events arrive on an F0 resource.
-- `prosody rate` at the A2 slow rate sounds natural with the chosen en-GB voices.
+Results are recorded in `plans/reports/smoke-261101-media-providers.md`; the adapters are in
+place ([ADR 0004](0004-purpose-oriented-media-adapters.md)) and each item runs with
+`factory media check ...`.
+
+- `WordBoundary` events arrive on an F0 resource. *Pending: needs an F0 key.*
+- `prosody rate` at the A2 slow rate sounds natural with the chosen en-GB voices. *Pending.*
 - Cloudflare's free plan accepts REST calls and the image cost per 1024×576 matches the estimate.
-- Render time for a 5-minute episode on the local laptop.
+  *Pending: needs a Cloudflare account.*
+- Render time for a 5-minute episode on the local laptop. **Verified 2026-11-01:** 22 s for 300 s
+  of 1920×1080 video with 80 captions on an Apple M1 Pro (4.3 MB, about 1.8 GB peak memory).

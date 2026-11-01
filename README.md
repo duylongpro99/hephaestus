@@ -57,7 +57,23 @@ uv run factory status <episode_id>           # state, jobs and spend against the
 ```
 
 `factory run --auto-approve` approves both gates as user `auto`; `--fake-llm` serves every LLM
-role from `tests/fixtures/<pack>/<episode>/`. TTS, images and publishing are fakes for now.
+role from `tests/fixtures/<pack>/<episode>/`.
+
+Speech, images, render and publishing go through the providers of a media profile in
+[`config/media.yaml`](config/media.yaml): `fake` (the default, offline, what CI runs) or `live`
+(Azure Speech, FLUX.2 [klein] on Cloudflare Workers AI, FFmpeg + Pillow, YouTube). Pick one with
+`factory run --media-profile live` or `FACTORY_MEDIA_PROFILE`; the `live` secrets are listed in
+`.env.example`. See [ADR 0004](docs/decisions/0004-purpose-oriented-media-adapters.md).
+
+```bash
+uv run factory media voices --profile live                  # pack voice key -> provider voice
+uv run factory media check speech --profile live --text "Where is the station?" --rate 0.8
+uv run factory media check image --profile live --prompt "a quiet train station at dawn"
+uv run factory media check video --props <render_props.json> --artifacts <store root>
+uv run factory media auth youtube --profile live            # once per environment; stores the token
+uv run factory media check publishing --profile live --video <mp4> --package <publish_package.json>
+FACTORY_LIVE_TESTS=1 uv run pytest -m live                   # conformance against the real providers
+```
 
 `scripts/ci.sh` checks the whole repository the way a hosted CI would: lint, unit and pack
 conformance tests, a fresh migrated database, the database and end-to-end tests, and one
