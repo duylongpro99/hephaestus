@@ -17,13 +17,14 @@ class CostEntry(Part):
     cache_read_input_tokens: int = 0
     usd: float
     priced: bool = True  # False when the model had no known price; usd is then 0 and the total is a floor
+    dedupe_key: str | None = None  # set for a charge that may arrive more than once; the ledger keeps one per episode
     timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 
 class CostLedger(Contract):
     """Running cost of an episode against its budget (architecture §4.4)."""
 
-    schema_version: str = "1.1.0"
+    schema_version: str = "1.2.0"
     episode_id: str
     budget_usd: float
     entries: list[CostEntry] = []

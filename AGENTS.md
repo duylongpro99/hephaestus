@@ -55,6 +55,7 @@ uv run pytest -m "not db and not e2e"     # chỉ unit + conformance
 docker compose up -d --wait db && uv run factory db migrate
 uv run factory run <spec.json> [--auto-approve] [--fake-llm]
 uv run factory status <episode_id>
+uv run factory publish resolve <episode_id> --platform youtube (--external-id ID | --not-uploaded)
 uv run factory run <spec.json> --media-profile live   # provider thật theo config/media.yaml
 uv run factory media voices|check <speech|image|video|publishing>|auth youtube
 FACTORY_LIVE_TESTS=1 uv run pytest -m live           # test gọi provider thật (tốn tiền/quota)

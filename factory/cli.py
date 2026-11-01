@@ -24,6 +24,8 @@ media_auth_app = typer.Typer(no_args_is_help=True, help="Authorize a provider th
 app.add_typer(media_app, name="media")
 media_app.add_typer(media_check_app, name="check")
 media_app.add_typer(media_auth_app, name="auth")
+publish_app = typer.Typer(no_args_is_help=True, help="Settle what the publisher cannot settle on its own.")
+app.add_typer(publish_app, name="publish")
 PROFILE_HELP = "config/media.yaml profile (default: $FACTORY_MEDIA_PROFILE or fake)"
 
 
@@ -618,6 +620,70 @@ def media_auth_youtube_cmd(profile: str = typer.Option(None, help=PROFILE_HELP))
         fh.write(creds.to_json())
     os.replace(tmp, token)
     typer.echo(f"authorized channel: {channels[0]['snippet']['title']}; token saved to {token} (mode 600)")
+
+
+@publish_app.command("resolve")
+def publish_resolve_cmd(
+    episode_id: str = typer.Argument(..., help="An episode whose upload escalated"),
+    platform: str = typer.Option(..., help="The platform of the interrupted upload, e.g. youtube"),
+    external_id: str = typer.Option(None, help="The id of the video the interrupted upload left on the platform"),
+    not_uploaded: bool = typer.Option(False, help="The platform has no video of this episode; upload it again"),
+    artifacts: Path = typer.Option(None, help="Artifact store root, for the export provider (default: artifacts/)"),
+):
+    """Settle an upload that escalated because it may have reached the platform without its receipt."""
+    from factory.adapters import media
+    from factory.adapters.publishing.base import episode_tag
+    from factory.artifacts import ARTIFACT_ROOT
+    from factory.contracts import PublishReceipt
+    from factory.orchestrator import repo
+    from factory.orchestrator.states import State
+
+    if (external_id is not None) == not_uploaded:
+        fail(ValueError("pass exactly one of --external-id or --not-uploaded"))
+    with db_connect() as conn:
+        episode = repo.get_episode(conn, episode_id)
+        if episode is None:
+            fail(ValueError(f"no episode {episode_id}"))
+        history = repo.jobs(conn, episode_id)
+        if episode["status"] != State.ESCALATED or not history or history[-1]["station"] != "c10_upload":
+            fail(ValueError(f"{episode_id} is {episode['status']}, not escalated at c10_upload; nothing to resolve"))
+        started = repo.get_attempt(conn, episode_id, platform)
+        if started is None:
+            fail(ValueError(f"{episode_id} has no interrupted {platform} upload to resolve; the escalation reason is in "
+                             f"`factory status {episode_id}`"))
+        try:
+            publisher = media.publisher_for(episode["media_profile"], artifacts or ARTIFACT_ROOT)
+        except MediaError as exc:
+            fail(exc)
+        if publisher.platform != platform:
+            fail(ValueError(f"{episode_id} publishes to {publisher.platform}, not {platform}"))
+        now = datetime.now(timezone.utc)
+        if external_id is not None:
+            try:
+                tags = publisher.video_tags(external_id)
+            except MediaError as exc:
+                fail(exc)
+            if tags is None:
+                fail(ValueError(f"{platform} has no video {external_id} on this account"))
+            if episode_tag(episode_id) not in tags:
+                typer.echo(f"warning: {platform} video {external_id} lacks the tag {episode_tag(episode_id)}; "
+                           "recording it as this episode's upload anyway", err=True)
+            receipt = PublishReceipt(episode_id=episode_id, platform=platform, external_id=external_id,
+                                     upload_ts=now, status="private", quota_units=0)
+            target, note = State.UPLOADED, f"operator: the interrupted upload is {platform}/{external_id}"
+        else:
+            receipt, target = None, State.FINAL_APPROVED
+            note = f"operator: the interrupted upload never reached {platform}; upload again"
+        with conn.transaction():
+            if receipt is not None:
+                repo.insert_receipt(conn, receipt)
+            repo.delete_attempt(conn, episode_id, platform)
+            repo.insert_job(conn, episode=episode_id, station="c10_upload", from_status=State.ESCALATED,
+                            to_status=target, attempt=history[-1]["attempt"] + 1, status="succeeded",
+                            started_at=now, finished_at=now, error=note)
+            repo.resolve_upload(conn, episode_id, target, now)
+        print_status(conn, episode_id)
+    typer.echo("run `factory run <spec.json>` to continue" + (" with scheduling" if receipt else " and upload again"))
 
 
 def db_connect():

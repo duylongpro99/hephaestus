@@ -11,7 +11,7 @@ from factory.adapters.image.base import ImageRequest, fit_image
 from factory.adapters.image.fake import FakeImage
 from factory.adapters.publishing.base import PublishError
 from factory.adapters.publishing.export import ExportPublisher
-from factory.adapters.speech.base import SpeechRequest
+from factory.adapters.speech.base import SpeechError, SpeechRequest
 from factory.adapters.speech.fake import FakeSpeech
 from factory.contracts import PublishPackage
 from factory.tools.language_pack import load_pack
@@ -41,6 +41,13 @@ def test_speech_is_deterministic_and_voices_differ(tmp_path, pack):
         speech.synthesize(request("Ya, mi lu ko!", voice), tmp_path / name)
     assert (tmp_path / "a.wav").read_bytes() == (tmp_path / "b.wav").read_bytes()
     assert (tmp_path / "a.wav").read_bytes() != (tmp_path / "c.wav").read_bytes()
+
+
+def test_speech_refuses_a_rate_outside_its_range(tmp_path, pack):
+    speech = FakeSpeech(pack, VOICES)
+    with pytest.raises(SpeechError, match="outside what fake speech supports"):
+        speech.synthesize(request(rate=5.0), tmp_path / "a.wav")
+    assert not (tmp_path / "a.wav").exists()
 
 
 def test_speech_identity_follows_the_voice_mapping_and_sample_rate(tmp_path, pack):
@@ -106,3 +113,16 @@ def test_export_conforms_and_its_id_comes_from_the_file(tmp_path):
 def test_export_cannot_schedule_what_it_never_exported(tmp_path):
     with pytest.raises(PublishError, match="no exported video"):
         ExportPublisher(tmp_path).schedule("export-missing", datetime(2030, 1, 1, tzinfo=timezone.utc), package())
+
+
+def test_export_publisher_finds_an_exported_episode(tmp_path):
+    video = tmp_path / "v.mp4"
+    video.write_bytes(b"video")
+    publisher = ExportPublisher(tmp_path / "out")
+    assert publisher.find("e1") == (None, 0) and publisher.video_tags("export-missing") is None
+    external_id = publisher.upload(video, package("e1")).external_id
+    other = tmp_path / "w.mp4"
+    other.write_bytes(b"other video")
+    publisher.upload(other, package("e2"))
+    assert publisher.find("e1") == (external_id, 0)
+    assert publisher.video_tags(external_id) == ["ep-e1"]

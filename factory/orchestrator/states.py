@@ -64,6 +64,9 @@ GATES = {step.gate: state for state, step in PIPELINE.items() if step.gate}
 MAX_REWRITES = 2
 REWRITE_TARGETS = frozenset(step.on_reject for step in PIPELINE.values() if step.on_reject)
 
+# Where an operator may send an episode whose upload escalated, once they know whether the video reached
+# the platform: UPLOADED with its id, or FINAL_APPROVED to upload again. The runner never takes these moves.
+UPLOAD_RESOLUTIONS = frozenset({State.UPLOADED, State.FINAL_APPROVED})
 
 class IllegalTransition(ValueError):
     pass

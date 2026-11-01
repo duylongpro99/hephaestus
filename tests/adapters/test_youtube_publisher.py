@@ -162,9 +162,75 @@ def test_youtube_passes_the_publisher_conformance(tmp_path):
     clip.write_bytes(b"\0" * 1024)
     status = {"privacyStatus": "private", "selfDeclaredMadeForKids": False, "containsSyntheticMedia": True}
     scheduled = {**status, "publishAt": "2030-01-01T09:00:00Z"}
-    yt, http = publisher(ok(CHANNEL), ok({"items": []}),
+    tagged = {"id": "new7", "snippet": {"channelId": "UCme", "tags": ["english", "ep-en-A2-x01"]}}
+    yt, http = publisher(ok(CHANNEL), ok({"items": []}),  # find before the upload
+                         ok(CHANNEL), ok({"items": []}),  # the upload's own lookup
                          ({"status": "200", "location": "https://upload.example/session"}, ""), ok({"id": "new7"}),
+                         ok(CHANNEL), ok({"items": [{"contentDetails": {"videoId": "new7"}}]}),
+                         ok({"items": [tagged]}),  # find after the upload
+                         ok({"items": [{"id": "UCme"}]}), ok({"items": [tagged]}),  # video_tags
                          ok({"items": [{"id": "new7", "status": status}]}), ok({"id": "new7"}),
                          ok({"items": [{"id": "new7", "status": scheduled}]}))
     assert check_publisher(yt, clip, PACKAGE) == "new7"
-    assert [m for _, m, *_ in http.request_sequence] == ["GET", "GET", "POST", "PUT", "GET", "PUT", "GET"]
+    assert [m for _, m, *_ in http.request_sequence] == ["GET"] * 4 + ["POST", "PUT"] + ["GET"] * 6 + ["PUT", "GET"]
+
+
+def test_video_tags_only_for_a_video_of_the_token_s_channel():
+    mine = {"id": "vid42", "snippet": {"channelId": "UCme", "tags": ["ep-en-A2-x01"]}}
+    yt, _ = publisher(ok({"items": [{"id": "UCme"}]}), ok({"items": [mine]}))
+    assert yt.video_tags("vid42") == ["ep-en-A2-x01"]
+    theirs = {"id": "vid42", "snippet": {"channelId": "UCother", "tags": ["ep-en-A2-x01"]}}
+    yt, _ = publisher(ok({"items": [{"id": "UCme"}]}), ok({"items": [theirs]}))
+    assert yt.video_tags("vid42") is None
+    yt, _ = publisher(ok({"items": [{"id": "UCme"}]}), ok({"items": []}))
+    assert yt.video_tags("vid42") is None
+
+
+def test_a_refused_upload_before_any_bytes_says_no_video_exists(tmp_path):
+    clip = tmp_path / "master.mp4"
+    clip.write_bytes(b"\0" * 1024)
+    yt, _ = publisher(ok(CHANNEL), ok({"items": []}), error(403, "quotaExceeded"))
+    with pytest.raises(PublishError, match="quota exhausted") as refused:
+        yt.upload(clip, PACKAGE)
+    assert refused.value.video_may_exist is False
+
+
+def test_a_failed_lookup_or_an_unreadable_file_says_no_video_exists(tmp_path):
+    yt, _ = publisher(error(401, "authError"))
+    with pytest.raises(PublishError) as lookup:
+        yt.upload(tmp_path / "unused.mp4", PACKAGE)
+    assert lookup.value.video_may_exist is False
+    yt, _ = publisher(ok(CHANNEL), ok({"items": []}))
+    with pytest.raises(PublishError, match="cannot read") as unreadable:
+        yt.upload(tmp_path / "missing.mp4", PACKAGE)
+    assert unreadable.value.video_may_exist is False
+
+
+def test_an_error_mid_upload_may_have_left_a_video(tmp_path):
+    clip = tmp_path / "master.mp4"
+    clip.write_bytes(b"\0" * 1024)
+    yt, _ = publisher(ok(CHANNEL), ok({"items": []}),
+                      ({"status": "200", "location": "https://upload.example/session"}, ""),
+                      error(400, "badRequest"))
+    with pytest.raises(PublishError) as broken:
+        yt.upload(clip, PACKAGE)
+    assert broken.value.video_may_exist is True
+
+
+class DroppedAfter(HttpMockSequence):
+    """Replays the scripted responses, then fails like a dropped connection."""
+
+    def request(self, uri, method="GET", body=None, headers=None, **kwargs):
+        if not self._iterable:
+            raise TimeoutError("timed out")
+        return super().request(uri, method, body, headers, **kwargs)
+
+
+def test_a_network_failure_before_the_upload_session_says_no_video_exists(tmp_path, monkeypatch):
+    monkeypatch.setattr("googleapiclient.http.time.sleep", lambda s: None)
+    clip = tmp_path / "master.mp4"
+    clip.write_bytes(b"\0" * 1024)
+    yt = YouTubePublisher(service=build_service(http=DroppedAfter([ok(CHANNEL), ok({"items": []})])))
+    with pytest.raises(PublishError, match="timed out") as dropped:
+        yt.upload(clip, PACKAGE)
+    assert dropped.value.video_may_exist is False

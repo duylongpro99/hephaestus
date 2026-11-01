@@ -55,10 +55,13 @@ uv run factory decide <spec.json> --gate 1 --decision approve   # open gate 1 (s
 uv run factory decide <spec.json> --gate 1 --decision reject --notes "..."  # A3 revises the script from the notes
 uv run factory run <spec.json>               # continue after the decision
 uv run factory status <episode_id>           # state, jobs and spend against the budget
+uv run factory publish resolve <episode_id> --platform youtube --external-id <id>  # or --not-uploaded
 ```
 
 `factory run --auto-approve` approves both gates as user `auto`; `--fake-llm` serves every LLM
-role from `tests/fixtures/<pack>/<episode>/`.
+role from `tests/fixtures/<pack>/<episode>/`. `factory publish resolve` settles an upload that escalated
+because a crashed run may have left a video without its receipt: give the video id you found on the
+channel, or `--not-uploaded` to upload again.
 
 Speech, images, render and publishing go through the providers of a media profile in
 [`config/media.yaml`](config/media.yaml): `fake` (the default, offline, what CI runs) or `live`

@@ -1,10 +1,16 @@
 """A11 Compliance, code checks only: platform flags and metadata limits (architecture §3)."""
 
+from factory.adapters.publishing.base import upload_tags
 from factory.config import ResolvedConfig
 from factory.contracts import PublishPackage, QAReport
 
 REVIEWER = "a11_compliance"
-TITLE_MAX, DESCRIPTION_MAX = 100, 5000  # YouTube's limits
+TITLE_MAX, DESCRIPTION_MAX, TAGS_MAX = 100, 5000, 500  # YouTube's limits
+
+
+def tags_length(tags: list[str]) -> int:
+    """Tag length as YouTube counts it: the tags, a comma between two, and quotes around a tag with a space."""
+    return sum(len(tag) + (2 if " " in tag else 0) for tag in tags) + max(len(tags) - 1, 0)
 
 
 def check(package: PublishPackage, config: ResolvedConfig) -> QAReport:
@@ -22,5 +28,8 @@ def check(package: PublishPackage, config: ResolvedConfig) -> QAReport:
             failures.append(f"{lang} title is {len(title)} characters (max {TITLE_MAX})")
         if len(description) > DESCRIPTION_MAX:
             failures.append(f"{lang} description is {len(description)} characters (max {DESCRIPTION_MAX})")
+        tags = tags_length(upload_tags(package, lang))
+        if tags > TAGS_MAX:
+            failures.append(f"{lang} tags take {tags} characters with the episode tag (max {TAGS_MAX})")
     summary = "flags and metadata pass" if not failures else f"{len(failures)} compliance failure(s)"
     return QAReport(episode_id=package.episode_id, reviewer=REVIEWER, hard_gate_failures=failures, summary=summary)

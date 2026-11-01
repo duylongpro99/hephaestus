@@ -13,7 +13,7 @@ from pathlib import Path
 from PIL import Image
 
 from factory.adapters.image.base import ImageGenerator, ImageRequest
-from factory.adapters.publishing.base import VideoPublisher
+from factory.adapters.publishing.base import VideoPublisher, episode_tag
 from factory.adapters.speech.base import SpeechRequest, SpeechResult, SpeechSynthesizer
 from factory.adapters.video.base import VideoRenderer
 from factory.contracts import PublishPackage, RenderProps
@@ -21,11 +21,14 @@ from factory.contracts import PublishPackage, RenderProps
 
 def check_speech(speech: SpeechSynthesizer, request: SpeechRequest, out_path: Path) -> SpeechResult:
     assert speech.identity
+    low, high = speech.rate_range
+    assert 0 < low < 1 < high
     result = speech.synthesize(request, out_path)
     with wave.open(str(out_path)) as wav:
         assert wav.getnchannels() == 1 and wav.getsampwidth() == 2
-        seconds = wav.getnframes() / wav.getframerate()
-    assert result.duration_s > 0 and abs(result.duration_s - seconds) < 0.01
+        rate = wav.getframerate()
+        seconds = wav.getnframes() / rate
+    assert result.duration_s > 0 and abs(result.duration_s - seconds) <= 1 / rate
     if result.words is not None:
         starts = [w.start_s for w in result.words]
         assert starts == sorted(starts)
@@ -61,8 +64,12 @@ def check_video(renderer: VideoRenderer, props: RenderProps, resolve, media_dir:
 
 def check_publisher(publisher: VideoPublisher, video: Path, package: PublishPackage) -> str:
     assert publisher.platform and publisher.identity
+    missing, units = publisher.find(package.episode_id)
+    assert missing is None and units >= 0
     upload = publisher.upload(video, package)
     assert upload.external_id and upload.quota_units >= 0
+    assert publisher.find(package.episode_id)[0] == upload.external_id
+    assert episode_tag(package.episode_id) in publisher.video_tags(upload.external_id)
     when = datetime(2030, 1, 1, 9, 0, tzinfo=timezone.utc)
     for _ in range(2):  # scheduling twice is not an error
         assert publisher.schedule(upload.external_id, when, package) >= 0

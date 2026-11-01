@@ -1,18 +1,28 @@
 """The runner against Postgres, with toy stations: jobs, artifacts, retries, budget, gates and resume."""
 
 from collections import Counter
+from pathlib import Path
 from datetime import datetime, timedelta, timezone
 
 import pytest
+from typer.testing import CliRunner
 
 from factory.adapters.costs import MediaError
-from factory.artifacts import ArtifactStore, Built
+from factory.adapters.speech import base as speech_base
+from factory.adapters.publishing.export import ExportPublisher
+from factory.artifacts import ArtifactStore, Built, station_version
+from factory.cli import app
 from factory.config import resolve
-from factory.contracts import CostEntry, EpisodeSpec, GateDecision, QAReport
+from factory.contracts import CostEntry, EpisodeSpec, GateDecision, PublishPackage, QAReport, RenderedVideo, Script
 from factory.orchestrator import repo
 from factory.orchestrator.runner import Runner, StationResult
+from factory.orchestrator.stations import Stations, Vendors
 from factory.orchestrator.states import MAX_REWRITES, PIPELINE, State
-from tests.test_workers import SPEC_PATH
+from factory.agents.drafts import draft_models, to_script
+from factory.tools.language_pack import load_pack
+from factory.workers import publisher, voice
+from tests import test_workers
+from tests.test_workers import EPISODE, SPEC_PATH, VOICES, CountingPublisher, PricedSpeech, SchedulingPublisher
 
 pytestmark = pytest.mark.db
 STATIONS = [step.station for step in PIPELINE.values() if step.gate is None]
@@ -273,3 +283,193 @@ def test_a_media_failure_still_records_what_its_earlier_requests_billed(db, tmp_
     assert runner(db, toys, tmp_path).advance(episode) == State.ESCALATED
     attempts = sum(1 for j in repo.jobs(db, episode) if j["station"] == "voice")
     assert attempts > 1 and repo.spent_usd(db, episode) == pytest.approx(0.5 * attempts)
+
+
+@pytest.fixture
+def pack():
+    return load_pack("xx-fixture")
+
+
+@pytest.fixture
+def script(spec):
+    draft = draft_models("xx-fixture", ("en",)).model_validate_json((EPISODE / "a2_scriptwriter.json").read_text())
+    return to_script(draft, spec.episode_id, "xx-fixture", ["en"])
+
+
+def voicing_toys(script, speech) -> dict:
+    """Toy stations, except that A3 stores the fixture script and voice is the real station on `speech`."""
+    toys = Toys()
+    registry = toys.registry()
+
+    def level_editor(ctx):
+        ctx.produce("a3_level_editor", "toy+1", [ctx.spec], Script, lambda media: Built(script))
+        return StationResult()
+
+    vendors = Vendors(llm=None, speech=lambda pack: speech, images=None, video=None, publisher=None)
+    return {**registry, "a3_level_editor": level_editor, "voice": Stations(vendors).voice_lines}
+
+
+def voice_runner(db, registry, tmp_path):
+    return Runner(db, registry, ArtifactStore(tmp_path), clock=FakeClock(), auto_approve=True)
+
+
+def test_voice_retry_after_a_failure_charges_each_line_once(db, tmp_path, episode, script, pack):
+    speech = PricedSpeech(pack, VOICES, fail_on={3})
+    assert voice_runner(db, voicing_toys(script, speech), tmp_path).advance(episode) == State.SCHEDULED
+    voice_jobs = [j["status"] for j in repo.jobs(db, episode) if j["station"] == "voice"]
+    lines = len(list(script.iter_lines()))
+    assert voice_jobs == ["retrying", "succeeded"] and len(speech.calls) == lines + 1
+    assert repo.spent_usd(db, episode) == pytest.approx(0.25 * lines)
+
+
+def test_a_killed_voice_attempt_is_charged_when_the_retry_succeeds(db, tmp_path, episode, script, pack):
+    killed = PricedSpeech(pack, VOICES, fail_on={3}, error=Crash)  # same class, so the same station_version
+    with pytest.raises(Crash):
+        voice_runner(db, voicing_toys(script, killed), tmp_path).advance(episode)
+    assert repo.spent_usd(db, episode) == 0  # the process died before the runner could record anything
+    speech = PricedSpeech(pack, VOICES)
+    assert voice_runner(db, voicing_toys(script, speech), tmp_path).advance(episode) == State.SCHEDULED
+    lines = len(list(script.iter_lines()))
+    assert len(speech.calls) == lines - 2
+    assert repo.spent_usd(db, episode) == pytest.approx(0.25 * lines)
+
+
+def test_a_rate_the_synthesizer_cannot_speak_escalates_without_retrying(db, tmp_path, episode, script, pack):
+    class Narrow(PricedSpeech):
+        rate_range = (1.5, 2.0)
+
+    speech = Narrow(pack, VOICES)
+    assert voice_runner(db, voicing_toys(script, speech), tmp_path).advance(episode) == State.ESCALATED
+    [job] = [j for j in repo.jobs(db, episode) if j["station"] == "voice"]
+    assert job["status"] == "escalated" and "outside the synthesizer's 1.50-2.00" in job["error"]
+    assert speech.calls == [] and repo.spent_usd(db, episode) == 0
+
+
+def test_the_voice_station_version_follows_the_worker_and_adapter_source(db, tmp_path, episode, script, pack):
+    speech = PricedSpeech(pack, VOICES)
+    voice_runner(db, voicing_toys(script, speech), tmp_path).advance(episode)
+    stored = repo.latest_artifact(db, episode, "c5_audio")["station_version"]
+    sources = [Path(m.__file__) for m in (voice, speech_base, test_workers)]
+    assert stored == station_version(speech.identity, *sources)
+    edited = tmp_path / "edited" / "voice.py"
+    edited.parent.mkdir()
+    edited.write_text(sources[0].read_text() + "\n# changed\n")
+    assert station_version(speech.identity, edited, *sources[1:]) != stored
+
+
+def publishing_toys(publisher) -> dict:
+    """Toy stations, except that packaging and render store a real package and video, and upload and schedule
+    are the real stations on `publisher`."""
+    registry = Toys().registry()
+    package = PublishPackage(episode_id="", video_uri="render/master.mp4", title={"en": "t"}, description={"en": "d"},
+                             tags={"en": []}, chapters=[], made_for_kids=False, contains_synthetic_media=True)
+
+    def packager(ctx):
+        ctx.produce("a9_packager", "toy+1", [ctx.spec], PublishPackage,
+                    lambda media: Built(package.model_copy(update={"episode_id": ctx.episode})))
+        return StationResult()
+
+    def render(ctx):
+        clip = ctx.store.root / "toy-master.mp4"
+        clip.write_bytes(b"not really a video")
+        ctx.produce("c8_render", "toy+1", [ctx.spec], RenderedVideo, lambda media: Built(RenderedVideo(
+            episode_id=ctx.episode, uri=clip.name, sha256="0" * 64, size_bytes=18, width=16, height=9, fps=25)))
+        return StationResult()
+
+    stations = Stations(Vendors(llm=None, speech=None, images=None, video=None, publisher=publisher))
+    return {**registry, "a9_packager": packager, "render": render,
+            "c10_upload": stations.upload, "c10_schedule": stations.schedule}
+
+
+def test_a_crash_after_insert_does_not_upload_twice(db, tmp_path, episode):
+    pub = CountingPublisher(tmp_path / "_export", fail=Crash("killed after the insert"), after_copy=True)
+    with pytest.raises(Crash):
+        voice_runner(db, publishing_toys(pub), tmp_path).advance(episode)
+    assert repo.get_attempt(db, episode, "export") is not None and repo.receipts(db, episode) == []
+    pub.hidden_finds = pub.finds + 2  # the new video shows up on the third lookup
+    clock = FakeClock()
+    r = Runner(db, publishing_toys(pub), ArtifactStore(tmp_path), clock=clock, auto_approve=True)
+    assert r.advance(episode) == State.SCHEDULED
+    [receipt] = repo.receipts(db, episode)
+    assert pub.uploads == 1 and receipt.external_id == ExportPublisher(tmp_path / "_export").find(episode)[0]
+    assert clock.sleeps == [publisher.MARKER_POLL_INTERVAL_S] * 2
+    assert repo.get_attempt(db, episode, "export") is None
+
+
+def interrupted_upload(db, tmp_path, episode) -> CountingPublisher:
+    """An episode escalated at c10_upload: its upload started, and the video cannot be found."""
+    pub = CountingPublisher(tmp_path / "_export", fail=Crash("killed mid-upload"))
+    with pytest.raises(Crash):
+        voice_runner(db, publishing_toys(pub), tmp_path).advance(episode)
+    pub.hidden_finds = 10**6
+    assert voice_runner(db, publishing_toys(pub), tmp_path).advance(episode) == State.ESCALATED
+    return pub
+
+
+def test_an_upload_marker_without_a_video_escalates_for_an_operator(db, tmp_path, episode):
+    pub = interrupted_upload(db, tmp_path, episode)
+    last = repo.jobs(db, episode)[-1]
+    assert (last["station"], last["status"]) == ("c10_upload", "escalated")
+    assert "factory publish resolve" in last["error"] and pub.uploads == 1
+
+
+def publish_resolve(db_url, monkeypatch, tmp_path, *args):
+    monkeypatch.setenv("DATABASE_URL", db_url)
+    return CliRunner().invoke(app, ["publish", "resolve", *args, "--artifacts", str(tmp_path)])
+
+
+def test_resolve_with_an_external_id_moves_the_episode_to_uploaded(db, db_url, monkeypatch, tmp_path, episode):
+    pub = interrupted_upload(db, tmp_path, episode)
+    pub.hidden_finds, pub.fail = 0, None
+    external_id = pub.upload(tmp_path / "toy-master.mp4", repo_package(db, tmp_path, episode)).external_id
+    result = publish_resolve(db_url, monkeypatch, tmp_path, episode, "--platform", "export", "--external-id", external_id)
+    assert result.exit_code == 0, result.output
+    assert repo.get_episode(db, episode)["status"] == State.UPLOADED
+    assert [r.external_id for r in repo.receipts(db, episode)] == [external_id]
+    assert repo.get_attempt(db, episode, "export") is None
+    last = repo.jobs(db, episode)[-1]
+    assert (last["from_status"], last["to_status"], last["status"]) == ("ESCALATED", "UPLOADED", "succeeded")
+    assert voice_runner(db, publishing_toys(pub), tmp_path).advance(episode) == State.SCHEDULED
+    assert pub.uploads == 2  # the crashed attempt and the operator's stand-in; the runner uploaded nothing
+
+
+def repo_package(db, tmp_path, episode) -> PublishPackage:
+    row = repo.latest_artifact(db, episode, "a9_packager")
+    return PublishPackage.model_validate(ArtifactStore(tmp_path).read(row["uri"])["artifact"])
+
+
+def test_resolve_refuses_a_video_the_account_does_not_have(db, db_url, monkeypatch, tmp_path, episode):
+    interrupted_upload(db, tmp_path, episode)
+    result = publish_resolve(db_url, monkeypatch, tmp_path, episode, "--platform", "export", "--external-id", "export-nope")
+    assert result.exit_code == 1 and "has no video export-nope" in result.output
+    assert repo.get_episode(db, episode)["status"] == State.ESCALATED
+
+
+def test_resolve_not_uploaded_clears_the_marker_and_returns_to_final_approved(db, db_url, monkeypatch, tmp_path,
+                                                                              episode):
+    pub = interrupted_upload(db, tmp_path, episode)
+    result = publish_resolve(db_url, monkeypatch, tmp_path, episode, "--platform", "export", "--not-uploaded")
+    assert result.exit_code == 0, result.output
+    assert repo.get_episode(db, episode)["status"] == State.FINAL_APPROVED
+    assert repo.get_attempt(db, episode, "export") is None
+    pub.hidden_finds = 0
+    assert voice_runner(db, publishing_toys(pub), tmp_path).advance(episode) == State.SCHEDULED
+    assert pub.uploads == 2
+
+
+def test_resolve_refuses_an_episode_not_escalated_at_upload(db, db_url, monkeypatch, tmp_path, episode):
+    result = publish_resolve(db_url, monkeypatch, tmp_path, episode, "--platform", "export", "--not-uploaded")
+    assert result.exit_code == 1 and "not escalated at c10_upload" in result.output
+    both = publish_resolve(db_url, monkeypatch, tmp_path, episode, "--platform", "export", "--not-uploaded",
+                   "--external-id", "x")
+    assert both.exit_code == 1 and "exactly one" in both.output
+
+
+def test_schedule_rerun_after_a_crash_keeps_the_quota_count(db, tmp_path, episode):
+    pub = SchedulingPublisher(tmp_path / "_export")
+    assert voice_runner(db, publishing_toys(pub), tmp_path).advance(episode) == State.SCHEDULED
+    [scheduled] = repo.receipts(db, episode)
+    # As if the process died after the receipt said scheduled but before the job moved the episode on.
+    db.execute("UPDATE episode SET status = 'UPLOADED' WHERE id = %s", (episode,))
+    assert voice_runner(db, publishing_toys(pub), tmp_path).advance(episode) == State.SCHEDULED
+    assert repo.receipts(db, episode) == [scheduled] and pub.schedules == 1

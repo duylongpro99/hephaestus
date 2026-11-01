@@ -188,6 +188,35 @@ def failed(report: QAReport) -> StationResult:
     return StationResult()
 
 
+@dataclass(frozen=True)
+class UploadRecords:
+    """One episode's upload state for one platform in the database. The marker is committed on its own,
+    before any byte leaves; the receipt replaces it in one transaction."""
+
+    conn: object
+    episode: str
+    platform: str
+
+    def receipt(self):
+        return repo.get_receipt(self.conn, self.episode, self.platform)
+
+    def attempt(self):
+        return repo.get_attempt(self.conn, self.episode, self.platform)
+
+    def start(self, at) -> None:
+        with self.conn.transaction():
+            repo.insert_attempt(self.conn, self.episode, self.platform, at)
+
+    def clear(self) -> None:
+        with self.conn.transaction():
+            repo.delete_attempt(self.conn, self.episode, self.platform)
+
+    def finish(self, receipt) -> None:
+        with self.conn.transaction():
+            repo.insert_receipt(self.conn, receipt)
+            repo.delete_attempt(self.conn, self.episode, self.platform)
+
+
 class Stations:
     def __init__(self, vendors: Vendors):
         self.v = vendors
@@ -264,8 +293,11 @@ class Stations:
             manifest, charges = voice.voice(script, directives, ctx.pack, speech, media, ctx.store.uri)
             return Built(manifest, ledger_entries(voice.STATION, charges))
 
-        ctx.produce("c5_audio", station_version(speech.identity, source(voice), source(speech_base), source(speech)), [script, directives],
-                    AudioManifest, build)
+        try:
+            ctx.produce("c5_audio", station_version(speech.identity, source(voice), source(speech_base), source(speech)),
+                        [script, directives], AudioManifest, build)
+        except voice.RateOutOfRange as exc:  # a config error: retrying would fail the same way
+            return StationResult("escalate", str(exc))
         return StationResult()
 
     def draw_visuals(self, ctx: StationContext) -> StationResult:
@@ -325,11 +357,11 @@ class Stations:
     def upload(self, ctx: StationContext) -> StationResult:
         package, video = ctx.read(packaging.STATION, PublishPackage), ctx.read("c8_render", RenderedVideo)
         pub = self.v.publisher
-        existing = repo.get_receipt(ctx.conn, ctx.episode, pub.platform)
-        receipt, uploaded = publisher.upload(existing, pub, ctx.store.resolve(video.uri), package, ctx.clock.now())
-        if uploaded:  # stored at once, before anything else can fail, so a retry never uploads again
-            with ctx.conn.transaction():
-                repo.insert_receipt(ctx.conn, receipt)
+        records = UploadRecords(ctx.conn, ctx.episode, pub.platform)
+        try:
+            receipt = publisher.upload(records, pub, ctx.store.resolve(video.uri), package, ctx.clock)
+        except publisher.UploadUnconfirmed as exc:
+            return StationResult("escalate", str(exc))
         ctx.produce("c10_upload", station_version(pub.identity, source(publisher), source(pub)),
                     [package, video, receipt.external_id], PublishReceipt, lambda media: Built(receipt))
         return StationResult()
