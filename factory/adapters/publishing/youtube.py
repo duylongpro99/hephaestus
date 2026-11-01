@@ -8,7 +8,7 @@ import json
 from datetime import UTC, datetime
 from pathlib import Path
 
-from factory.adapters.publishing.base import PublishError, Upload
+from factory.adapters.publishing.base import PublishError, Upload, episode_tag, upload_tags
 from factory.contracts import PublishPackage
 
 SCOPES = ["https://www.googleapis.com/auth/youtube.upload", "https://www.googleapis.com/auth/youtube"]
@@ -16,11 +16,6 @@ RECENT_UPLOADS = 50
 UPDATE_UNITS = 50
 CHUNK_RETRIES = 5
 REAUTH = "run `factory media auth youtube` again"
-
-
-def episode_tag(episode_id: str) -> str:
-    """A tag on every upload that finds it again after a crash lost the receipt."""
-    return f"ep-{episode_id}"
 
 
 def description(package: PublishPackage, language: str) -> str:
@@ -35,7 +30,7 @@ def description(package: PublishPackage, language: str) -> str:
 def video_body(package: PublishPackage, category_id: str) -> dict:
     """The `videos.insert` resource: private, in the title's first language, others as localizations."""
     language, *others = list(package.title)
-    tags = [*package.tags.get(language, []), episode_tag(package.episode_id)]
+    tags = upload_tags(package, language)
     body = {
         "snippet": {"title": package.title[language], "description": description(package, language), "tags": tags,
                     "categoryId": category_id, "defaultLanguage": language, "defaultAudioLanguage": language},
@@ -139,29 +134,50 @@ class YouTubePublisher:
                 return video["id"], 3
         return None, 3
 
+    def video_tags(self, external_id: str) -> list[str] | None:
+        yt = self.service
+        channels = self.call(yt.channels().list(part="id", mine=True)).get("items", [])
+        videos = self.call(yt.videos().list(part="snippet", id=external_id)).get("items", [])
+        if not channels or not videos or videos[0]["snippet"].get("channelId") != channels[0]["id"]:
+            return None
+        return videos[0]["snippet"].get("tags", [])
+
     def upload(self, video: Path, package: PublishPackage) -> Upload:
-        existing, units = self.find(package.episode_id)
+        try:
+            existing, units = self.find(package.episode_id)
+        except PublishError as exc:  # nothing was sent yet
+            exc.video_may_exist = False
+            raise
         if existing:
             return Upload(external_id=existing, quota_units=units)
         from googleapiclient.http import MediaFileUpload
 
-        media = MediaFileUpload(str(video), mimetype="video/mp4", chunksize=8 << 20, resumable=True)
+        try:
+            media = MediaFileUpload(str(video), mimetype="video/mp4", chunksize=8 << 20, resumable=True)
+        except OSError as exc:
+            raise PublishError(f"cannot read {video}: {exc}", video_may_exist=False) from exc
         body = video_body(package, self.category_id)
         request = self.service.videos().insert(part=",".join(body), body=body, media_body=media)
         response = None
         while response is None:
-            # retries a failed chunk with backoff inside the same upload session
-            response = self.run(lambda: request.next_chunk(num_retries=CHUNK_RETRIES))[1]
+            try:
+                # retries a failed chunk with backoff inside the same upload session
+                response = self.run(lambda: request.next_chunk(num_retries=CHUNK_RETRIES))[1]
+            except PublishError as exc:
+                # Without a session URI YouTube refused the upload before it began: no video exists.
+                exc.video_may_exist = request.resumable_uri is not None
+                raise
         return Upload(external_id=response["id"], quota_units=units)
 
     def run(self, step):
-        """Call one API step, turning HTTP and token-refresh failures into a PublishError."""
-        from google.auth.exceptions import RefreshError
+        """Call one API step, turning HTTP, token-refresh and network failures into a PublishError."""
+        from google.auth.exceptions import RefreshError, TransportError
         from googleapiclient.errors import HttpError
+        from httplib2 import HttpLib2Error
 
         try:
             return step()
-        except (HttpError, RefreshError) as exc:
+        except (HttpError, RefreshError, TransportError, HttpLib2Error, OSError) as exc:
             raise publish_error(exc) from exc
 
     def schedule(self, external_id: str, publish_at: datetime, package: PublishPackage) -> int:

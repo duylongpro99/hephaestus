@@ -17,7 +17,9 @@ providers:
     type: azure_speech
     model: neural
     env: {key: AZURE_SPEECH_KEY, region: AZURE_SPEECH_REGION}
-    options: {max_requests_per_minute: 20}   # the F0 (free) tier's limit; raise it on S0
+    # max_requests_per_minute: the F0 (free) tier's limit; raise it on S0.
+    # wide_char_units: Azure bills each East Asian wide or fullwidth character as 2 characters.
+    options: {max_requests_per_minute: 20, wide_char_units: 2}
   # Both image providers draw at width x height and the adapter crops and scales to the shot size.
   cloudflare-images:
     type: cloudflare_workers_ai

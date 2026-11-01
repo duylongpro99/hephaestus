@@ -6,7 +6,7 @@ import struct
 import wave
 from pathlib import Path
 
-from factory.adapters.speech.base import SpeechRequest, SpeechResult, voices_hash
+from factory.adapters.speech.base import SpeechRequest, SpeechResult, check_rate, voices_hash
 from factory.tools.language_pack import LanguagePack
 
 SAMPLE_RATE = 24_000
@@ -33,6 +33,8 @@ def write_tone(out_path: Path, seconds: float, hz: int, sample_rate: int = SAMPL
 
 
 class FakeSpeech:
+    rate_range = (0.25, 4.0)
+
     def __init__(self, pack: LanguagePack, voices: dict[str, str], sample_rate: int = SAMPLE_RATE):
         self.pack, self.voices, self.sample_rate = pack, voices, sample_rate
         self.identity = f"fake_speech/sine-tone-1@{sample_rate}#{voices_hash(voices)}"
@@ -43,6 +45,7 @@ class FakeSpeech:
         return max(MIN_SECONDS, units / pack_rate * 60 if per_minute else units / pack_rate)
 
     def synthesize(self, request: SpeechRequest, out_path: Path) -> SpeechResult:
+        check_rate(request.rate, self.rate_range, "fake speech")
         seconds = self.seconds(request.text, request.rate)
         duration = write_tone(out_path, seconds, tone_hz(self.voices[request.voice]), self.sample_rate)
         return SpeechResult(duration_s=duration, words=None, charges=[])

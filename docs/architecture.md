@@ -345,7 +345,7 @@ EPISODE:
 - A per-episode **cost budget** (default $3, set per channel) and a **loop budget** stop runaway rewrite loops.
 - **Script rejects are revised, not replayed.** A reject from the review panel or at gate 1 sends the episode back to `DRAFTED`. A3 then gets the latest script plus a `RevisionRequest` with the rejecting reviewers' notes and `QAIssue`s (a human reject at gate 1 must carry notes), runs at least one editing turn even when the code gates already pass, and must still pass them. A revision that changes nothing escalates. The panel then judges the new script. The loop budget is `MAX_REWRITES` (2, in `factory/orchestrator/states.py`), counted per episode across the panel and gate 1; the next script reject moves the episode to `ESCALATED` with a "rewrite limit reached" error. A reject at gate 2 always escalates and does not count.
 - Human edits at the gates are saved as diffs in `GateDecision`. They become few-shot examples and eval data.
-- **`UPLOADED` is separate from `SCHEDULED`** so a crash between the two never uploads twice: C10 first uploads as private and stores the `PublishReceipt` with the video id, then sets `publishAt`, thumbnail, captions and playlist in later idempotent steps keyed by that id.
+- **`UPLOADED` is separate from `SCHEDULED`** so a crash between the two never uploads twice: C10 first uploads as private and stores the `PublishReceipt` with the video id, then sets `publishAt`, thumbnail, captions and playlist in later idempotent steps keyed by that id. A crash during the upload itself is covered by a `publish_attempt` marker committed before the first byte: a retry that finds the marker without a receipt looks the video up by its `ep-<episode_id>` tag and escalates if it cannot find it, and `factory publish resolve` settles it.
 - **Ordering.** `ordering: strict` episodes publish in sequence. A rejected or escalated episode holds its slot; C16 shifts later slots and notifies the operator. The exposure ledger is updated only on `PUBLISHED`, so C1 recomputes review words for later episodes if the order actually changes.
 - **Re-run from any station.** The console can reset an episode to any earlier state. Content addressing makes the untouched stations free.
 - **Gate 1 pre-render preview** uses cached TTS per line with the final voices; the cost is small because the same lines are reused in `VOICED` if the reviewer does not change them.
@@ -368,7 +368,7 @@ EPISODE:
 | Season plan (Gate 0) | human ⛔ | the operator approves theme, arc and loglines; C1 runs only after approval |
 | Thumbnail | code + LLM vision | text legible when downscaled to 168 px wide (YouTube sidebar size); ≤4 words unless the Audience Profile says fewer; contrast ≥ AA; character on-model; no claim A11 would call misleading |
 | Captions | code ⛔ | every cue within ±150 ms of the audio; cue length and lines per cue from the pack (e.g. `ja` ≤16 chars, `en` ≤42 chars, 2 lines); 100% of script lines covered in every language |
-| Publish idempotency | code ⛔ | no upload if a `PublishReceipt` exists for the episode; `publishAt` set only after the receipt is stored; a Shorts upload is its own receipt |
+| Publish idempotency | code ⛔ | no upload if a `PublishReceipt` or a `publish_attempt` marker exists for the episode; `publishAt` set only after the receipt is stored, and not again once the receipt is scheduled at that time; a Shorts upload is its own receipt |
 | Human 0 / 1 / 2 | human ⛔ | approve, or edit and approve, or reject with notes; every decision is a `GateDecision` row |
 
 **Evals per agent:**
@@ -467,8 +467,9 @@ A small web app (Next.js or similar) on top of the orchestrator's API. It is the
 | `exposure_ledger` | channel, lemma, episode, published_at | updated only on publish |
 | `asset` | id, type (image, rig, music, sfx, font), uri, license_id, provenance | the library C6 and C14 search first |
 | `license` | id, source, terms_url, commercial_ok, attribution, expires | read by A11 |
-| `cost_ledger` | episode, station, vendor, units, usd, ts | |
+| `cost_ledger` | episode, station, vendor, units, usd, ts, dedupe_key | a keyed charge (one voice line) is stored once per episode |
 | `publish_receipt` | episode, platform, external_id, upload_ts, publish_at, status, quota_units | idempotency key for C10 |
+| `publish_attempt` | episode, platform, started_at | an upload in flight; replaced by the receipt in one transaction |
 | `analytics_snapshot` | episode, day, metrics json | C11 output |
 | `notification` | episode, event, recipient, sent_at | idempotency key for C15 |
 

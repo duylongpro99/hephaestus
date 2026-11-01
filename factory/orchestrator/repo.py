@@ -7,7 +7,13 @@ import psycopg
 
 from factory.config import ResolvedConfig
 from factory.contracts import CostEntry, EpisodeSpec, GateDecision, PublishReceipt
-from factory.orchestrator.states import REWRITE_TARGETS, State, check_transition
+from factory.orchestrator.states import (
+    REWRITE_TARGETS,
+    UPLOAD_RESOLUTIONS,
+    IllegalTransition,
+    State,
+    check_transition,
+)
 
 
 class EpisodeExists(ValueError):
@@ -53,12 +59,23 @@ def get_episode(conn: psycopg.Connection, episode: str) -> dict | None:
 
 def move(conn: psycopg.Connection, episode: str, src: State, dst: State, now: datetime) -> None:
     check_transition(src, dst)
+    move_unchecked(conn, episode, src, dst, now)
+
+
+def move_unchecked(conn: psycopg.Connection, episode: str, src: State, dst: State, now: datetime) -> None:
     cur = conn.execute(
         "UPDATE episode SET status = %s, status_changed_at = %s WHERE id = %s AND status = %s",
         (dst, now, episode, src),
     )
     if cur.rowcount != 1:
         raise RuntimeError(f"episode {episode} is no longer in {src}; another runner moved it")
+
+
+def resolve_upload(conn: psycopg.Connection, episode: str, dst: State, now: datetime) -> None:
+    """Move an episode whose upload escalated on, as an operator decided (`factory publish resolve`)."""
+    if dst not in UPLOAD_RESOLUTIONS:
+        raise IllegalTransition(f"an escalated upload resolves to {' or '.join(sorted(UPLOAD_RESOLUTIONS))}, not {dst}")
+    move_unchecked(conn, episode, State.ESCALATED, dst, now)
 
 
 def insert_job(
@@ -129,14 +146,16 @@ def artifacts(conn: psycopg.Connection, episode: str) -> list[dict]:
 
 
 def add_costs(conn: psycopg.Connection, episode: str, entries: list[CostEntry]) -> None:
+    """Record what the entries billed; an entry whose dedupe key the episode already has is skipped."""
     for e in entries:
         units = {"input_tokens": e.input_tokens, "output_tokens": e.output_tokens,
                  "cache_creation_input_tokens": e.cache_creation_input_tokens,
                  "cache_read_input_tokens": e.cache_read_input_tokens}
         conn.execute(
-            "INSERT INTO cost_ledger (episode, station, vendor, model, units, usd, priced, ts) "
-            "VALUES (%s, %s, %s, %s, %s, %s, %s, %s)",
-            (episode, e.station, e.vendor, e.model, json.dumps(units), e.usd, e.priced, e.timestamp),
+            "INSERT INTO cost_ledger (episode, station, vendor, model, units, usd, priced, ts, dedupe_key) "
+            "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s) "
+            "ON CONFLICT (episode, dedupe_key) WHERE dedupe_key IS NOT NULL DO NOTHING",
+            (episode, e.station, e.vendor, e.model, json.dumps(units), e.usd, e.priced, e.timestamp, e.dedupe_key),
         )
 
 
@@ -195,6 +214,23 @@ def insert_receipt(conn: psycopg.Connection, receipt: PublishReceipt) -> None:
         (receipt.episode_id, receipt.platform, receipt.external_id, receipt.upload_ts, receipt.publish_at,
          receipt.status, receipt.quota_units),
     )
+
+
+def get_attempt(conn: psycopg.Connection, episode: str, platform: str) -> datetime | None:
+    """When an upload of this episode to `platform` started without a receipt to show for it."""
+    row = conn.execute(
+        "SELECT started_at FROM publish_attempt WHERE episode = %s AND platform = %s", (episode, platform),
+    ).fetchone()
+    return row["started_at"] if row else None
+
+
+def insert_attempt(conn: psycopg.Connection, episode: str, platform: str, started_at: datetime) -> None:
+    conn.execute("INSERT INTO publish_attempt (episode, platform, started_at) VALUES (%s, %s, %s)",
+                 (episode, platform, started_at))
+
+
+def delete_attempt(conn: psycopg.Connection, episode: str, platform: str) -> None:
+    conn.execute("DELETE FROM publish_attempt WHERE episode = %s AND platform = %s", (episode, platform))
 
 
 def schedule_receipt(conn: psycopg.Connection, receipt: PublishReceipt) -> None:

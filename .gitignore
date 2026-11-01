@@ -14,3 +14,5 @@ packs/*/data/raw/
 .claude/*
 !.claude/rules/
 !.claude/settings.json
+# Local database dumps taken before schema or data changes.
+backups/

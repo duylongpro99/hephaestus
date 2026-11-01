@@ -31,6 +31,7 @@ class SpeechResult:
 
 class SpeechSynthesizer(Protocol):
     identity: str  # everything that changes the audio; part of the station_version
+    rate_range: tuple[float, float]  # the relative rates the provider can speak at, inclusive
 
     def synthesize(self, request: SpeechRequest, out_path: Path) -> SpeechResult:
         """Write a mono 16-bit PCM WAV of the line to `out_path`."""
@@ -40,3 +41,11 @@ class SpeechSynthesizer(Protocol):
 def voices_hash(voices: dict[str, str]) -> str:
     """A short hash of the voice mapping, so a changed voice changes the synthesizer's identity."""
     return hashlib.sha256(json.dumps(voices, sort_keys=True).encode()).hexdigest()[:8]
+
+
+def check_rate(rate: float, rate_range: tuple[float, float], provider: str) -> None:
+    """Refuse a rate the provider cannot speak at, rather than silently speaking at a different one."""
+    low, high = rate_range
+    if not low <= rate <= high:
+        raise SpeechError(f"rate {rate:.2f} is outside what {provider} supports ({low:.2f}-{high:.2f}); "
+                          "check the level band's speaking rate and the pack's native rate")

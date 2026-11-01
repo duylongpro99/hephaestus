@@ -138,7 +138,8 @@ def speech_for(profile: str, pack: LanguagePack, config: MediaConfig | None = No
     return AzureSpeech(
         key=secret(name, provider, "key"), region=secret(name, provider, "region"), voices=voices,
         sample_rate=speech.sample_rate, price=config.price(name, provider.model or ""),
-        max_requests_per_minute=provider.options.get("max_requests_per_minute"), name=name,
+        max_requests_per_minute=provider.options.get("max_requests_per_minute"),
+        wide_char_units=int(provider.options.get("wide_char_units", 1)), name=name,
     )
 
 
